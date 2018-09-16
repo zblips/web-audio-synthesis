@@ -4,7 +4,7 @@
       width: 15px;
       height: 15px;
       border-radius: 50%;
-      border: 2px solid #D3DEE7;
+      border: 2px solid #9C8AA5;
       outline: none;
       display: block;
       margin: 10px auto;
@@ -36,21 +36,25 @@
 </template>
 
 <script>
-
   export default {
     props: {
       label: {
         type: String,
       },
+      isActive: {
+        type: Boolean,
+      },
+    },
+    data() {
+      return {
+        active: this.isActive,
+      }
     },
     methods: {
       toggle() {
         this.active = !this.active
-        this.$emit('toggle', this.active)
+        this.$emit('update', this.active)
       },
     },
-    data: () => ({
-      active: false,
-    }),
   }
 </script>

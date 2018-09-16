@@ -40,7 +40,7 @@
   import MibVisualizer from './mib-visualizer.vue'
   import { resetSariasSongMapping, setSariasSongMapping } from '../../../../core/utils/gamepad-service'
   import { createMidiTrack } from '@/core/midi/midi-track'
-  import { arkanoid } from '../../../../core/midi/midi-events/arkanoid-events'
+  import { tetris } from '../../../../core/midi/midi-events/tetris-events'
   import Osc from './oscillator.vue'
   import Envelope from './envelope'
   import UiFilter from './ui-filter'
@@ -75,12 +75,9 @@
       this.synth = Synth(this.audioContext)
       this.output = Output(this.audioContext)
       this.synth.connect(this.output)
-      this.midiTrack = createMidiTrack(this.audioContext, arkanoid).setSlave(this.synth)
+      this.midiTrack = createMidiTrack(this.audioContext, tetris).setSlave(this.synth)
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
       this.keyboard.init()
-
-      console.log(this.options)
-
       setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
     },
     destroyed() {
@@ -88,7 +85,6 @@
       .then(() => {
         this.keyboard.destroy()
       })
-
       resetSariasSongMapping()
     },
   }

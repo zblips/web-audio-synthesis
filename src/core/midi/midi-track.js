@@ -11,7 +11,7 @@ function toTimedEvents({ events }) {
 }
 
 export function createMidiTrack(audioContext, { tracks }) {
-  const tempo = 100
+  const tempo = 140
   const division = 96
   const events = toTimedEvents(tracks[0])
 

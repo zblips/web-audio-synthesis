@@ -17,10 +17,10 @@
 
 <template>
   <div class="card envelope">
-    <slider :width="30" :height="160" label="attack"></slider>
-    <slider :width="30" :height="160" label="decay"></slider>
-    <slider :width="30" :height="160" label="sustain"></slider>
-    <slider v-if="type === 'adsr'" :width="30" :height="160" label="release"></slider>
+    <slider :width="30" :height="160" label="A"></slider>
+    <slider :width="30" :height="160" label="D"></slider>
+    <slider :width="30" :height="160" label="S"></slider>
+    <slider v-if="type === 'adsr'" :width="30" :height="160" label="R"></slider>
   </div>
 </template>
 
