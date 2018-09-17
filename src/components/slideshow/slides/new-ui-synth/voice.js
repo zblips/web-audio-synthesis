@@ -1,19 +1,10 @@
-import { Dispatcher, midiToFrequency, WaveForms } from 'wasa'
+import { midiToFrequency, unscale, WaveForms } from 'wasa'
 
 const getFrequency = midiToFrequency(440)
 
 const SMOOTHING_TIME_CONSTANT = 1E10
 
 export const create4xVoiceManager = (audioContext) => {
-  /*
-   monophonic voice is created once and reused, while polyphonic voices are created on demand
-   */
-  const createMonoVoice = () => {
-    const voice = create2xOscVoice(audioContext)
-    voice.start(audioContext.currentTime)
-    return voice
-  }
-
   const gain1 = audioContext.createGain()
   const gain2 = audioContext.createGain()
 
@@ -22,80 +13,34 @@ export const create4xVoiceManager = (audioContext) => {
 
   const output = audioContext.createGain()
 
-  const dispatcher = Dispatcher.openSession()
+  let isPolyphonic = true
+  let fmRatioValue = 0
+  let fmGainValue = 0
+  let osc1GainValue = 0.5
+  let osc2GainValue = 0.5
+  let osc1DetuneValue = 0
+  let osc2DetuneValue = 0
+  let osc1Type = WaveForms.SQUARE
+  let osc2Type = WaveForms.SQUARE
 
-  let fmRatio = 1
-  let isPolyphonic = false
   let voices = {} // polyphonic state
   let notes = [] // monophonic state
-  let monoVoice
+
+  let monoVoice = create2xOscVoice(audioContext)
+  .setOsc1DetuneValue(osc1DetuneValue)
+  .setOsc2DetuneValue(osc2DetuneValue)
+  .setOsc1Type(osc1Type)
+  .setOsc2Type(osc2Type)
+  monoVoice.start(audioContext.currentTime)
 
   /* routing */
   gain1.connect(output)
   gain2.connect(output)
   fmOscillator.connect(fmGain)
-  fmOscillator.start()
+  fmOscillator.start(audioContext.currentTime)
 
   gain1.gain.value = 0.5
   gain2.gain.value = 0.5
-
-  fmOscillator.frequency.value = 400
-  fmGain.gain.value = 100
-
-  const
-    togglePolyphony = (value = !isPolyphonic) => {
-      isPolyphonic = value
-      if (!isPolyphonic) {
-        monoVoice = createMonoVoice()
-        monoVoice.osc1.connect(gain1)
-        monoVoice.osc2.connect(gain2)
-        fmGain.connect(monoVoice.osc1.frequency)
-        fmGain.connect(monoVoice.osc2.frequency)
-        output.gain.setTargetAtTime(0, audioContext.currentTime, SMOOTHING_TIME_CONSTANT)
-      } else {
-        if (monoVoice) {
-          monoVoice.disconnect()
-        }
-        fmGain.disconnect()
-        output.gain.cancelScheduledValues(audioContext.currentTime)
-        output.gain.setValueAtTime(1, audioContext.currentTime)
-      }
-      dispatcher.dispatch('POLYPHONY_TOGGLED', isPolyphonic)
-    }
-
-  // Handle events
-  dispatcher.as('OSC1_GAIN_CHANGED')
-  .subscribe((value) => {
-    gain1.gain.value = Number(value.toFixed(1))
-  })
-  dispatcher.dispatch('OSC1_GAIN_CHANGED', gain1.gain.value)
-
-  dispatcher.as('OSC2_GAIN_CHANGED')
-  .subscribe((value) => {
-    gain2.gain.value = Number(value.toFixed(1))
-  })
-  dispatcher.dispatch('OSC2_GAIN_CHANGED', gain2.gain.value)
-
-  dispatcher.as('FM_AMOUNT_CHANGED')
-  .subscribe((value) => {
-    fmGain.gain.value = Number(value.toFixed(1)) * 300
-  })
-  dispatcher.dispatch('FM_AMOUNT_CHANGED', fmGain.gain.value / 300)
-
-  dispatcher.as('FM_RATIO_CHANGED')
-  .subscribe((value) => {
-    fmRatio = Number(value.toFixed(1)) * 20
-    for (const voice of Object.values(voices)) {
-      fmOscillator.frequency.value = voice.osc1.frequency.value * fmRatio
-      break
-    }
-  })
-  dispatcher.dispatch('FM_RATIO_CHANGED', fmRatio / 20)
-
-  dispatcher.as('POLYPHONY_TOGGLED')
-  .subscribe(togglePolyphony)
-
-  togglePolyphony(true)
 
   return {
     connect({ input, connect }) {
@@ -103,20 +48,30 @@ export const create4xVoiceManager = (audioContext) => {
       return { connect }
     },
     noteOn(value, time = audioContext.currentTime) {
+      const frequency = getFrequency(value)
+      fmOscillator.frequency.setTargetAtTime(frequency * fmRatioValue, time, SMOOTHING_TIME_CONSTANT)
+
       if (isPolyphonic && !voices[value]) {
         const voice = create2xOscVoice(audioContext)
+        .setOsc1DetuneValue(osc1DetuneValue)
+        .setOsc2DetuneValue(osc2DetuneValue)
+        .setOsc1Type(osc1Type)
+        .setOsc2Type(osc2Type)
         voice.osc1.connect(gain1)
         voice.osc2.connect(gain2)
-
         fmGain.connect(voice.osc1.frequency)
         fmGain.connect(voice.osc2.frequency)
         voices[value] = voice
-
-        voice.noteOn(value, time)
+        voice.noteOn(frequency, time)
         voice.start(time)
       } else if (!isPolyphonic && notes.indexOf(value) === -1) {
         notes.push(value)
-        monoVoice.noteOn(value, time)
+        monoVoice
+        .setOsc1DetuneValue(osc1DetuneValue)
+        .setOsc2DetuneValue(osc2DetuneValue)
+        .setOsc1Type(osc1Type)
+        .setOsc2Type(osc2Type)
+        .noteOn(frequency, time)
         output.gain.setValueAtTime(1, time)
       }
     },
@@ -127,11 +82,75 @@ export const create4xVoiceManager = (audioContext) => {
       } else {
         notes.splice(notes.indexOf(value), 1)
         if (notes.length > 0) {
-          monoVoice.noteOn(notes[notes.length - 1], time)
+          monoVoice
+          .setOsc1DetuneValue(osc1DetuneValue)
+          .setOsc2DetuneValue(osc2DetuneValue)
+          .setOsc1Type(osc1Type)
+          .setOsc2Type(osc2Type)
+          .noteOn(notes[notes.length - 1], time)
         } else {
           output.gain.setTargetAtTime(0, time, SMOOTHING_TIME_CONSTANT)
         }
       }
+    },
+    togglePolyphonyValue(value = !isPolyphonic) {
+      isPolyphonic = value
+      if (!isPolyphonic) {
+        output.gain.setTargetAtTime(0, audioContext.currentTime, SMOOTHING_TIME_CONSTANT)
+        monoVoice.osc1.connect(gain1)
+        monoVoice.osc2.connect(gain2)
+        fmGain.connect(monoVoice.osc1.frequency)
+        fmGain.connect(monoVoice.osc2.frequency)
+      } else {
+        monoVoice.disconnect()
+        output.gain.cancelScheduledValues(audioContext.currentTime)
+        output.gain.setValueAtTime(1, audioContext.currentTime)
+      }
+    },
+    set osc1GainValue(value) {
+      osc1GainValue = value
+      gain1.gain.value = value
+    },
+    get osc1GainValue() {
+      return osc1GainValue
+    },
+    set osc1DetuneValue(value) {
+      osc1DetuneValue = unscale({ min: 0, max: 100 }, Number(value.toFixed(2)))
+      Object.values(voices).forEach(voice => voice.setOsc1DetuneValue(osc1DetuneValue))
+    },
+    set osc2DetuneValue(value) {
+      osc2DetuneValue = unscale({ min: 0, max: 100 }, Number(value.toFixed(2)))
+      Object.values(voices).forEach(voice => voice.setOsc1DetuneValue(osc2DetuneValue))
+    },
+    set osc2GainValue(value) {
+      osc2GainValue = value
+      gain2.gain.value = value
+    },
+    get osc2GainValue() {
+      return osc2GainValue
+    },
+    set fmRatioValue(value) {
+      fmRatioValue = Number(value.toFixed(1)) * 20
+      for (const voice of Object.values(voices)) {
+        fmOscillator.frequency.value = voice.osc1.frequency.value * fmRatioValue
+        break
+      }
+    },
+    get fmRatioValue() {
+      return fmRatioValue / 20
+    },
+    set fmGainValue(value) {
+      fmGainValue = Number(value.toFixed(1)) * 300
+      fmGain.gain.value = fmGainValue
+    },
+    get fmGainValue() {
+      return fmGainValue / 300
+    },
+    get isPolyphonic() {
+      return isPolyphonic
+    },
+    set isPolyphonic(value) {
+      isPolyphonic = value
     },
   }
 }
@@ -140,14 +159,15 @@ const create2xOscVoice = (audioContext) => {
   const osc1 = audioContext.createOscillator()
   const osc2 = audioContext.createOscillator()
 
-  osc1.type = WaveForms.SINE
-  osc2.type = WaveForms.SAWTOOTH
+  let osc1DetuneValue = 0
+  let osc2DetuneValue = 0
 
   return {
-    noteOn(value, time = audioContext.currentTime) {
-      const frequency = getFrequency(value)
+    noteOn(frequency, time = audioContext.currentTime) {
       osc1.frequency.setTargetAtTime(frequency, time, SMOOTHING_TIME_CONSTANT)
+      osc1.detune.setValueAtTime(osc1DetuneValue, time)
       osc2.frequency.setTargetAtTime(frequency, time, SMOOTHING_TIME_CONSTANT)
+      osc2.detune.setTargetAtTime(osc2DetuneValue, time, SMOOTHING_TIME_CONSTANT)
     },
     start(time) {
       osc1.start(time)
@@ -161,7 +181,29 @@ const create2xOscVoice = (audioContext) => {
       osc1.disconnect()
       osc2.disconnect()
     },
-    osc1,
-    osc2,
+    setOsc1DetuneValue(value) {
+      osc1DetuneValue = value
+      osc1.detune.value = value
+      return this
+    },
+    setOsc2DetuneValue(value) {
+      osc2DetuneValue = value
+      osc2.detune.value = value
+      return this
+    },
+    setOsc1Type(value) {
+      osc1.type = value
+      return this
+    },
+    setOsc2Type(value) {
+      osc2.type = value
+      return this
+    },
+    get osc1() {
+      return osc1
+    },
+    get osc2() {
+      return osc2
+    },
   }
 }

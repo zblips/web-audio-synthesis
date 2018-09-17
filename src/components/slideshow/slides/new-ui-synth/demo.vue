@@ -19,7 +19,7 @@
   <div class="slide">
     <div class="synth">
       <div class="upper-row">
-        <osc></osc>
+        <osc :state="synth.voiceManager"></osc>
         <mib-visualizer :width="700" :height="320" :analyzer="output.analyzer"></mib-visualizer>
       </div>
       <div class="lower-row">

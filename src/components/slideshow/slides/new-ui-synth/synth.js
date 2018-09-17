@@ -13,5 +13,8 @@ export const Synth = (audioContext) => {
     connect({ input }) {
       voiceManager.connect({ input })
     },
+    get voiceManager() {
+      return voiceManager
+    },
   }
 }

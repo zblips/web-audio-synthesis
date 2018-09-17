@@ -29,21 +29,20 @@
   <div class="card">
     <div class="knobs">
       <span class="osc-title">Osc1</span>
-      <knob class="osc-1" label="square" :value="osc1Gain.value" :width="180" @update="setOsc1GainValue"></knob>
-      <knob label="detune" :value="1" :width="130"></knob>
+      <knob class="osc-1" label="square" :value="state.osc1GainValue" :width="180" @update="setOsc1GainValue"></knob>
+      <knob label="detune" :value="1" :width="130" @update="setOsc1DetuneValue"></knob>
     </div>
 
     <div class="knobs">
       <span class="osc-title">Osc2</span>
-      <knob class="osc-2 disabled" label="sawtooth" :value="osc2Gain.value" :width="180"
-            @update="setOsc2GainValue"></knob>
-      <knob label="detune" :value="1" :width="130"></knob>
+      <knob class="osc-2 disabled" label="sawtooth" :value="state.osc2GainValue" :width="180" @update="setOsc2GainValue"></knob>
+      <knob label="detune" :value="1" :width="130" @update="setOsc2DetuneValue"></knob>
     </div>
 
     <div class="knobs global-params">
-      <knob class="fm-amount" label="fm amount" :value="fmAmount.value" :width="100" @update="setFmAmount"></knob>
-      <knob class="fm-ratio" label="fm ratio" :value="fmRatio.value" :width="100" @update="setFmRatio"></knob>
-      <toggle @update="togglePolyphony" :is-active="polyphony.value"></toggle>
+      <knob class="fm-amount" label="fm amount" :value="state.fmGainValue" :width="100" @update="setFmGainValue"></knob>
+      <knob class="fm-ratio" label="fm ratio" :value="state.fmRatioValue" :width="100" @update="setFmRatioValue"></knob>
+      <toggle @update="togglePolyphonyValue" :is-active="state.isPolyphonic"></toggle>
     </div>
   </div>
 </template>
@@ -51,70 +50,39 @@
 <script>
   import Knob from './knob.vue'
   import Toggle from './toggle.vue'
-  import { Dispatcher } from 'wasa'
-
-  const dispatcher = Dispatcher.openSession()
-
-  const polyphony = { value: false }
-  const osc1Gain = { value: 1 }
-  const osc2Gain = { value: 1 }
-  const fmRatio = { value: 1 }
-  const fmAmount = { value: 0 }
-
-  dispatcher.as('POLYPHONY_TOGGLED')
-  .subscribe((value) => {
-    polyphony.value = value
-  })
-
-  dispatcher.as('OSC1_GAIN_CHANGED')
-  .subscribe((value) => {
-    osc1Gain.value = value
-  })
-
-  dispatcher.as('OSC2_GAIN_CHANGED')
-  .subscribe((value) => {
-    osc2Gain.value = value
-  })
-
-  dispatcher.as('FM_RATIO_CHANGED')
-  .subscribe((value) => {
-    fmRatio.value = value
-  })
-
-  dispatcher.as('FM_AMOUNT_CHANGED')
-  .subscribe((value) => {
-    fmAmount.value = value
-  })
 
   export default {
     components: {
       Knob,
       Toggle,
     },
-    data() {
-      return {
-        polyphony,
-        osc1Gain,
-        osc2Gain,
-        fmAmount,
-        fmRatio,
-      }
+    props: {
+      state: {
+        type: Object,
+        default: () => Object.create(null),
+      },
     },
     methods: {
       setOsc1GainValue(value) {
-        dispatcher.dispatch('OSC1_GAIN_CHANGED', value)
+        this.state.osc1GainValue = value
       },
       setOsc2GainValue(value) {
-        dispatcher.dispatch('OSC2_GAIN_CHANGED', value)
+        this.state.osc2GainValue = value
       },
-      setFmAmount(value) {
-        dispatcher.dispatch('FM_AMOUNT_CHANGED', value)
+      setOsc1DetuneValue(value) {
+        this.state.osc1DetuneValue = value
       },
-      setFmRatio(value) {
-        dispatcher.dispatch('FM_RATIO_CHANGED', value)
+      setOsc2DetuneValue(value) {
+        this.state.osc2DetuneValue = value
       },
-      togglePolyphony(value) {
-        dispatcher.dispatch('POLYPHONY_TOGGLED', value)
+      setFmGainValue(value) {
+        this.state.fmGainValue = value
+      },
+      setFmRatioValue(value) {
+        this.state.fmRatioValue = value
+      },
+      togglePolyphonyValue(value) {
+        this.state.togglePolyphonyValue(value)
       },
     },
   }
