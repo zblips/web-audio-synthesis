@@ -50,7 +50,6 @@
     <div class="toggle" v-for="value in values" :key="value">
       <div class="button">
         <button :class="{ active: isActive(value), inactive: !isActive(value) }" @click="select(value)"></button>
-        <div class="label">{{value}}</div>
       </div>
 
     </div>
@@ -62,14 +61,16 @@
     props: {
       values: {
         type: Array,
+        default: () => [1, 0, -1],
       },
     },
     data: () => ({
-      activeValue: '',
+      activeValue: 0,
     }),
     methods: {
       select(value) {
         this.activeValue = value
+        this.$emit('update', value)
       },
       isActive(value) {
         return this.activeValue === value

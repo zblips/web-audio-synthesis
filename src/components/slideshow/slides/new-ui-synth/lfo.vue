@@ -12,7 +12,7 @@
       box-sizing: border-box;
     }
 
-    .knobs {
+    .slice {
       width: 60%;
     }
 
@@ -24,7 +24,7 @@
 
 <template>
   <div class="card lfo">
-    <div class="knobs">
+    <div class="slice">
       <knob label="amount" :value="1" :width="180"></knob>
       <knob label="rate" :value="1" :width="130"></knob>
     </div>

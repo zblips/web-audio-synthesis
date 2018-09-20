@@ -9,6 +9,7 @@
 
     .upper-row, .lower-row {
       height: 50vh;
+      width: 100vw;
       display: flex;
     }
 
@@ -20,14 +21,14 @@
     <div class="synth">
       <div class="upper-row">
         <osc :state="synth.voiceManager"></osc>
-        <mib-visualizer :width="700" :height="320" :analyzer="output.analyzer"></mib-visualizer>
+        <mib-visualizer :width="800" :height="320" :analyzer="output.analyzer"></mib-visualizer>
       </div>
-      <div class="lower-row">
-        <ui-filter></ui-filter>
-        <envelope type="adsr"></envelope>
-        <envelope></envelope>
-        <lfo></lfo>
-      </div>
+      <!--<div class="lower-row">-->
+        <!--<ui-filter></ui-filter>-->
+        <!--<envelope type="adsr"></envelope>-->
+        <!--<envelope></envelope>-->
+        <!--<lfo></lfo>-->
+      <!--</div>-->
 
     </div>
   </div>
@@ -45,6 +46,10 @@
   import Envelope from './envelope'
   import UiFilter from './ui-filter'
   import Lfo from './lfo.vue'
+
+  import { Dispatcher } from 'wasa'
+
+  const dispatcher = Dispatcher.openSession()
 
   export default {
     components: {
@@ -64,11 +69,34 @@
       updateOctave(value) {
         this.keyboard.octave = value
       },
+      stop() {
+        this.audioContext.close()
+        .catch(() => console.info('context is allready closed'))
+        .then(() => {
+          this.keyboard.destroy()
+          resetSariasSongMapping()
+
+          const voiceState = this.synth.voiceManager.getState()
+          this.audioContext = new AudioContext()
+          this.synth = Synth(this.audioContext)
+          this.synth.voiceManager.setState(voiceState)
+          this.output = Output(this.audioContext)
+          this.synth.connect(this.output)
+          this.midiTrack = createMidiTrack(this.audioContext, tetris).setSlave(this.synth)
+          this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
+          this.keyboard.init()
+          setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
+          this.$forceUpdate()
+        })
+      },
     },
     props: {
       options: {
         type: Object,
       },
+    },
+    mounted() {
+      dispatcher.as('STOP').subscribe(() => this.stop())
     },
     created() {
       this.audioContext = new AudioContext()

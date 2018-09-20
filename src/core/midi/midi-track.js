@@ -1,5 +1,8 @@
 import { isNil } from 'ramda'
 import { Status } from 'midi-parse'
+import { Dispatcher } from 'wasa'
+
+const dispatcher = Dispatcher.openSession()
 
 function toTimedEvents({ events }) {
   let delta = 0
@@ -42,7 +45,8 @@ export function createMidiTrack(audioContext, { tracks }) {
         }
       })
     },
-    stop(time = 0) {
+    stop(time = audioContext.currentTime) {
+      dispatcher.dispatch('STOP')
     },
     setSlave(instrument) {
       slave = instrument

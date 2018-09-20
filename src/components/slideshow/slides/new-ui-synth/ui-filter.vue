@@ -12,7 +12,7 @@
       box-sizing: border-box;
     }
 
-    .knobs {
+    .slice {
       width: 60%;
     }
 
@@ -24,7 +24,7 @@
 
 <template>
   <div class="card filters">
-    <div class="knobs">
+    <div class="slice">
       <knob class="filter-frequency" label="frequency" :value="1" :width="180"></knob>
       <knob label="peak" :value="1" :width="130"></knob>
     </div>
