@@ -43,11 +43,11 @@
 
 <template>
   <div class="eg-slideshow">
-    <slide :mouseNavigation="false" leave='fadeOut'>
+    <slide enter='fadeIn' leave='fadeOut'>
       <synthesizer-demo :options="{test: true}"></synthesizer-demo>
     </slide>
 
-    <slide :mouseNavigation="false" leave='fadeOut'>
+    <slide enter='fadeIn' leave='fadeOut'>
       <mib-title></mib-title>
     </slide>
 
@@ -170,9 +170,9 @@
   import MibTitle from './slides/mib-title.vue'
   import { gamepadHandler } from '../../core/utils/gamepad-service'
 
-  import MibWebAudioApi00 from './slides/webAudioApi/mib-web-audio-api-00'
-  import MibWebAudioApi01 from './slides/webAudioApi/mib-web-audio-api-01'
-  import MibWebAudioSnippet from './slides/webAudioApi/snippet'
+  import MibWebAudioApi00 from './slides/web-audio-api/mib-web-audio-api-00'
+  import MibWebAudioApi01 from './slides/web-audio-api/mib-web-audio-api-01'
+  import MibWebAudioSnippet from './slides/web-audio-api/snippet'
 
   import MibMonophonicIntro from './slides/monophonic-synthesis/intro'
   import MibMonophonicSnippet from './slides/monophonic-synthesis/snippet.vue'
@@ -274,6 +274,9 @@
       updateURL() {
         this.$router.push(`/${this.currentSlideIndex}/${this.step}`)
       },
+    },
+    props: {
+      mouseNavigation: false,
     },
     watch: {
       $route: 'updateSlides',
