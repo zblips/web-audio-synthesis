@@ -12,6 +12,7 @@
       margin: auto;
       position: relative;
       top: -1vh;
+      cursor: pointer;
     }
 
     .label {
@@ -55,7 +56,7 @@
       </g>
     </svg>
 
-    <span class="label">{{label}}</span>
+    <span class="label" v-if="label">{{label}}</span>
   </div>
 </template>
 
@@ -111,6 +112,9 @@
     }),
     methods: {
       toggleActive(event) {
+        if (event.ctrlKey) {
+          return this.zero()
+        }
         if (event.which !== 1) {
           return
         }
@@ -131,11 +135,11 @@
         event.preventDefault()
         const increment = this.origin.y - event.pageY
         const viewBoxRatio = this.width / this.viewBoxDimensions.width
-        this.updateAngle(increment * viewBoxRatio)
+        this.updateAngle(increment * viewBoxRatio, 0.25)
       },
       wheel(event) {
         event.preventDefault()
-        this.updateAngle(event.wheelDeltaY * 0.1)
+        this.updateAngle(event.wheelDeltaY, 0.01)
       },
       updateAngle(increment, ease = 1) {
         const angle = this.angle + (increment * ease)
@@ -145,6 +149,10 @@
           const value = scale({ min: -160, max: 160 }, this.angle)
           this.$emit('update', value)
         }
+      },
+      zero() {
+        this.angle = -160
+        this.$emit('update', 0)
       },
     },
   }

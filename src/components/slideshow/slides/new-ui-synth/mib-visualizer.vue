@@ -9,8 +9,10 @@
     .canvas {
       width: 80%;
       height: 80%;
-      margin: auto;
+      margin: auto 10px auto 10px;
       background-color: #2c3e50;
+      border: 2px solid #A3B8C8;
+      border-radius: 10px;
     }
   }
 </style>
@@ -41,6 +43,10 @@
       analyzer: {
         type: AnalyserNode,
       },
+      type: {
+        type: String,
+        default: 'osc',
+      },
     },
     computed: {
       canvasStyle() {
@@ -52,7 +58,13 @@
     },
     methods: {
       draw() {
-        const sliceWidth = this.width / this.analyzer.fftSize
+        if (this.type === 'osc') {
+          return this.drawOscilloscope()
+        }
+        this.drawSpectrum()
+      },
+      drawOscilloscope() {
+        const sliceWidth = this.width / this.analyzer.fftSize + 1
         this.analyzer.getByteTimeDomainData(this.buffer)
 
         this.canvasContext.fillStyle = 'rgb(255, 255, 255, 0)'
@@ -82,7 +94,25 @@
         this.canvasContext.lineWidth = 1
         this.canvasContext.strokeStyle = '#ff5574'
         this.canvasContext.stroke()
-        requestAnimationFrame(this.draw)
+        requestAnimationFrame(this.drawOscilloscope)
+      },
+      drawSpectrum() {
+        this.analyzer.fftSize = 256
+        const data = new Uint8Array(this.analyzer.frequencyBinCount)
+        this.analyzer.getByteFrequencyData(data)
+
+        this.canvasContext.fillStyle = 'rgb(255, 255, 255, 0)'
+        this.canvasContext.clearRect(0, 0, this.width, this.height)
+
+        this.canvasContext.lineWidth = 0.5
+        this.canvasContext.strokeStyle = '#af1e3a'
+        this.canvasContext.beginPath()
+        const width = this.width / data.length
+        data.forEach((freq, i) => {
+          this.canvasContext.fillStyle = `rgb(${freq + 100}, 50, 50)`
+          this.canvasContext.fillRect(i * width, this.height - freq, width, freq)
+        })
+        requestAnimationFrame(this.drawSpectrum)
       },
     },
   }

@@ -21,31 +21,33 @@
     <div class="synth">
       <div class="upper-row">
         <osc :state="synth.voiceManager"></osc>
-        <mib-visualizer :width="800" :height="320" :analyzer="output.analyzer"></mib-visualizer>
+        <mib-visualizer :width="800" :height="500" :analyzer="output.analyzer"></mib-visualizer>
+        <mib-visualizer :width="800" :height="500" :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
       </div>
-      <!--<div class="lower-row">-->
-        <!--<ui-filter></ui-filter>-->
-        <!--<envelope type="adsr"></envelope>-->
-        <!--<envelope></envelope>-->
-        <!--<lfo></lfo>-->
-      <!--</div>-->
-
+      <div class="lower-row">
+        <ui-filter :state="synth.filter"></ui-filter>
+        <envelope :state="synth.accentEnvelope"></envelope>
+        <envelope type="adsr" :state="synth.adsrEnvelope"></envelope>
+        <lfo :state="synth.lfo"></lfo>
+      </div>
     </div>
+
   </div>
 </template>
 
 <script>
-  import { Keyboard } from '@/core/keyboard'
+  import { Keyboard } from './keyboard'
   import { Synth } from './synth'
-  import { Output } from '@/core/output'
+  import { Output } from './output'
   import MibVisualizer from './mib-visualizer.vue'
   import { resetSariasSongMapping, setSariasSongMapping } from '../../../../core/utils/gamepad-service'
   import { createMidiTrack } from '@/core/midi/midi-track'
-  import { tetris } from '../../../../core/midi/midi-events/tetris-events'
+  import { saria } from '../../../../core/midi/midi-events/saria-events'
   import Osc from './oscillator.vue'
   import Envelope from './envelope'
   import UiFilter from './ui-filter'
   import Lfo from './lfo.vue'
+  import { createReverb } from './reverb'
 
   import { Dispatcher } from 'wasa'
 
@@ -59,16 +61,23 @@
       Osc,
       Lfo,
     },
+    data() {
+      const audioContext = new AudioContext()
+      const synth = Synth(audioContext)
+      const output = Output(audioContext)
+      const midiTrack = createMidiTrack(audioContext, saria).setSlave(synth)
+      const keyboard = Keyboard(Object.assign(synth, midiTrack))
+      const reverb = createReverb(audioContext)
+      return {
+        audioContext,
+        synth,
+        output,
+        midiTrack,
+        reverb,
+        keyboard,
+      }
+    },
     methods: {
-      updateWaveForm(value) {
-        this.synth.waveForm = value
-      },
-      updateDetune(value) {
-        this.synth.detune = value
-      },
-      updateOctave(value) {
-        this.keyboard.octave = value
-      },
       stop() {
         this.audioContext.close()
         .catch(() => console.info('context is allready closed'))
@@ -78,15 +87,21 @@
 
           const voiceState = this.synth.voiceManager.getState()
           this.audioContext = new AudioContext()
-          this.synth = Synth(this.audioContext)
-          this.synth.voiceManager.setState(voiceState)
-          this.output = Output(this.audioContext)
-          this.synth.connect(this.output)
-          this.midiTrack = createMidiTrack(this.audioContext, tetris).setSlave(this.synth)
-          this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
-          this.keyboard.init()
-          setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
-          this.$forceUpdate()
+          this.reverb = createReverb(this.audioContext)
+          this.reverb
+          .setFadeValue(-1)
+          .setImpulse(require('../../../../assets/media/Nice_Drum_Room.wav'))
+          .subscribe(() => {
+            this.synth = Synth(this.audioContext)
+            this.synth.voiceManager.setState(voiceState)
+            this.output = Output(this.audioContext)
+            this.synth.connect(this.reverb).connect(this.output)
+            this.midiTrack = createMidiTrack(this.audioContext, saria).setSlave(this.synth)
+            this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
+            this.keyboard.init()
+            setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
+            this.$forceUpdate()
+          })
         })
       },
     },
@@ -97,16 +112,20 @@
     },
     mounted() {
       dispatcher.as('STOP').subscribe(() => this.stop())
-    },
-    created() {
       this.audioContext = new AudioContext()
       this.synth = Synth(this.audioContext)
       this.output = Output(this.audioContext)
-      this.synth.connect(this.output)
-      this.midiTrack = createMidiTrack(this.audioContext, tetris).setSlave(this.synth)
+      this.midiTrack = createMidiTrack(this.audioContext, saria).setSlave(this.synth)
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
-      this.keyboard.init()
-      setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
+      this.reverb = createReverb(this.audioContext)
+      this.reverb
+      .setFadeValue(-0)
+      .setImpulse(require('../../../../assets/media/Deep_Space.wav'))
+      .subscribe(() => {
+        this.synth.connect(this.reverb).connect(this.output)
+        this.keyboard.init()
+        setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
+      })
     },
     destroyed() {
       this.audioContext.close()

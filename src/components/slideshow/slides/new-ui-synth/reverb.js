@@ -1,13 +1,17 @@
 import { Observable } from 'rxjs'
 import { createDryWetMixer } from 'wasa'
 
-export const Reverb = (audioContext) => {
+export const createReverb = (audioContext) => {
   const convolver = audioContext.createConvolver()
   const dryWetMixer = createDryWetMixer(audioContext)
 
   dryWetMixer.setWetNode(convolver)
 
   return {
+    setFadeValue(value) {
+      dryWetMixer.setFadeValue(value)
+      return this
+    },
     connect({ input, connect }) {
       dryWetMixer.connect({ getInput: () => input })
       return { connect }
@@ -17,22 +21,18 @@ export const Reverb = (audioContext) => {
     },
     setImpulse(url) {
       return Observable.create(observer => {
-        const xhr = new XMLHttpRequest()
-        xhr.open('GET', url, true)
-        xhr.responseType = 'arraybuffer'
-        xhr.onload = () => {
-          audioContext.decodeAudioData(xhr.response, (buffer) => {
-            convolver.buffer = buffer
+        fetch(url)
+        .then(response => response.arrayBuffer())
+        .then(buffer => {
+          audioContext.decodeAudioData(buffer, (data) => {
+            convolver.buffer = data
             convolver.loop = true
             convolver.normalize = true
             observer.next(convolver)
             observer.complete()
           })
-        }
-        xhr.onError = (event) => {
-          observer.error(event)
-        }
-        xhr.send()
+        })
+        .catch(error => observer.error(error))
       })
     },
   }

@@ -63,13 +63,19 @@
       values: {
         type: Array,
       },
+      value: {
+        type: String,
+      },
     },
-    data: () => ({
-      activeValue: '',
-    }),
+    data() {
+      return {
+        activeValue: this.value || '',
+      }
+    },
     methods: {
       select(value) {
         this.activeValue = value
+        this.$emit('update', value)
       },
       isActive(value) {
         return this.activeValue === value

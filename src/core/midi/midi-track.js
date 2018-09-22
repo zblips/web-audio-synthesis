@@ -1,5 +1,5 @@
 import { isNil } from 'ramda'
-import { Status } from 'midi-parse'
+import { Status, Meta } from 'midi-parse'
 import { Dispatcher } from 'wasa'
 
 const dispatcher = Dispatcher.openSession()
@@ -14,7 +14,7 @@ function toTimedEvents({ events }) {
 }
 
 export function createMidiTrack(audioContext, { tracks }) {
-  const tempo = 140
+  const tempo = 100
   const division = 96
   const events = toTimedEvents(tracks[0])
 
@@ -38,6 +38,8 @@ export function createMidiTrack(audioContext, { tracks }) {
       events.forEach((event) => {
         let time = startTime + event.time * (60 / (tempo * division))
         switch (event.type) {
+          case Meta.END_OF_TRACK:
+            return dispatcher.dispatch('END_OF_TRACK', time)
           case Status.NOTE_ON:
             return noteOn(time, event.data)
           case Status.NOTE_OFF:

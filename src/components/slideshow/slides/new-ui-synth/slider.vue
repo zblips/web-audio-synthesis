@@ -2,18 +2,29 @@
   @import '../../../../assets/styles/synth-card';
 
   .slider {
-
+    &.active {
+      cursor: move;
+    }
     .curse {
-      fill: none;
-      stroke: #4B6F8B;
-      stroke-width: 6px;
-      stroke-linecap: round;
-      stroke-miterlimit: 10;
+      stroke: none;
+      fill: #b6b6b6;
     }
 
     .handle {
       fill: #A3B8C8;
       stroke-linecap: round;
+      cursor: pointer;
+      &.active {
+        cursor: move;
+      }
+    }
+
+    .cursor {
+      fill: #fdfdfd;
+      cursor: pointer;
+      &.active {
+        cursor: move;
+      }
     }
 
     .label {
@@ -29,11 +40,15 @@
 </style>
 
 <template>
-  <div class="slider">
+  <div :class="{ 'slider': true, active }">
     <svg :viewBox="viewBox" @mousedown="toggleActive" @mousewheel="wheel" :style="sliderStyle" ref="viewBox">
       <g>
-        <line class="curse" x1="25" y1="0" x2="25" y2="200"></line>
-        <rect class="handle" ref="handle" id="svg_1" height="25" width="50" x="0" y="0"></rect>
+        <rect class="curse" id="svg_1" :height="viewBoxDimensions.height" width="3" x="24" y="0"></rect>
+        <rect :class="{handle: true, active }" ref="handle" id="svg_1" :height="viewBoxDimensions.width / 2"
+              :width="viewBoxDimensions.width" x="0" y="0" rx="8" ry="8"></rect>
+        <rect class="cursor" ref="cursor" id="svg_1" height="2" :width="viewBoxDimensions.width" x="0"
+              :y="viewBoxDimensions.width / 4"></rect>
+
       </g>
     </svg>
     <span class="label">{{label}}</span>
@@ -42,6 +57,7 @@
 
 <script>
   import * as R from 'ramda'
+  import { scale, unscale } from 'wasa'
 
   export default {
     props: {
@@ -51,15 +67,17 @@
       label: {
         type: String,
       },
-      width: {
-        type: Number,
-      },
       height: {
         type: Number,
       },
     },
-    created() {
-      this.position = 0
+    mounted() {
+      const yMax = this.viewBoxDimensions.height - this.viewBoxDimensions.width / 2
+      const yMin = 0
+      const cursorRelativePos = this.viewBoxDimensions.width / 4
+      const max = yMin + cursorRelativePos
+      const min = yMax + cursorRelativePos
+      this.value && this.move(unscale({ min, max }, this.value))
     },
     computed: {
       viewBox() {
@@ -76,28 +94,23 @@
       sliderStyle() {
         return {
           height: `${this.height}px`,
-          width: `${this.width}px`,
+          width: `${this.height / 4}px`,
         }
       },
     },
     data: () => ({
-      position: 0,
       active: false,
       viewBoxDimensions: {
         x: 0,
         y: 0,
         width: 50,
-        height: 160,
+        height: 200,
       },
     }),
     methods: {
       toggleActive(event) {
         if (event.which !== 1) {
           return
-        }
-        const ctm = this.$refs.viewBox.getScreenCTM()
-        this.origin = {
-          y: (event.clientY - ctm.f) / ctm.d,
         }
         this.active = true
         document.addEventListener('mousemove', this.drag)
@@ -111,11 +124,27 @@
       drag(event) {
         event.preventDefault()
         const coord = this.getMousePosition(event)
-        this.$refs.handle.setAttributeNS(null, 'y', R.clamp(0.1, 175, coord.y))
+        if (coord.y < -25 || coord.y > 225) {
+          return
+        }
+        this.move(coord.y)
       },
       wheel(event) {
         event.preventDefault()
-        this.updatePosition(event.wheelDeltaY * 0.01)
+        const newPos = Number(this.$refs.handle.getAttributeNS(null, 'y')) + (-event.wheelDeltaY * 0.01)
+        this.move(newPos)
+      },
+      move(mousePos) {
+        const yMax = this.viewBoxDimensions.height - this.viewBoxDimensions.width / 2
+        const yMin = 0
+        const cursorRelativePos = this.viewBoxDimensions.width / 4
+        const cursorMin = yMin + cursorRelativePos
+        const cursorMax = yMax + cursorRelativePos
+        const newCursorPos = R.clamp(cursorMin, cursorMax, mousePos + cursorRelativePos)
+        const newYPos = R.clamp(yMin, yMax, mousePos)
+        this.$refs.handle.setAttributeNS(null, 'y', newYPos)
+        this.$refs.cursor.setAttributeNS(null, 'y', newCursorPos)
+        this.$emit('update', scale({ max: cursorMin, min: cursorMax }, newCursorPos))
       },
       getMousePosition(event) {
         const ctm = this.$refs.viewBox.getScreenCTM()
@@ -123,12 +152,6 @@
           x: (event.clientX - ctm.e) / ctm.a,
           y: (event.clientY - ctm.f) / ctm.d,
         }
-      },
-      updatePosition(increment) {
-        this.position = R.clamp(0.1, 175, this.position - increment)
-      },
-      movePosition() {
-
       },
     },
   }
