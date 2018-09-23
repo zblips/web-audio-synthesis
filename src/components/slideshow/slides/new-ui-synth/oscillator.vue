@@ -14,26 +14,12 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      padding: 10px;
+      padding: $internal-card-padding;
 
       .osc, .fm {
         box-sizing: border-box;
-        background-color: #A3B8C8;
-        border-radius: 15px;
-      }
-
-      .title {
-        font-size: $input-label-size;
-        position: absolute;
-        left: 18px;
-        top: 15px;
-      }
-
-      .toggle-button {
-        position: absolute;
-        right: 20px;
-        z-index: 100;
-        cursor: pointer;
+        background-color: $column-block-background;
+        border-radius: $column-border-radius;
       }
 
       .osc {

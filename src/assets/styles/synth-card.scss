@@ -1,8 +1,29 @@
+$input-label-size: 20px;
+
+$margin-int: 6px;
+$margin-ext: 12px;
+
+$internal-card-padding: 10px;
+$column-border-radius: 15px;
+
 .card {
   background-color: #fdfdfd;
   border-radius: 15px;
   box-sizing: border-box;
 
+  .title {
+    font-size: $input-label-size;
+    position: absolute;
+    left: 18px;
+    top: 15px;
+  }
+
+  .toggle-button {
+    position: absolute;
+    right: 20px;
+    z-index: 100;
+    cursor: pointer;
+  }
 }
 
 .toggle-button {
@@ -21,8 +42,3 @@
     box-shadow: 0 0 5px 0 #ff5574;
   }
 }
-
-$margin-int: 6px;
-$margin-ext: 12px;
-
-$input-label-size: 20px;
