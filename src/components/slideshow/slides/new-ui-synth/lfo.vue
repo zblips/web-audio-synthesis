@@ -1,47 +1,52 @@
 <style scoped lang="scss">
   @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/ui';
+  @import '../../../../assets/styles/colors';
 
   .card.lfo {
     width: 15vw;
-    margin: $margin-ext $margin-ext $margin-int $margin-int;
+    position: relative;
     display: flex;
     flex-direction: column;
+    margin: $margin-ext $margin-ext $margin-int $margin-int;
+    padding: $internal-card-padding;
 
-    & > div {
-      margin: auto;
-      height: 100%;
+    .column {
+      background-color: $column-block-background;
+      border-radius: $column-border-radius;
       box-sizing: border-box;
-    }
+      height: 100%;
 
-    .knobs {
-      width: 60%;
-      margin-bottom: 20px;
-    }
+      .amount-knob, .rate-knob {
+        position: relative;
+        top: -6%;
+      }
 
-    .toggle {
-      margin-top: 30px;
-      width: 60%;
-    }
+      .amount-knob {
+        height: 45%;
+      }
 
-    .label {
-      font-size: 26px;
-      text-align: center;
+      .rate-knob {
+        height: 30%;
+      }
     }
   }
 </style>
 
 <template>
   <div class="card lfo">
-    <div class="knobs">
-      <knob label="amount" :value="state.amplitude" :width="180" @update="setAmount"></knob>
-      <knob label="rate" :value="state.frequency" :width="130" @update="setRate"></knob>
-    </div>
-    <div class="toggle">
-      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination"  :width="200"></ui-select>
+    <div class="column">
+      <span class="title">LFO</span>
+      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">
+      </button>
+
+      <knob class="amount-knob" label="amount" :value="state.amplitude" @update="setAmount"></knob>
+
+      <knob class="rate-knob" label="rate" :value="state.frequency" @update="setRate"></knob>
+
+      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="200">
+      </ui-select>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -66,6 +71,7 @@
     data() {
       return {
         destination: this.state.destination,
+        active: false,
       }
     },
     methods: {
@@ -77,6 +83,11 @@
       },
       nextDestination(value) {
         this.state.setActiveParameter(value)
+      },
+      toggleLFO() {
+        console.warn('THIS HAS NOT BEEN CODED !!!')
+
+        this.active = !this.active
       },
     },
   }

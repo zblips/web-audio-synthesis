@@ -26,7 +26,7 @@
         position: relative;
         bottom: 16%;
         font-family: "Lucida Console", Monaco, monospace;
-        font-size: 26px;
+        font-size: 62%;
         text-align: center;
         margin: 0 auto;
         color: gray;
