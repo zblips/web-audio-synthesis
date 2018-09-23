@@ -97,7 +97,11 @@
         this.state.fadeValue = value
       },
       toggleFilter() {
-        console.warn('THIS HAS NOT BEEN CODED !!!')
+        if (this.active) {
+          this.setFadeValue(-1)
+        } else {
+          this.setFadeValue(1)
+        }
 
         this.active = !this.active
       },

@@ -45,7 +45,7 @@
   <div class="card envelope">
     <div class="column">
       <span class="title">{{type}}</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">
+      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleEnv()">
       </button>
 
       <div class="sliders">
@@ -55,7 +55,8 @@
         <slider v-if="type === 'ADSR'" :height="200" label="R" :value="state.release" @update="setReleaseTime"></slider>
       </div>
 
-      <knob class="accent-knob red" v-if="type === 'Accent'" label="accent" :value="state.accent" @update="setAccentValue">
+      <knob class="accent-knob red" v-if="type === 'Accent'" label="accent" :value="state.accent"
+            @update="setAccentValue">
       </knob>
     </div>
   </div>
@@ -80,6 +81,11 @@
       Slider,
       Knob,
     },
+    data() {
+      return {
+        active: false,
+      }
+    },
     methods: {
       setAttackTime(value) {
         this.state.attack = value
@@ -95,6 +101,10 @@
       },
       setReleaseTime(value) {
         this.state.release = value
+      },
+      toggleEnv() {
+        this.active = !this.active
+        this.state.toggleActive()
       },
     },
   }

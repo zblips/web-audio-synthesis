@@ -71,7 +71,7 @@
     data() {
       return {
         destination: this.state.destination,
-        active: false,
+        active: true,
       }
     },
     methods: {
@@ -82,12 +82,17 @@
         this.state.frequency = value
       },
       nextDestination(value) {
+        this.active = !(value === 'off')
         this.state.setActiveParameter(value)
       },
       toggleLFO() {
-        console.warn('THIS HAS NOT BEEN CODED !!!')
+        if (this.active) {
+          this.value = 'off'
+        } else {
+          this.value = 'all freq.'
+        }
 
-        this.active = !this.active
+        this.nextDestination(this.value)
       },
     },
   }
