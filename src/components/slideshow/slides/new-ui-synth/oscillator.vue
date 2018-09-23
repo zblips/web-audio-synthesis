@@ -9,6 +9,7 @@
 
     .column {
       height: 100%;
+      width: 33%;
       box-sizing: border-box;
       position: relative;
       display: flex;
@@ -30,23 +31,42 @@
 
       .toggle-button {
         position: absolute;
-        left: 45%;
+        right: 20px;
+        z-index: 100;
+        cursor: pointer;
       }
 
       .osc {
         height: 100%;
 
-        .wave-selector, .detune-knob {
-          top: -40px;
+        .osc1-gain, .osc2-gain {
+          height: 42%;
+        }
+
+        .osc1-detune, .osc2-detune {
+          height: 25%;
+        }
+
+        .wave-selector {
+          top: -16px;
         }
 
         .octave-selector {
-          top: -30px;
+          top: 24px;
         }
       }
 
       .fm {
-        height: 90%;
+        height: 85%;
+
+        .fm-amount {
+          height: 50%;
+        }
+
+        .fm-ratio {
+          height: 35%;
+          margin-top: 16px;
+        }
       }
     }
   }
@@ -58,16 +78,16 @@
     <div class="column">
       <div class="osc">
         <span class="title">Osc1</span>
-        <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleGain(1)"></button>
+        <button class="toggle-button" :class="{ active: activeOsc1, inactive: !activeOsc1 }" @click="toggleOsc1()">
+        </button>
 
-        <knob class="osc-1" :value="state.osc1GainValue" :width="180" @update="setOsc1GainValue"></knob>
+        <knob class="osc1-gain" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc1Type" @update="nextOsc1TypeValue"
                    :width="120">
         </ui-select>
 
-        <knob class="detune-knob" label="detune" :value="state.osc1DetuneValue" :width="130"
-              @update="setOsc1DetuneValue">
+        <knob class="osc1-detune" label="detune" :value="state.osc1DetuneValue" @update="setOsc1DetuneValue">
         </knob>
 
         <ui-select class="octave-selector" :values="['-1', '0', '+1']" value="0" @update="shiftOsc1" :width="40">
@@ -78,17 +98,16 @@
     <div class="column">
       <div class="osc">
         <span class="title">Osc2</span>
-        <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleGain(2)"></button>
+        <button class="toggle-button" :class="{ active: activeOsc2, inactive: !activeOsc2 }" @click="toggleOsc2()">
+        </button>
 
-        <knob class="osc-2 disabled" :value="state.osc2GainValue" :width="180"
-              @update="setOsc2GainValue"></knob>
+        <knob class="osc2-gain disabled" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc2Type" @update="nextOsc2TypeValue"
                    :width="120">
         </ui-select>
 
-        <knob class="detune-knob" label="detune" :value="state.osc2DetuneValue" :width="130"
-              @update="setOsc2DetuneValue">
+        <knob class="osc2-detune" label="detune" :value="state.osc2DetuneValue" @update="setOsc2DetuneValue">
         </knob>
 
         <ui-select class="octave-selector" :values="['-1', '0', '+1']" value="0" @update="shiftOsc2" :width="40">
@@ -99,18 +118,12 @@
     <div class="column">
       <div class="fm">
         <span class="title">fm</span>
-        <toggle></toggle>
-        <div class="knobs">
-          <knob class="fm-amount" label="amount" :value="state.fmGainValue" :width="180"
-                @update="setFmGainValue"></knob>
-          <knob class="fm-ratio" label="ratio" :value="state.fmRatioValue" :width="130"
-                @update="setFmRatioValue"></knob>
-        </div>
+        <button class="toggle-button" :class="{ active: activeFm, inactive: !activeFm }" @click="toggleFm()"></button>
+
+        <knob class="fm-amount" label="amount" :value="state.fmGainValue" @update="setFmGainValue"></knob>
+
+        <knob class="fm-ratio" label="ratio" :value="state.fmRatioValue" @update="setFmRatioValue"></knob>
       </div>
-      <!--<div class="row poly">-->
-      <!--<span class="title">poly</span>-->
-      <!--<ui-switch @update="togglePolyphonyValue" :on="state.isPolyphonic"></ui-switch>-->
-      <!--</div>-->
     </div>
   </div>
 </template>
@@ -143,7 +156,9 @@
       return {
         osc1Type: this.state.osc1Type,
         osc2Type: this.state.osc2Type,
-        active: true,
+        activeOsc1: true,
+        activeOsc2: true,
+        activeFm: false,
       }
     },
     methods: {
@@ -180,22 +195,17 @@
       nextOsc2TypeValue(value) {
         this.state.osc2Type = value
       },
-      toggleGain(oscNumber) {
-        if (this.active) {
-          if (oscNumber === 1) {
-            this.setOsc1GainValue(0)
-          } else {
-            this.setOsc2GainValue(0)
-          }
-        } else {
-          if (oscNumber === 1) {
-            this.setOsc1GainValue(1)
-          } else {
-            this.setOsc2GainValue(1)
-          }
-        }
-
-        this.active = !this.active
+      toggleOsc1() {
+        this.activeOsc1 ? this.setOsc1GainValue(0) : this.setOsc1GainValue(1)
+        this.activeOsc1 = !this.activeOsc1
+      },
+      toggleOsc2() {
+        this.activeOsc2 ? this.setOsc2GainValue(0) : this.setOsc2GainValue(1)
+        this.activeOsc2 = !this.activeOsc2
+      },
+      toggleFm() {
+        this.activeFm ? this.setFmGainValue(0) : this.setFmGainValue(1)
+        this.activeFm = !this.activeFm
       },
     },
   }

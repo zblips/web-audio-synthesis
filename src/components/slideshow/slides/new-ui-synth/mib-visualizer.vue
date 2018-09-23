@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <div class="card visualizer">
+  <div class="card visualizer" ref="cardVisualizer">
     <div class="canvas" :width="width" :height="height">
       <canvas ref="canvas" :width="width" :height="height"></canvas>
     </div>
@@ -46,11 +46,12 @@
       return {
         width: 100,
         height: 200,
+        cardVisualizer: null,
       }
     },
     methods: {
       draw() {
-        const cardElement = document.querySelector('div.card.visualizer')
+        const cardElement = this.$refs.cardVisualizer
         this.width = cardElement.offsetWidth - 26
         this.height = cardElement.offsetHeight - 32
 
