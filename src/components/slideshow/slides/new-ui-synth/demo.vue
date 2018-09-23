@@ -38,8 +38,8 @@
         <lfo :state="synth.lfo"></lfo>
       </div>
       <div class="lower-row">
-        <mib-visualizer :width="800" :height="500" :analyzer="output.analyzer"></mib-visualizer>
-        <mib-visualizer :width="800" :height="500" :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
+        <mib-visualizer :analyzer="output.analyzer"></mib-visualizer>
+        <mib-visualizer :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
       </div>
       <div class="app-bar">
         <span>Web Audio Synthesis</span>

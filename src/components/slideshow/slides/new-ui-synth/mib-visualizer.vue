@@ -50,12 +50,9 @@
     },
     methods: {
       draw() {
-        console.log(this.width, this.height)
         const cardElement = document.querySelector('div.card.visualizer')
-
         this.width = cardElement.offsetWidth - 26
         this.height = cardElement.offsetHeight - 32
-        console.log(this.width, this.height)
 
         if (this.type === 'osc') {
           return this.drawOscilloscope()

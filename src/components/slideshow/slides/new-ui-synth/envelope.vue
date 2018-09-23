@@ -2,7 +2,7 @@
   @import '../../../../assets/styles/synth-card';
 
   .card.envelope {
-    width: 25vw;
+    width: 18vw;
     margin: $margin-ext $margin-int $margin-int;
 
     .sliders {

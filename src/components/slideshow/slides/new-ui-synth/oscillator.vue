@@ -3,61 +3,50 @@
   @import '../../../../assets/styles/colors';
 
   .card {
-    /*width: 35vw;*/
+    width: 34vw;
     margin: $margin-ext $margin-int $margin-int $margin-ext;
     display: flex;
 
-    .label {
-      position: relative;
-      bottom: 24px;
-      font-family: 'Arial';
-      font-size: 26px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-      color: #2c3e50;
-      .screen {
-        background-color: #2c3e50;
-        border: 2px double gray;
-        border-radius: 5px;
-        padding: 2px;
-        color: #fdfdfd;
-        width: 120px;
-        display: inline-block;
-      }
-    }
-
     .column {
-      height: 43vh;
-      min-height: 400px;
-      .row {
-        background-color: #A3B8C8;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        border-radius: 15px;
+      height: 100%;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+
+      .osc, .fm {
         box-sizing: border-box;
-        margin: 10px;
-        .title {
-          font-size: $input-label-size;
-          position: absolute;
-          left: 18px;
-          top: 15px;
+        background-color: #A3B8C8;
+        border-radius: 15px;
+      }
+
+      .title {
+        font-size: $input-label-size;
+        position: absolute;
+        left: 18px;
+        top: 15px;
+      }
+
+      .toggle-button {
+        position: absolute;
+        left: 45%;
+      }
+
+      .osc {
+        height: 100%;
+
+        .wave-selector, .detune-knob {
+          top: -40px;
         }
-        &.osc {
-          height: 100%;
-          .knobs {
-            height: 20%;
-          }
+
+        .octave-selector {
+          top: -30px;
         }
-        &.fm {
-          height: 23vh;
-          min-height: 370px;
-        }
-        &.poly {
-          min-height: 150px;
-          height: 13vh;
-        }
+      }
+
+      .fm {
+        height: 90%;
       }
     }
   }
@@ -67,30 +56,48 @@
 <template>
   <div class="card">
     <div class="column">
-      <div class="row osc">
+      <div class="osc">
         <span class="title">Osc1</span>
-        <toggle></toggle>
+        <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleGain(1)"></button>
+
         <knob class="osc-1" :value="state.osc1GainValue" :width="180" @update="setOsc1GainValue"></knob>
-        <ui-select :values="state.types" :value="state.osc1Type" @update="nextOsc1TypeValue" :width="120"></ui-select>
-        <knob label="detune" :value="state.osc1DetuneValue" :width="130" @update="setOsc1DetuneValue"></knob>
-        <ui-select :values="['-1', '0', '+1']" value="0" @update="shiftOsc1" :width="40"></ui-select>
+
+        <ui-select class="wave-selector" :values="state.types" :value="state.osc1Type" @update="nextOsc1TypeValue"
+                   :width="120">
+        </ui-select>
+
+        <knob class="detune-knob" label="detune" :value="state.osc1DetuneValue" :width="130"
+              @update="setOsc1DetuneValue">
+        </knob>
+
+        <ui-select class="octave-selector" :values="['-1', '0', '+1']" value="0" @update="shiftOsc1" :width="40">
+        </ui-select>
       </div>
     </div>
 
     <div class="column">
-      <div class="row osc">
+      <div class="osc">
         <span class="title">Osc2</span>
-        <toggle></toggle>
+        <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleGain(2)"></button>
+
         <knob class="osc-2 disabled" :value="state.osc2GainValue" :width="180"
               @update="setOsc2GainValue"></knob>
-        <ui-select :values="state.types" :value="state.osc2Type" @update="nextOsc2TypeValue" :width="120"></ui-select>
-        <knob label="detune" :value="state.osc2DetuneValue" :width="130" @update="setOsc2DetuneValue"></knob>
-        <ui-select :values="['-1', '0', '+1']" value="0" @update="shiftOsc2" :width="40"></ui-select>
+
+        <ui-select class="wave-selector" :values="state.types" :value="state.osc2Type" @update="nextOsc2TypeValue"
+                   :width="120">
+        </ui-select>
+
+        <knob class="detune-knob" label="detune" :value="state.osc2DetuneValue" :width="130"
+              @update="setOsc2DetuneValue">
+        </knob>
+
+        <ui-select class="octave-selector" :values="['-1', '0', '+1']" value="0" @update="shiftOsc2" :width="40">
+        </ui-select>
       </div>
     </div>
 
     <div class="column">
-      <div class="row fm">
+      <div class="fm">
         <span class="title">fm</span>
         <toggle></toggle>
         <div class="knobs">
@@ -101,8 +108,8 @@
         </div>
       </div>
       <!--<div class="row poly">-->
-        <!--<span class="title">poly</span>-->
-        <!--<ui-switch @update="togglePolyphonyValue" :on="state.isPolyphonic"></ui-switch>-->
+      <!--<span class="title">poly</span>-->
+      <!--<ui-switch @update="togglePolyphonyValue" :on="state.isPolyphonic"></ui-switch>-->
       <!--</div>-->
     </div>
   </div>
@@ -136,6 +143,7 @@
       return {
         osc1Type: this.state.osc1Type,
         osc2Type: this.state.osc2Type,
+        active: true,
       }
     },
     methods: {
@@ -171,6 +179,23 @@
       },
       nextOsc2TypeValue(value) {
         this.state.osc2Type = value
+      },
+      toggleGain(oscNumber) {
+        if (this.active) {
+          if (oscNumber === 1) {
+            this.setOsc1GainValue(0)
+          } else {
+            this.setOsc2GainValue(0)
+          }
+        } else {
+          if (oscNumber === 1) {
+            this.setOsc1GainValue(1)
+          } else {
+            this.setOsc2GainValue(1)
+          }
+        }
+
+        this.active = !this.active
       },
     },
   }

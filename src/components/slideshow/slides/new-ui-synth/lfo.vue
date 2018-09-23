@@ -3,7 +3,7 @@
   @import '../../../../assets/styles/ui';
 
   .card.lfo {
-    width: 40vw;
+    width: 15vw;
     margin: $margin-ext $margin-ext $margin-int $margin-int;
     display: flex;
     flex-direction: column;

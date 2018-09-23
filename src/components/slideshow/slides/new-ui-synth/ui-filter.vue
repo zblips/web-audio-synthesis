@@ -2,7 +2,7 @@
   @import '../../../../assets/styles/synth-card';
 
   .card.filters {
-    width: 25vw;
+    width: 15vw;
     margin: $margin-ext $margin-int $margin-int;
     display: flex;
     flex-direction: column;

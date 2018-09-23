@@ -51,13 +51,13 @@
 <style scoped lang="scss">
   .label {
     position: relative;
-    bottom: 24px;
     font-family: 'Arial';
     font-size: 26px;
     text-align: center;
     cursor: pointer;
     user-select: none;
     color: #2c3e50;
+
     .screen {
       background-color: #2c3e50;
       border: 2px double gray;
