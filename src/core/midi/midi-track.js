@@ -1,6 +1,7 @@
 import { isNil } from 'ramda'
 import { Status, Meta } from 'midi-parse'
 import { Dispatcher } from 'wasa'
+import * as MidiEvents from './midi-events'
 
 const dispatcher = Dispatcher.openSession()
 
@@ -16,7 +17,16 @@ function toTimedEvents({ events }) {
 export function createMidiTrack(audioContext, { tracks }) {
   const tempo = 100
   const division = 96
-  const events = toTimedEvents(tracks[0])
+
+  let events = toTimedEvents(tracks[0])
+
+  let noteOffEvents = []
+
+  dispatcher.as('MIDI_TRACK_CHANGED')
+  .subscribe((trackName) => {
+    console.log(trackName)
+    events = toTimedEvents(MidiEvents[trackName][0])
+  })
 
   let slave, startTime
 
@@ -43,6 +53,7 @@ export function createMidiTrack(audioContext, { tracks }) {
           case Status.NOTE_ON:
             return noteOn(time, event.data)
           case Status.NOTE_OFF:
+            noteOffEvents.push(event.data)
             return noteOff(time, event.data)
         }
       })
@@ -56,6 +67,9 @@ export function createMidiTrack(audioContext, { tracks }) {
     },
     getSlave() {
       return slave
+    },
+    get tracks() {
+      return Object.keys(MidiEvents)
     },
   }
 }

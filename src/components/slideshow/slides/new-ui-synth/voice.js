@@ -14,7 +14,7 @@ export const create4xVoiceManager = (audioContext) => {
   const output = audioContext.createGain()
 
   let isPolyphonic = false
-  let fmRatioValue = 0
+  let fmRatioValue = 2
   let fmGainValue = 0
   let osc1GainValue = 0.5
   let osc2GainValue = 0.5
@@ -167,14 +167,14 @@ export const create4xVoiceManager = (audioContext) => {
       return osc2GainValue
     },
     set fmRatioValue(value) {
-      fmRatioValue = Number(value.toFixed(1)) * 20 + 2
+      fmRatioValue = unscale({ min: 1, max: 10 }, Number(value.toFixed(1))) * 2
       for (const voice of Object.values(voices)) {
         fmOscillator.frequency.value = voice.osc1.frequency.value * fmRatioValue
         break
       }
     },
     get fmRatioValue() {
-      return fmRatioValue / 20
+      return scale({ min: 1, max: 10 }, fmRatioValue / 2)
     },
     set fmGainValue(value) {
       fmGainValue = Number(value.toFixed(1)) * 300
@@ -223,6 +223,9 @@ export const create4xVoiceManager = (audioContext) => {
     },
     get allOscsFrequency() {
       return allOscsFrequencySource.offset
+    },
+    get fmGainParam() {
+      return fmGain.gain
     },
     getState() {
       return {

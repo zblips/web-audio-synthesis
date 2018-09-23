@@ -61,6 +61,9 @@ export const createAdsrEnvelope = (parameters) => {
     },
     toggleActive(value = !isActive) {
       isActive = value
+      if (!isActive && parameter) {
+        reset(parameter)
+      }
       return this
     },
     start(time) {

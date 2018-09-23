@@ -12,6 +12,7 @@ export const LFODestinations = Object.freeze({
   FILTER_FREQUENCY: 'filter freq.',
   FILTER_PEAK: 'filter peak',
   ALL_FREQUENCY: 'all freq.',
+  FM_AMOUNT: 'fm amount',
   // OSC1_FREQUENCY: 'osc1 freq.',
   // OSC2_FREQUENCY: 'osc2 freq',
 })

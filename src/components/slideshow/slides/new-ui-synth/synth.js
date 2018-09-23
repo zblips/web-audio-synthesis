@@ -36,6 +36,7 @@ export const Synth = (audioContext) => {
     [LFODestinations.FILTER_FREQUENCY]: filter.frequencyParam,
     [LFODestinations.ALL_FREQUENCY]: voiceManager.allOscsFrequency,
     [LFODestinations.FILTER_PEAK]: filter.peakParam,
+    [LFODestinations.FM_AMOUNT]: voiceManager.fmGainParam,
   })
   .setActiveParameter(LFODestinations.FILTER_FREQUENCY)
 
