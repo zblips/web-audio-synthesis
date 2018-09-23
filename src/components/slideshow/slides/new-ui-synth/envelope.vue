@@ -44,7 +44,7 @@
 <template>
   <div class="card envelope">
     <div class="column">
-      <span class="title">ADSR</span>
+      <span class="title">{{type}}</span>
       <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">
       </button>
 
@@ -52,10 +52,10 @@
         <slider :height="200" label="A" :value="state.attack" @update="setAttackTime"></slider>
         <slider :height="200" label="D" :value="state.decay" @update="setDecayTime"></slider>
         <slider :height="200" label="S" :value="state.sustain" @update="setSustainValue"></slider>
-        <slider v-if="type === 'adsr'" :height="200" label="R" :value="state.release" @update="setReleaseTime"></slider>
+        <slider v-if="type === 'ADSR'" :height="200" label="R" :value="state.release" @update="setReleaseTime"></slider>
       </div>
 
-      <knob class="accent-knob" v-if="type === 'accent'" label="accent" :value="state.accent" @update="setAccentValue">
+      <knob class="accent-knob red" v-if="type === 'Accent'" label="accent" :value="state.accent" @update="setAccentValue">
       </knob>
     </div>
   </div>
@@ -73,7 +73,7 @@
       },
       type: {
         type: String,
-        default: 'accent',
+        default: 'Accent',
       },
     },
     components: {

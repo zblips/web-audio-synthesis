@@ -39,9 +39,9 @@
       <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">
       </button>
 
-      <knob class="amount-knob" label="amount" :value="state.amplitude" @update="setAmount"></knob>
+      <knob class="amount-knob green" label="amount" :value="state.amplitude" @update="setAmount"></knob>
 
-      <knob class="rate-knob" label="rate" :value="state.frequency" @update="setRate"></knob>
+      <knob class="rate-knob green" label="rate" :value="state.frequency" @update="setRate"></knob>
 
       <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="200">
       </ui-select>

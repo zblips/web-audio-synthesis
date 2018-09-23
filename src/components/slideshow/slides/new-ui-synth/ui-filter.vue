@@ -50,7 +50,7 @@
       <knob class="peak-knob" label="peak" :value="state.peakValue" @update="setPeakValue">
       </knob>
 
-      <knob class="dry-wet-knob" label="dry-wet" :value="state.fadeValue" @update="setFadeValue">
+      <knob class="dry-wet-knob grey" label="dry-wet" :value="state.fadeValue" @update="setFadeValue">
       </knob>
 
       <ui-select class="type-selector" :value="state.type" :values="state.types" @update="setType" :width="120">

@@ -32,7 +32,7 @@
     <div class="synth">
       <div class="upper-row">
         <osc :state="synth.voiceManager"></osc>
-        <envelope type="adsr" :state="synth.adsrEnvelope"></envelope>
+        <envelope type="ADSR" :state="synth.adsrEnvelope"></envelope>
         <ui-filter :state="synth.filter"></ui-filter>
         <envelope :state="synth.accentEnvelope"></envelope>
         <lfo :state="synth.lfo"></lfo>

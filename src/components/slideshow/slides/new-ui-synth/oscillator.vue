@@ -67,13 +67,13 @@
         <button class="toggle-button" :class="{ active: activeOsc1, inactive: !activeOsc1 }" @click="toggleOsc1()">
         </button>
 
-        <knob class="osc1-gain" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
+        <knob class="osc1-gain yellow" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc1Type" @update="nextOsc1TypeValue"
                    :width="120">
         </ui-select>
 
-        <knob class="osc1-detune" label="detune" :value="state.osc1DetuneValue" @update="setOsc1DetuneValue">
+        <knob class="osc1-detune yellow" label="detune" :value="state.osc1DetuneValue" @update="setOsc1DetuneValue">
         </knob>
 
         <ui-select class="octave-selector" :values="['-1', '0', '+1']" value="0" @update="shiftOsc1" :width="40">
@@ -87,13 +87,13 @@
         <button class="toggle-button" :class="{ active: activeOsc2, inactive: !activeOsc2 }" @click="toggleOsc2()">
         </button>
 
-        <knob class="osc2-gain disabled" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
+        <knob class="osc2-gain red" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc2Type" @update="nextOsc2TypeValue"
                    :width="120">
         </ui-select>
 
-        <knob class="osc2-detune" label="detune" :value="state.osc2DetuneValue" @update="setOsc2DetuneValue">
+        <knob class="osc2-detune red" label="detune" :value="state.osc2DetuneValue" @update="setOsc2DetuneValue">
         </knob>
 
         <ui-select class="octave-selector" :values="['-1', '0', '+1']" value="0" @update="shiftOsc2" :width="40">
@@ -103,12 +103,12 @@
 
     <div class="column">
       <div class="fm">
-        <span class="title">fm</span>
+        <span class="title">Fm</span>
         <button class="toggle-button" :class="{ active: activeFm, inactive: !activeFm }" @click="toggleFm()"></button>
 
-        <knob class="fm-amount" label="amount" :value="state.fmGainValue" @update="setFmGainValue"></knob>
+        <knob class="fm-amount violet" label="amount" :value="state.fmGainValue" @update="setFmGainValue"></knob>
 
-        <knob class="fm-ratio" label="ratio" :value="state.fmRatioValue" @update="setFmRatioValue"></knob>
+        <knob class="fm-ratio violet" label="ratio" :value="state.fmRatioValue" @update="setFmRatioValue"></knob>
       </div>
     </div>
   </div>
