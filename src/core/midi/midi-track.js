@@ -1,5 +1,8 @@
 import { isNil } from 'ramda'
-import { Status } from 'midi-parse'
+import { Status, Meta } from 'midi-parse'
+import { Dispatcher } from 'wasa'
+
+const dispatcher = Dispatcher.openSession()
 
 function toTimedEvents({ events }) {
   let delta = 0
@@ -10,12 +13,12 @@ function toTimedEvents({ events }) {
   })
 }
 
-export function createMidiTrack (audioContext, { tracks }) {
-  let slave
+export function createMidiTrack(audioContext, { tracks }) {
   const tempo = 100
   const division = 96
-
   const events = toTimedEvents(tracks[0])
+
+  let slave, startTime
 
   const noteOn = (time, note) => {
     if (!isNil(slave)) {
@@ -31,10 +34,12 @@ export function createMidiTrack (audioContext, { tracks }) {
 
   return {
     start() {
-      const startTime = audioContext.currentTime
+      startTime = audioContext.currentTime
       events.forEach((event) => {
         let time = startTime + event.time * (60 / (tempo * division))
         switch (event.type) {
+          case Meta.END_OF_TRACK:
+            return dispatcher.dispatch('END_OF_TRACK', time)
           case Status.NOTE_ON:
             return noteOn(time, event.data)
           case Status.NOTE_OFF:
@@ -42,7 +47,8 @@ export function createMidiTrack (audioContext, { tracks }) {
         }
       })
     },
-    stop(time = 0) {
+    stop(time = audioContext.currentTime) {
+      dispatcher.dispatch('STOP')
     },
     setSlave(instrument) {
       slave = instrument

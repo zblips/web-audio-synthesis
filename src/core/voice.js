@@ -22,12 +22,14 @@ export const Voice = (audioContext) => {
 
   setWaveForm(waveForm1, osc1)
   setWaveForm(waveForm2, osc2)
+
   const gain1 = audioContext.createGain()
   const gain2 = audioContext.createGain()
+  const merger = audioContext.createGain()
   const output = audioContext.createGain()
 
-  gain1.connect(output)
-  gain2.connect(output)
+  gain1.connect(merger).connect(output)
+  gain2.connect(merger).connect(output)
 
   allOscsFrequencySource.connect(osc1.frequency)
   allOscsFrequencySource.connect(osc2.frequency)
@@ -47,8 +49,8 @@ export const Voice = (audioContext) => {
       osc2.frequency.value = frequency
       osc1.detune.value = detune1
       osc2.detune.value = detune2
-      osc1.connect(gain1)
-      osc2.connect(gain2)
+      osc1.connect(merger)
+      osc2.connect(merger)
       osc1.start(time)
       osc2.start(time)
     },

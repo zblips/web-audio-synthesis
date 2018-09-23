@@ -1,23 +1,22 @@
-import Rx from 'rxjs'
+import { Observable } from 'rxjs'
+import { createDryWetMixer } from 'wasa'
 
 export const Reverb = (audioContext) => {
   const convolver = audioContext.createConvolver()
-  const merger = audioContext.createChannelMerger(2)
-  const splitter = audioContext.createChannelSplitter(2)
-  const wetGain = audioContext.createGain()
-  const dryGain = audioContext.createGain()
-  splitter.connect(wetGain)
-  splitter.connect(dryGain)
-  wetGain.connect(convolver)
-  convolver.connect(merger)
-  dryGain.connect(merger)
-  wetGain.gain.value = 0.075
+  const dryWetMixer = createDryWetMixer(audioContext)
+
+  dryWetMixer.setWetNode(convolver)
+
   return {
-    connect({ input }) {
-      merger.connect(input)
+    connect({ input, connect }) {
+      dryWetMixer.connect({ getInput: () => input })
+      return { connect }
+    },
+    get input() {
+      return dryWetMixer.getInput()
     },
     setImpulse(url) {
-      return Rx.Observable.create(observer => {
+      return Observable.create(observer => {
         const xhr = new XMLHttpRequest()
         xhr.open('GET', url, true)
         xhr.responseType = 'arraybuffer'
@@ -36,6 +35,5 @@ export const Reverb = (audioContext) => {
         xhr.send()
       })
     },
-    input: splitter,
   }
 }

@@ -1,0 +1,61 @@
+import { createDryWetMixer, scale, unscale } from 'wasa'
+
+export const FilterTypes = Object.freeze({
+  LOW_PASS: 'lowpass',
+  HIGH_PASS: 'highpass',
+  BAND_PASS: 'bandpass',
+})
+
+export const createFilter = (audioContext) => {
+  const dryWetMixer = createDryWetMixer(audioContext)
+  const filter = audioContext.createBiquadFilter()
+
+  dryWetMixer.setWetNode(filter)
+
+  return {
+    connect({ input, connect }) {
+      dryWetMixer.connect({ getInput: () => input })
+      return { connect }
+    },
+    setFadeValue(value) {
+      dryWetMixer.setFadeValue(value)
+      return this
+    },
+    get input() {
+      return dryWetMixer.getInput()
+    },
+    set frequencyValue(value) {
+      filter.frequency.linearRampToValueAtTime(unscale({ min: 50, max: 22050 }, value), audioContext.currentTime + 0.1)
+    },
+    get frequencyValue() {
+      return scale({ min: 33, max: 22050 }, filter.frequency.value)
+    },
+    set peakValue(value) {
+      filter.Q.value = unscale({ min: 0, max: 29 }, value)
+    },
+    get peakValue() {
+      return scale({ min: 0, max: 29 }, filter.Q.value)
+    },
+    set type(value) {
+      filter.type = value
+    },
+    get type() {
+      return filter.type
+    },
+    get types() {
+      return Object.values(FilterTypes)
+    },
+    set fadeValue(value) {
+      dryWetMixer.setFadeValue(unscale({ min: -1, max: 1 }, value))
+    },
+    get fadeValue() {
+      return scale({ min: -1, max: 1 }, dryWetMixer.getFadeValue())
+    },
+    get frequencyParam() {
+      return filter.frequency
+    },
+    get peakParam() {
+      return filter.Q
+    },
+  }
+}

@@ -26,10 +26,19 @@
       position: absolute;
       width: 100%;
 
-      img {
+      .znk-icon {
         padding-top: 4px;
         width: 200px;
         height: 57px;
+      }
+
+      .gdg-container {
+        display: flex;
+        align-items: center;
+
+        .gdg-icon {
+          height: 80px;
+        }
       }
     }
   }
@@ -39,16 +48,19 @@
 <template>
   <div class="slide">
     <div class="content">
-      <h1>Music in the browzzzer</h1>
+      <h1>Web Audio Synthesis</h1>
       <p>Codons un synthétiseur avec la Web Audio API</p>
     </div>
 
     <div class="footer">
       <span>Antoine Cordier <br/> Alban Delcourt</span>
 
-      <span> Technozaure Mars 2018</span>
+      <span class="gdg-container">
+        <img class="gdg-icon" src="../../../assets/img/gdg-lille.png">
+        <span>GDG Septembre 2018</span>
+      </span>
 
-      <img src="../../../assets/img/znk.png">
+      <img class="znk-icon" src="../../../assets/img/znk.png">
     </div>
   </div>
 </template>

@@ -5,8 +5,8 @@
     font-family: "Roboto Condensed";
     background-color: $bg-primary;
     overflow: hidden;
-    height: 99%;
-    width: 99%;
+    height: 100%;
+    width: 100%;
 
     .eg-slide {
       background-color: $bg-primary;
@@ -43,7 +43,11 @@
 
 <template>
   <div class="eg-slideshow">
-    <slide :mouseNavigation="false" leave='fadeOut'>
+    <slide enter='fadeIn' leave='fadeOut'>
+      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
+    </slide>
+
+    <slide enter='fadeIn' leave='fadeOut'>
       <mib-title></mib-title>
     </slide>
 
@@ -74,7 +78,7 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
-      <mib-monophonic-demo></mib-monophonic-demo>
+      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
     </slide>
 
     <!--POLYPHONIC-->
@@ -91,7 +95,7 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut'>
-      <mib-polyphonic-demo></mib-polyphonic-demo>
+      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
     </slide>
 
     <!--ADDITIVE-->
@@ -108,7 +112,7 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
-      <mib-additive-demo></mib-additive-demo>
+      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
     </slide>
 
     <!--SUBSTRACTIVE-->
@@ -121,7 +125,7 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
-      <mib-substractive-demo></mib-substractive-demo>
+      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
     </slide>
 
     <!--ENVELOPES-->
@@ -138,7 +142,7 @@
     </slide>
 
     <slide enter='bounceInRight' :mouseNavigation="false" :steps="2">
-      <mib-envelopes-demo :step="step"></mib-envelopes-demo>
+      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
     </slide>
 
     <!--LFO-->
@@ -151,7 +155,7 @@
     </slide>
 
     <slide enter='bounceInRight' :mouseNavigation="false" :steps="2">
-      <mib-lfo-demo :step="step"></mib-lfo-demo>
+      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
     </slide>
 
     <!--END-->
@@ -166,13 +170,15 @@
   import MibTitle from './slides/mib-title.vue'
   import { gamepadHandler } from '../../core/utils/gamepad-service'
 
-  import MibWebAudioApi00 from './slides/webAudioApi/mib-web-audio-api-00'
-  import MibWebAudioApi01 from './slides/webAudioApi/mib-web-audio-api-01'
-  import MibWebAudioSnippet from './slides/webAudioApi/snippet'
+  import MibWebAudioApi00 from './slides/web-audio-api/mib-web-audio-api-00'
+  import MibWebAudioApi01 from './slides/web-audio-api/mib-web-audio-api-01'
+  import MibWebAudioSnippet from './slides/web-audio-api/snippet'
+
   import MibMonophonicIntro from './slides/monophonic-synthesis/intro'
   import MibMonophonicSnippet from './slides/monophonic-synthesis/snippet.vue'
   import MibMonophonicGraph from './slides/monophonic-synthesis/graph.vue'
   import MibMonophonicDemo from './slides/monophonic-synthesis/demo.vue'
+  import SynthesizerDemo from './slides/new-ui-synth/demo.vue'
 
   import MibPolyphonicIntro from './slides/polyphonic-synthesis/intro'
   import MibPolyphonicSnippet from './slides/polyphonic-synthesis/snippet.vue'
@@ -216,6 +222,8 @@
       MibMonophonicGraph,
       MibMonophonicSnippet,
       MibMonophonicDemo,
+
+      SynthesizerDemo,
 
       MibPolyphonicIntro,
       MibPolyphonicGraph,
@@ -266,6 +274,9 @@
       updateURL() {
         this.$router.push(`/${this.currentSlideIndex}/${this.step}`)
       },
+    },
+    props: {
+      mouseNavigation: false,
     },
     watch: {
       $route: 'updateSlides',
