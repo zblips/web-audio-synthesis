@@ -2,13 +2,11 @@
   @import '../../../../assets/styles/synth-card';
 
   .card {
-    /*width: 50vw;*/
-    margin: $margin-ext $margin-ext $margin-int $margin-int;
+    width: 50vw;
+    margin: $margin-int $margin-ext;
     display: flex;
 
     .canvas {
-      width: 80%;
-      height: 80%;
       margin: auto 10px auto 10px;
       background-color: #2c3e50;
       border: 2px solid #A3B8C8;
@@ -18,8 +16,8 @@
 </style>
 
 <template>
-  <div class="card">
-    <div class="canvas" :style="canvasStyle">
+  <div class="card visualizer">
+    <div class="canvas" :width="width" :height="height">
       <canvas ref="canvas" :width="width" :height="height"></canvas>
     </div>
   </div>
@@ -32,14 +30,10 @@
       this.canvasContext = this.$refs.canvas.getContext('2d')
       this.buffer = new Uint8Array(this.analyzer.fftSize)
       this.draw()
+
+      window.addEventListener('resize', this.draw)
     },
     props: {
-      width: {
-        type: Number,
-      },
-      height: {
-        type: Number,
-      },
       analyzer: {
         type: AnalyserNode,
       },
@@ -48,16 +42,21 @@
         default: 'osc',
       },
     },
-    computed: {
-      canvasStyle() {
-        return {
-          height: `${this.height}px`,
-          width: `${this.width}px`,
-        }
-      },
+    data() {
+      return {
+        width: 100,
+        height: 200,
+      }
     },
     methods: {
       draw() {
+        console.log(this.width, this.height)
+        const cardElement = document.querySelector('div.card.visualizer')
+
+        this.width = cardElement.offsetWidth - 26
+        this.height = cardElement.offsetHeight - 32
+        console.log(this.width, this.height)
+
         if (this.type === 'osc') {
           return this.drawOscilloscope()
         }
@@ -109,11 +108,14 @@
         this.canvasContext.beginPath()
         const width = this.width / data.length
         data.forEach((freq, i) => {
-          this.canvasContext.fillStyle = `rgb(${freq + 100}, 50, 50)`
+          this.canvasContext.fillStyle = `rgb(${freq + 100}, 85,116)`
           this.canvasContext.fillRect(i * width, this.height - freq, width, freq)
         })
         requestAnimationFrame(this.drawSpectrum)
       },
+    },
+    beforeDestroy() {
+      window.removeEventListener('resize', this.draw)
     },
   }
 </script>

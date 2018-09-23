@@ -3,7 +3,7 @@
 
   .card.envelope {
     width: 25vw;
-    margin: $margin-int $margin-int $margin-ext $margin-int;
+    margin: $margin-ext $margin-int $margin-int;
 
     .sliders {
       display: flex;

@@ -8,9 +8,20 @@
     height: 100vh;
 
     .upper-row, .lower-row {
-      height: 50vh;
+      height: 47vh;
       width: 100vw;
       display: flex;
+      box-sizing: border-box;
+    }
+
+    .app-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100vw;
+      height: 4vh;
+      background-color: #fdfdfd;
+      text-align: left;
+      padding: 8px;
     }
 
   }
@@ -21,14 +32,17 @@
     <div class="synth">
       <div class="upper-row">
         <osc :state="synth.voiceManager"></osc>
+        <envelope type="adsr" :state="synth.adsrEnvelope"></envelope>
+        <ui-filter :state="synth.filter"></ui-filter>
+        <envelope :state="synth.accentEnvelope"></envelope>
+        <lfo :state="synth.lfo"></lfo>
+      </div>
+      <div class="lower-row">
         <mib-visualizer :width="800" :height="500" :analyzer="output.analyzer"></mib-visualizer>
         <mib-visualizer :width="800" :height="500" :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
       </div>
-      <div class="lower-row">
-        <ui-filter :state="synth.filter"></ui-filter>
-        <envelope :state="synth.accentEnvelope"></envelope>
-        <envelope type="adsr" :state="synth.adsrEnvelope"></envelope>
-        <lfo :state="synth.lfo"></lfo>
+      <div class="app-bar">
+        <span>Web Audio Synthesis</span>
       </div>
     </div>
 

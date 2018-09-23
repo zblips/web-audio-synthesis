@@ -4,7 +4,7 @@
 
   .card.lfo {
     width: 40vw;
-    margin: $margin-int $margin-ext $margin-ext $margin-int;
+    margin: $margin-ext $margin-ext $margin-int $margin-int;
     display: flex;
     flex-direction: column;
 

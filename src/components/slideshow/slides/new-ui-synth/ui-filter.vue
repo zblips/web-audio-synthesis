@@ -3,7 +3,7 @@
 
   .card.filters {
     width: 25vw;
-    margin: $margin-int $margin-int $margin-ext $margin-ext;
+    margin: $margin-ext $margin-int $margin-int;
     display: flex;
     flex-direction: column;
     & > div {

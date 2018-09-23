@@ -114,9 +114,9 @@
   import UiSwitch from './switch.vue'
   import OctaveSelector from './octave-selector.vue'
   import UiSelect from './ui-select.vue'
-  import { WaveForms } from 'wasa'
+  // import { WaveForms } from 'wasa'
 
-  const waveForms = Object.values(WaveForms)
+  // const waveForms = Object.values(WaveForms)
 
   export default {
     components: {
