@@ -1,5 +1,6 @@
 <style lang="scss" type="text/scss" scoped>
   @import '../../../../assets/styles/synth-card';
+  @import '../../../../assets/styles/colors';
 
   .slider {
     &.active {
@@ -7,11 +8,11 @@
     }
     .curse {
       stroke: none;
-      fill: #b6b6b6;
+      fill: white;
     }
 
     .handle {
-      fill: #A3B8C8;
+      fill: $ui-primary;
       stroke-linecap: round;
       cursor: pointer;
       &.active {
@@ -32,7 +33,7 @@
       text-align: center;
       display: block;
       margin: 0 auto;
-      color: gray;
+      color: white;
       font-family: "Lucida Console", Monaco, monospace;
     }
   }
