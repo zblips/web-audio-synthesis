@@ -13,17 +13,6 @@
       display: flex;
       box-sizing: border-box;
     }
-
-    .app-bar {
-      position: fixed;
-      bottom: 0;
-      width: 100vw;
-      height: 4vh;
-      background-color: #fdfdfd;
-      text-align: left;
-      padding: 8px;
-    }
-
   }
 </style>
 
@@ -41,9 +30,7 @@
         <mib-visualizer :analyzer="output.analyzer"></mib-visualizer>
         <mib-visualizer :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
       </div>
-      <div class="app-bar">
-        <span>Web Audio Synthesis</span>
-      </div>
+      <ui-synth-bar :state="{ midiTrack, synth }"></ui-synth-bar>
     </div>
 
   </div>
@@ -60,15 +47,13 @@
   import Osc from './oscillator.vue'
   import Envelope from './envelope'
   import UiFilter from './ui-filter'
+  import UiSynthBar from './ui-synth-bar.vue'
   import Lfo from './lfo.vue'
   import { createReverb } from './reverb'
 
-  import { Dispatcher } from 'wasa'
-
-  const dispatcher = Dispatcher.openSession()
-
   export default {
     components: {
+      UiSynthBar,
       UiFilter,
       Envelope,
       MibVisualizer,
@@ -91,41 +76,12 @@
         keyboard,
       }
     },
-    methods: {
-      stop() {
-        this.audioContext.close()
-        .catch(() => console.info('context is allready closed'))
-        .then(() => {
-          this.keyboard.destroy()
-          resetSariasSongMapping()
-
-          const voiceState = this.synth.voiceManager.getState()
-          this.audioContext = new AudioContext()
-          this.reverb = createReverb(this.audioContext)
-          this.reverb
-          .setFadeValue(-1)
-          .setImpulse(require('../../../../assets/media/Nice_Drum_Room.wav'))
-          .subscribe(() => {
-            this.synth = Synth(this.audioContext)
-            this.synth.voiceManager.setState(voiceState)
-            this.output = Output(this.audioContext)
-            this.synth.connect(this.reverb).connect(this.output)
-            this.midiTrack = createMidiTrack(this.audioContext, saria).setSlave(this.synth)
-            this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
-            this.keyboard.init()
-            setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
-            this.$forceUpdate()
-          })
-        })
-      },
-    },
     props: {
       options: {
         type: Object,
       },
     },
     mounted() {
-      dispatcher.as('STOP').subscribe(() => this.stop())
       this.audioContext = new AudioContext()
       this.synth = Synth(this.audioContext)
       this.output = Output(this.audioContext)

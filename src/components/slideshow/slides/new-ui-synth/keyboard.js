@@ -1,5 +1,8 @@
 import * as R from 'ramda'
 import { DOM } from 'rx-dom'
+import { Dispatcher } from 'wasa'
+
+const dispatcher = Dispatcher.openSession()
 
 export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
   const subscriptions = []
@@ -17,6 +20,10 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
   let isStarted = false
 
   const getShiftedNote = (key, octave) => keyMapping.indexOf(key) + 12 * octave
+
+  dispatcher.as('END_OF_TRACK').subscribe(() => {
+    isStarted = false
+  })
 
   return {
     get octave() {

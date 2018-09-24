@@ -36,6 +36,7 @@ export const Synth = (audioContext) => {
     [LFODestinations.FILTER_FREQUENCY]: filter.frequencyParam,
     [LFODestinations.ALL_FREQUENCY]: voiceManager.allOscsFrequency,
     [LFODestinations.FILTER_PEAK]: filter.peakParam,
+    [LFODestinations.FM_AMOUNT]: voiceManager.fmGainParam,
   })
   .setActiveParameter(LFODestinations.FILTER_FREQUENCY)
 
@@ -51,6 +52,9 @@ export const Synth = (audioContext) => {
       voiceManager.noteOff(value, time)
       accentEnvelope.stop(time)
       adsrEnvelope.stop(time)
+    },
+    stop(time = audioContext.currentTime) {
+      voiceManager.stop(time)
     },
     connect({ input, connect }) {
       filter.connect({ input })
