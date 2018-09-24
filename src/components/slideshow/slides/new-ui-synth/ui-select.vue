@@ -1,7 +1,13 @@
 <template>
-  <span class="label"><span @click="previousValue">🢔</span> <span class="screen" :style="style"
-                                                                   @click="nextValue"><span>{{ activeValue }}</span></span><span
-    @click="nextValue"> 🢖 </span></span>
+  <span class="label">
+    <span @click="previousValue">🢔</span>
+
+    <span class="screen" :style="style" @click="nextValue">
+      <span>{{ activeValue }}</span>
+    </span>
+
+    <span @click="nextValue">🢖</span>
+  </span>
 </template>
 
 <script>
@@ -51,13 +57,13 @@
 <style scoped lang="scss">
   .label {
     position: relative;
-    bottom: 24px;
     font-family: 'Arial';
-    font-size: 26px;
+    font-size: 70%;
     text-align: center;
     cursor: pointer;
     user-select: none;
     color: #2c3e50;
+
     .screen {
       background-color: #2c3e50;
       border: 2px double gray;

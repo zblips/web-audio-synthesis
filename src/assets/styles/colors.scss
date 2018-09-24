@@ -8,6 +8,8 @@ $text-primary: #34495e;
 $text-input-label: #2c2c2c;
 $button-box-shadow: #999;
 
+$column-block-background: #c2c5cd;
+
 
 // Knob colors
 /*Blue knob*/
@@ -46,7 +48,7 @@ $knob-handle-grey: #d6cbc4;
 $knob-curse-grey: #dfd4cf;
 $knob-cursor-grey: #666666;
 
-.container {
+.card .column {
   .knob {
     .background {
       fill: $knob-background-blue;
@@ -59,11 +61,11 @@ $knob-cursor-grey: #666666;
     }
     .cursor {
       stroke: $knob-cursor-blue;
-      stroke-width: 4px;
+      stroke-width: 3px;
     }
   }
 
-  &.osc-1 {
+  .violet {
     .knob {
       .background {
         fill: $knob-background-violet;
@@ -76,12 +78,12 @@ $knob-cursor-grey: #666666;
       }
       .cursor {
         stroke: $knob-cursor-violet;
-        stroke-width: 4px;
+        stroke-width: 3px;
       }
     }
   }
 
-  &.fm-amount {
+  .red {
     .knob {
       .background {
         fill: $knob-background-red;
@@ -94,12 +96,12 @@ $knob-cursor-grey: #666666;
       }
       .cursor {
         stroke: $knob-cursor-red;
-        stroke-width: 4px;
+        stroke-width: 3px;
       }
     }
   }
 
-  &.fm-ratio {
+  .green {
     .knob {
       .background {
         fill: $knob-background-green;
@@ -112,12 +114,12 @@ $knob-cursor-grey: #666666;
       }
       .cursor {
         stroke: $knob-cursor-green;
-        stroke-width: 4px;
+        stroke-width: 3px;
       }
     }
   }
 
-  &.filter-frequency {
+  .yellow {
     .knob {
       .background {
         fill: $knob-background-yellow;
@@ -130,12 +132,12 @@ $knob-cursor-grey: #666666;
       }
       .cursor {
         stroke: $knob-cursor-yellow;
-        stroke-width: 4px;
+        stroke-width: 3px;
       }
     }
   }
 
-  &.disabled {
+  .grey {
     .knob {
       .background {
         fill: $knob-background-grey;
@@ -148,7 +150,7 @@ $knob-cursor-grey: #666666;
       }
       .cursor {
         stroke: $knob-cursor-grey;
-        stroke-width: 4px;
+        stroke-width: 3px;
       }
     }
   }

@@ -1,37 +1,60 @@
 <style lang="scss" scoped>
   @import '../../../../assets/styles/synth-card';
+  @import '../../../../assets/styles/colors';
 
   .card.filters {
-    width: 25vw;
-    margin: $margin-int $margin-int $margin-ext $margin-ext;
+    width: 15vw;
+    position: relative;
     display: flex;
     flex-direction: column;
-    & > div {
-      margin: auto;
-      height: 100%;
+    margin: $margin-ext $margin-int $margin-int;
+    padding: $internal-card-padding;
+
+    .column {
+      background-color: $column-block-background;
+      border-radius: $column-border-radius;
       box-sizing: border-box;
+      height: 100%;
+
+      .frequency-knob, .peak-knob, .dry-wet-knob {
+        position: relative;
+        top: -6%;
+      }
+
+      .frequency-knob {
+        height: 35%;
+      }
+
+      .peak-knob {
+        height: 25%;
+      }
+
+      .dry-wet-knob {
+        height: 25%;
+      }
     }
 
-    .knobs {
-      width: 60%;
-    }
-
-    .toggle {
-      margin-top: 40px;
-      width: 40%;
-    }
   }
 </style>
 
 <template>
   <div class="card filters">
-    <div class="knobs">
-      <knob class="filter-frequency" label="frequency" :value="state.frequencyValue" :width="180" @update="setFrequencyValue"></knob>
-      <knob label="peak" :value="state.peakValue" :width="130" @update="setPeakValue"></knob>
-      <knob label="dry/wet" :value="state.fadeValue" :width="100" @update="setFadeValue"></knob>
-    </div>
-    <div class="toggle">
-      <ui-select :value="state.type" :values="state.types" @update="setType" :width="120"></ui-select>
+    <div class="column">
+      <span class="title">Filter</span>
+      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleFilter()">
+      </button>
+
+      <knob class="frequency-knob" label="frequency" :value="state.frequencyValue" @update="setFrequencyValue">
+      </knob>
+
+      <knob class="peak-knob" label="peak" :value="state.peakValue" @update="setPeakValue">
+      </knob>
+
+      <knob class="dry-wet-knob grey" label="dry-wet" :value="state.fadeValue" @update="setFadeValue">
+      </knob>
+
+      <ui-select class="type-selector" :value="state.type" :values="state.types" @update="setType" :width="120">
+      </ui-select>
     </div>
   </div>
 </template>
@@ -55,6 +78,11 @@
         default: () => Object.create(null),
       },
     },
+    data() {
+      return {
+        active: false,
+      }
+    },
     methods: {
       setType(value) {
         this.state.type = value
@@ -67,6 +95,15 @@
       },
       setFadeValue(value) {
         this.state.fadeValue = value
+      },
+      toggleFilter() {
+        if (this.active) {
+          this.setFadeValue(-1)
+        } else {
+          this.setFadeValue(1)
+        }
+
+        this.active = !this.active
       },
     },
   }

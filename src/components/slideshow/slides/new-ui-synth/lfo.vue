@@ -1,47 +1,52 @@
 <style scoped lang="scss">
   @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/ui';
+  @import '../../../../assets/styles/colors';
 
   .card.lfo {
-    width: 40vw;
-    margin: $margin-int $margin-ext $margin-ext $margin-int;
+    width: 15vw;
+    position: relative;
     display: flex;
     flex-direction: column;
+    margin: $margin-ext $margin-ext $margin-int $margin-int;
+    padding: $internal-card-padding;
 
-    & > div {
-      margin: auto;
-      height: 100%;
+    .column {
+      background-color: $column-block-background;
+      border-radius: $column-border-radius;
       box-sizing: border-box;
-    }
+      height: 100%;
 
-    .knobs {
-      width: 60%;
-      margin-bottom: 20px;
-    }
+      .amount-knob, .rate-knob {
+        position: relative;
+        top: -6%;
+      }
 
-    .toggle {
-      margin-top: 30px;
-      width: 60%;
-    }
+      .amount-knob {
+        height: 45%;
+      }
 
-    .label {
-      font-size: 26px;
-      text-align: center;
+      .rate-knob {
+        height: 30%;
+      }
     }
   }
 </style>
 
 <template>
   <div class="card lfo">
-    <div class="knobs">
-      <knob label="amount" :value="state.amplitude" :width="180" @update="setAmount"></knob>
-      <knob label="rate" :value="state.frequency" :width="130" @update="setRate"></knob>
-    </div>
-    <div class="toggle">
-      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination"  :width="200"></ui-select>
+    <div class="column">
+      <span class="title">LFO</span>
+      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">
+      </button>
+
+      <knob class="amount-knob green" label="amount" :value="state.amplitude" @update="setAmount"></knob>
+
+      <knob class="rate-knob green" label="rate" :value="state.frequency" @update="setRate"></knob>
+
+      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="200">
+      </ui-select>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -66,6 +71,7 @@
     data() {
       return {
         destination: this.state.destination,
+        active: true,
       }
     },
     methods: {
@@ -76,7 +82,17 @@
         this.state.frequency = value
       },
       nextDestination(value) {
+        this.active = !(value === 'off')
         this.state.setActiveParameter(value)
+      },
+      toggleLFO() {
+        if (this.active) {
+          this.value = 'off'
+        } else {
+          this.value = 'all freq.'
+        }
+
+        this.nextDestination(this.value)
       },
     },
   }

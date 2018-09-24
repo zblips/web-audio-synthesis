@@ -31,7 +31,7 @@
 <template>
   <div class="toggle">
     <button :class="{ active, inactive: !active }" @click="toggle()"></button>
-    <span class="label">{{label}}</span>
+    <span class="label" v-if="label">{{label}}</span>
   </div>
 </template>
 
