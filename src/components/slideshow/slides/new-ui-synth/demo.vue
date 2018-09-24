@@ -13,17 +13,6 @@
       display: flex;
       box-sizing: border-box;
     }
-
-    .app-bar {
-      position: fixed;
-      bottom: 0;
-      width: 100vw;
-      height: 4vh;
-      background-color: #fdfdfd;
-      text-align: left;
-      padding: 8px;
-    }
-
   }
 </style>
 
@@ -41,9 +30,7 @@
         <mib-visualizer :analyzer="output.analyzer"></mib-visualizer>
         <mib-visualizer :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
       </div>
-      <div class="app-bar">
-        <span>Web Audio Synthesis</span>
-      </div>
+      <ui-synth-bar :state="{ midiTrack, synth }"></ui-synth-bar>
     </div>
 
   </div>
@@ -60,6 +47,7 @@
   import Osc from './oscillator.vue'
   import Envelope from './envelope'
   import UiFilter from './ui-filter'
+  import UiSynthBar from './ui-synth-bar.vue'
   import Lfo from './lfo.vue'
   import { createReverb } from './reverb'
 
@@ -69,6 +57,7 @@
 
   export default {
     components: {
+      UiSynthBar,
       UiFilter,
       Envelope,
       MibVisualizer,
@@ -125,7 +114,6 @@
       },
     },
     mounted() {
-      dispatcher.as('STOP').subscribe(() => this.stop())
       this.audioContext = new AudioContext()
       this.synth = Synth(this.audioContext)
       this.output = Output(this.audioContext)

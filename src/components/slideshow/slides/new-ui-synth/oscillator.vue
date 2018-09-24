@@ -117,19 +117,12 @@
 <script>
   import Knob from './knob.vue'
   import Toggle from './toggle.vue'
-  import UiSwitch from './switch.vue'
-  import OctaveSelector from './octave-selector.vue'
   import UiSelect from './ui-select.vue'
-  // import { WaveForms } from 'wasa'
-
-  // const waveForms = Object.values(WaveForms)
 
   export default {
     components: {
       Knob,
       Toggle,
-      UiSwitch,
-      OctaveSelector,
       UiSelect,
     },
     props: {

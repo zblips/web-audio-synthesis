@@ -13,7 +13,7 @@ export const create4xVoiceManager = (audioContext) => {
 
   const output = audioContext.createGain()
 
-  let isPolyphonic = false
+  let isPolyphonic = true
   let fmRatioValue = 2
   let fmGainValue = 0
   let osc1GainValue = 0.5
@@ -24,8 +24,10 @@ export const create4xVoiceManager = (audioContext) => {
   let osc2Type = WaveForms.SQUARE
   let osc1Shift = 0
   let osc2Shift = 0
-  let voices = {} // polyphonic state
+  let voices = new Map() // polyphonic state
   let notes = [] // monophonic state
+
+  let cache = new Map()
 
   let monoVoice = create2xOscVoice(audioContext)
   .setOsc1DetuneValue(osc1DetuneValue)
@@ -56,12 +58,14 @@ export const create4xVoiceManager = (audioContext) => {
     isPolyphonic = value
     if (!isPolyphonic) { // to mono mode
       output.gain.setValueAtTime(0, audioContext.currentTime)
-      Object.values(voices).forEach(voice => voice.stop())
+      for (const voice of voices.values()) {
+        voice.stop()
+      }
+      voices.clear()
       monoVoice.osc1.connect(gain1)
       monoVoice.osc2.connect(gain2)
       fmGain.connect(monoVoice.osc1.frequency)
       fmGain.connect(monoVoice.osc2.frequency)
-      voices = {}
     } else {
       monoVoice.disconnect()
       output.gain.cancelScheduledValues(audioContext.currentTime)
@@ -79,7 +83,7 @@ export const create4xVoiceManager = (audioContext) => {
     },
     noteOn(value, time = audioContext.currentTime) {
       fmOscillator.frequency.setValueAtTime(getFrequency(value) * fmRatioValue, time)
-      if (isPolyphonic && !voices[value]) {
+      if (isPolyphonic && !voices.has(value)) {
         const voice = create2xOscVoice(audioContext)
         .setOsc1DetuneValue(osc1DetuneValue)
         .setOsc2DetuneValue(osc2DetuneValue)
@@ -93,12 +97,13 @@ export const create4xVoiceManager = (audioContext) => {
         allOscsFrequencySource.connect(voice.osc2.frequency)
         fmGain.connect(voice.osc1.frequency)
         fmGain.connect(voice.osc2.frequency)
-        voices[value] = voice
+        voices.set(value, voice)
+        cache.set(voice, null)
+        voice.onEnded(() => {
+          cache.delete(voice)
+        })
         voice.noteOn(value, time)
         voice.start(time)
-        if (!output.gain['xUnderEnvelopeControl']) {
-          output.gain.setValueAtTime(1, time)
-        }
       } else if (!isPolyphonic && notes.indexOf(value) === -1) {
         notes.push(value)
         monoVoice
@@ -109,16 +114,16 @@ export const create4xVoiceManager = (audioContext) => {
         .setOsc1ValueShift(osc1Shift)
         .setOsc2ValueShift(osc2Shift)
         .noteOn(value, time)
-        if (!output.gain['xUnderEnvelopeControl']) {
-          output.gain.setValueAtTime(1, time)
-        }
+      }
+      if (!output.gain['xUnderEnvelopeControl']) {
+        output.gain.setValueAtTime(1, time)
       }
     },
     noteOff(value, time = audioContext.currentTime) {
-      if (isPolyphonic && voices[value]) {
+      if (isPolyphonic && voices.has(value)) {
         const deltaTime = output.gain['xUnderEnvelopeControl'] ? output.gain['xEnvelopeDuration'] : 0
-        voices[value].stop(time + deltaTime)
-        delete voices[value]
+        voices.get(value).stop(time + deltaTime)
+        voices.delete(value)
       } else {
         notes.splice(notes.indexOf(value), 1)
         if (notes.length > 0) {
@@ -136,6 +141,12 @@ export const create4xVoiceManager = (audioContext) => {
           }
         }
       }
+    },
+    stop(time = audioContext.currentTime) {
+      for (const voice of cache.keys()) {
+        voice.stop(time)
+      }
+      cache.clear()
     },
     togglePolyphonyValue,
     set osc1GainValue(value) {
@@ -336,6 +347,10 @@ const create2xOscVoice = (audioContext) => {
     },
     get osc2() {
       return osc2
+    },
+    onEnded(callback) {
+      osc1.onended = callback
+      return this
     },
   }
 }

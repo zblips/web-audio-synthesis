@@ -1,5 +1,5 @@
 import { isNil } from 'ramda'
-import { Status, Meta } from 'midi-parse'
+import { Meta, Status } from 'midi-parse'
 import { Dispatcher } from 'wasa'
 import * as MidiEvents from './midi-events'
 
@@ -14,18 +14,27 @@ function toTimedEvents({ events }) {
   })
 }
 
-export function createMidiTrack(audioContext, { tracks }) {
+export function createMidiTrack(audioContext) {
   const tempo = 100
   const division = 96
 
-  let events = toTimedEvents(tracks[0])
+  let events = []
 
-  let noteOffEvents = []
+  const createEotDispatcher = () => {
+    const eotDispatcher = audioContext.createConstantSource()
+    const muteGain = audioContext.createGain()
+    muteGain.gain.value = 0
+    eotDispatcher.connect(muteGain).connect(audioContext.destination)
+    eotDispatcher.start(audioContext.currentTime)
+    eotDispatcher.onended = () => {
+      dispatcher.dispatch('END_OF_TRACK')
+    }
+    return eotDispatcher
+  }
 
   dispatcher.as('MIDI_TRACK_CHANGED')
   .subscribe((trackName) => {
-    console.log(trackName)
-    events = toTimedEvents(MidiEvents[trackName][0])
+    events = toTimedEvents(MidiEvents[trackName].tracks[0])
   })
 
   let slave, startTime
@@ -45,21 +54,18 @@ export function createMidiTrack(audioContext, { tracks }) {
   return {
     start() {
       startTime = audioContext.currentTime
+
       events.forEach((event) => {
         let time = startTime + event.time * (60 / (tempo * division))
         switch (event.type) {
           case Meta.END_OF_TRACK:
-            return dispatcher.dispatch('END_OF_TRACK', time)
+            return createEotDispatcher().stop(time)
           case Status.NOTE_ON:
             return noteOn(time, event.data)
           case Status.NOTE_OFF:
-            noteOffEvents.push(event.data)
             return noteOff(time, event.data)
         }
       })
-    },
-    stop(time = audioContext.currentTime) {
-      dispatcher.dispatch('STOP')
     },
     setSlave(instrument) {
       slave = instrument
@@ -70,6 +76,9 @@ export function createMidiTrack(audioContext, { tracks }) {
     },
     get tracks() {
       return Object.keys(MidiEvents)
+    },
+    get track() {
+      return 'tetris'
     },
   }
 }

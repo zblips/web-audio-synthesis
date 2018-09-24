@@ -53,6 +53,9 @@ export const Synth = (audioContext) => {
       accentEnvelope.stop(time)
       adsrEnvelope.stop(time)
     },
+    stop(time = audioContext.currentTime) {
+      voiceManager.stop(time)
+    },
     connect({ input, connect }) {
       filter.connect({ input })
       return { connect }
