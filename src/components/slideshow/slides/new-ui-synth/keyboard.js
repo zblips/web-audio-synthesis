@@ -21,7 +21,9 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
 
   const getShiftedNote = (key, octave) => keyMapping.indexOf(key) + 12 * octave
 
-  dispatcher.as('END_OF_TRACK').subscribe(() => isStarted = false)
+  dispatcher.as('END_OF_TRACK').subscribe(() => {
+    isStarted = false
+  })
 
   return {
     get octave() {

@@ -51,10 +51,6 @@
   import Lfo from './lfo.vue'
   import { createReverb } from './reverb'
 
-  import { Dispatcher } from 'wasa'
-
-  const dispatcher = Dispatcher.openSession()
-
   export default {
     components: {
       UiSynthBar,
@@ -79,34 +75,6 @@
         reverb,
         keyboard,
       }
-    },
-    methods: {
-      stop() {
-        this.audioContext.close()
-        .catch(() => console.info('context is allready closed'))
-        .then(() => {
-          this.keyboard.destroy()
-          resetSariasSongMapping()
-
-          const voiceState = this.synth.voiceManager.getState()
-          this.audioContext = new AudioContext()
-          this.reverb = createReverb(this.audioContext)
-          this.reverb
-          .setFadeValue(-1)
-          .setImpulse(require('../../../../assets/media/Nice_Drum_Room.wav'))
-          .subscribe(() => {
-            this.synth = Synth(this.audioContext)
-            this.synth.voiceManager.setState(voiceState)
-            this.output = Output(this.audioContext)
-            this.synth.connect(this.reverb).connect(this.output)
-            this.midiTrack = createMidiTrack(this.audioContext, saria).setSlave(this.synth)
-            this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
-            this.keyboard.init()
-            setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
-            this.$forceUpdate()
-          })
-        })
-      },
     },
     props: {
       options: {
