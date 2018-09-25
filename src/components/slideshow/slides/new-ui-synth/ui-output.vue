@@ -36,12 +36,8 @@
   <div class="card lfo">
     <div class="column">
       <span class="title">Reverb</span>
-      <!--<button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">-->
-      <!--</button>-->
 
-      <knob class="amount-knob green" label="amount" :value="state.reverb.fadeValue" @update="setReverbWetMix"></knob>
-
-      <!--<knob class="rate-knob green" label="rate" :value="state.frequency" @update="setRate"></knob>-->
+      <knob class="amount-knob" label="amount" :value="state.reverb.fadeValue" @update="setReverbWetMix"></knob>
 
       <ui-select :value="impulse" :values="state.reverb.impulses" @update="nextReverbImpulse" :width="200">
       </ui-select>

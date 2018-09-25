@@ -50,7 +50,7 @@
   import { MonophonicSynth } from '@/core/synth/monophonic-synth'
   import { Output } from '@/core/output'
   import { WaveForms } from '@/core/waveforms'
-  import MibVisualizer from '@/components/synth/mib-visualizer.vue'
+  import MibVisualizer from '@/components/synth/ui-visualizer.vue'
   import MibSpinBox from '@/components/synth/mib-spinbox.vue'
   import MibSlider from '@/components/synth/mib-slider.vue'
   import { setSariasSongMapping, resetSariasSongMapping } from '../../../../core/utils/gamepad-service'

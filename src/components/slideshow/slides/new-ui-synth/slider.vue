@@ -8,15 +8,40 @@
     }
     .curse {
       stroke: none;
-      fill: white;
+      fill: #2c3e50;
     }
 
     .handle {
-      fill: $ui-primary;
+      fill: black;
       stroke-linecap: round;
       cursor: pointer;
+
       &.active {
         cursor: move;
+      }
+    }
+
+    &.red {
+      .handle {
+        fill: #f02614;
+      }
+    }
+
+    &.blue {
+      .handle {
+        fill: #3a95de;
+      }
+    }
+
+    &.cyan {
+      .handle {
+        fill: #82bbb8;
+      }
+    }
+
+    &.green {
+      .handle {
+        fill: #4cae5e;
       }
     }
 
@@ -33,7 +58,7 @@
       text-align: center;
       display: block;
       margin: 0 auto;
-      color: white;
+      color: #2c3e50;
       font-family: "Lucida Console", Monaco, monospace;
     }
   }

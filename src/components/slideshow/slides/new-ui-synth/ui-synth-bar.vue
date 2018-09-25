@@ -54,8 +54,7 @@
   @import '../../../../assets/styles/colors';
 
   .app-bar {
-    position: fixed;
-    bottom: 0;
+    position: relative;
     width: 100vw;
     height: 6vh;
     background-color: #fdfdfd;

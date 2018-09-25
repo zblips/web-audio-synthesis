@@ -53,7 +53,7 @@
   import { Keyboard } from '@/core/keyboard'
   import { AdditiveSynth } from '@/core/synth/additive-synth'
   import { Output } from '@/core/output'
-  import MibVisualizer from '@/components/synth/mib-visualizer.vue'
+  import MibVisualizer from '@/components/synth/ui-visualizer.vue'
   import MibSpinBox from '@/components/synth/mib-spinbox.vue'
   import MibSlider from '@/components/synth/mib-slider.vue'
   import { createMidiTrack } from '@/core/midi/midi-track'

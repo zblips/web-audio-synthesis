@@ -48,13 +48,13 @@
       </button>
 
       <div class="sliders">
-        <slider :height="200" label="A" :value="state.attack" @update="setAttackTime"></slider>
-        <slider :height="200" label="D" :value="state.decay" @update="setDecayTime"></slider>
-        <slider :height="200" label="S" :value="state.sustain" @update="setSustainValue"></slider>
-        <slider v-if="type === 'ADSR'" :height="200" label="R" :value="state.release" @update="setReleaseTime"></slider>
+        <slider class="red" :height="200" label="A" :value="state.attack" @update="setAttackTime"></slider>
+        <slider class="blue" :height="200" label="D" :value="state.decay" @update="setDecayTime"></slider>
+        <slider class="green" :height="200" label="S" :value="state.sustain" @update="setSustainValue"></slider>
+        <slider class="cyan" v-if="type === 'ADSR'" :height="200" label="R" :value="state.release" @update="setReleaseTime"></slider>
       </div>
 
-      <knob class="accent-knob red" v-if="type === 'Accent'" label="accent" :value="state.accent"
+      <knob class="accent-knob black" v-if="type === 'Accent'" label="accent" :value="state.accent"
             @update="setAccentValue">
       </knob>
     </div>

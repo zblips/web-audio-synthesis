@@ -19,6 +19,7 @@
 <template>
   <div class="slide">
     <div class="synth">
+      <ui-synth-bar :state="{ midiTrack, synth }"></ui-synth-bar>
       <div class="upper-row">
         <osc :state="synth.voiceManager"></osc>
         <envelope type="ADSR" :state="synth.adsrEnvelope"></envelope>
@@ -31,7 +32,6 @@
         <mib-visualizer :analyzer="output.analyzer"></mib-visualizer>
         <mib-visualizer :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
       </div>
-      <ui-synth-bar :state="{ midiTrack, synth }"></ui-synth-bar>
     </div>
 
   </div>
@@ -41,7 +41,7 @@
   import { Keyboard } from './keyboard'
   import { Synth } from './synth'
   import { Output } from './output'
-  import MibVisualizer from './mib-visualizer.vue'
+  import MibVisualizer from './ui-visualizer.vue'
   import { resetSariasSongMapping, setSariasSongMapping } from '../../../../core/utils/gamepad-service'
   import { createMidiTrack } from '@/core/midi/midi-track'
   import { saria } from '../../../../core/midi/midi-events/saria-events'
