@@ -44,10 +44,10 @@
       <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleFilter()">
       </button>
 
-      <knob class="frequency-knob" label="frequency" :value="state.frequencyValue" @update="setFrequencyValue">
+      <knob class="frequency-knob grey" label="frequency" :value="state.frequencyValue" @update="setFrequencyValue">
       </knob>
 
-      <knob class="peak-knob" label="peak" :value="state.peakValue" @update="setPeakValue">
+      <knob class="peak-knob grey" label="peak" :value="state.peakValue" @update="setPeakValue">
       </knob>
 
       <ui-select class="type-selector" :value="state.type" :values="state.types" @update="setType" :width="150">

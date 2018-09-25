@@ -36,6 +36,12 @@ $knob-handle-violet: #732C7B;
 $knob-curse-violet: #BDAEC6;
 $knob-cursor-violet: #FFFFFF;
 
+/*Black knob*/
+$knob-background-black: #e8edee;
+$knob-handle-black: #2c3e50;
+$knob-curse-black: #c8d5e2;
+$knob-cursor-black: #FFFFFF;
+
 /*Yellow knob*/
 $knob-background-yellow: #FFCC00;
 $knob-handle-yellow: #FFFF66;
@@ -47,22 +53,6 @@ $knob-background-grey: #dedede;
 $knob-handle-grey: #d6cbc4;
 $knob-curse-grey: #dfd4cf;
 $knob-cursor-grey: #666666;
-
-.knob {
-  .background {
-    fill: $knob-background-grey;
-  }
-  .handle {
-    fill: $knob-handle-grey;
-  }
-  .curse {
-    fill: $knob-curse-grey;
-  }
-  .cursor {
-    stroke: $knob-cursor-grey;
-    stroke-width: 3px;
-  }
-}
 
 .card .column {
   .knob {
@@ -94,6 +84,24 @@ $knob-cursor-grey: #666666;
       }
       .cursor {
         stroke: $knob-cursor-violet;
+        stroke-width: 3px;
+      }
+    }
+  }
+
+  .black {
+    .knob {
+      .background {
+        fill: $knob-background-black;
+      }
+      .handle {
+        fill: $knob-handle-black;
+      }
+      .curse {
+        fill: $knob-curse-black;
+      }
+      .cursor {
+        stroke: $knob-cursor-black;
         stroke-width: 3px;
       }
     }

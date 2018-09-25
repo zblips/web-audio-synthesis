@@ -226,7 +226,7 @@
   import { WaveForms } from '@/core/waveforms'
   import { FilterTypes } from '@/core/filter-types'
   import { LFODestinations } from '@/core/lfo-destinations'
-  import MibVisualizer from '@/components/synth/mib-visualizer.vue'
+  import MibVisualizer from '@/components/synth/ui-visualizer.vue'
   import MibSpinBox from '@/components/synth/mib-spinbox.vue'
   import MibSlider from '@/components/synth/mib-slider.vue'
   import MibToggle from '@/components/synth/mib-toggle.vue'

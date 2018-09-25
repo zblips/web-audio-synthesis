@@ -8,11 +8,7 @@ export const IMPULSES = {
 }
 
 export const createReverb = (audioContext) => {
-  // const convolver = audioContext.createConvolver()
   const dryWetMixer = createDryWetMixer(audioContext)
-
-  // dryWetMixer.setWetNode(convolver)
-
   const impulses = {}
   let impulse
 
