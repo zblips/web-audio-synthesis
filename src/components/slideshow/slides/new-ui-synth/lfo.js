@@ -36,7 +36,7 @@ export const createLfo = (audioContext, parameters) => {
   gain.gain.value = MIN_AMPLITUDE + EPSILON
 
   osc.connect(gain)
-  osc.frequency.value = MAX_FREQUENCY - EPSILON
+  osc.frequency.value = (100 * 2) / 60
   setWaveForm(waveForm, osc)
   osc.start(audioContext.currentTime)
 

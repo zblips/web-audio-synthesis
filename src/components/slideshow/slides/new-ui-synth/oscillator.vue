@@ -26,7 +26,7 @@
         height: 100%;
 
         .osc1-gain, .osc2-gain {
-          height: 42%;
+          height: 40%;
         }
 
         .osc1-detune, .osc2-detune {
@@ -43,10 +43,11 @@
       }
 
       .fm {
-        height: 85%;
+        height: 100%;
 
         .fm-amount {
-          height: 50%;
+          /*width: 120px;*/
+          height: 40%;
         }
 
         .fm-ratio {
@@ -64,13 +65,13 @@
     <div class="column">
       <div class="osc">
         <span class="title">Osc1</span>
-        <button class="toggle-button" :class="{ active: activeOsc1, inactive: !activeOsc1 }" @click="toggleOsc1()">
+        <button class="toggle-button corner" :class="{ active: activeOsc1, inactive: !activeOsc1 }" @click="toggleOsc1()">
         </button>
 
         <knob class="osc1-gain yellow" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc1Type" @update="nextOsc1TypeValue"
-                   :width="120">
+                   :width="150">
         </ui-select>
 
         <knob class="osc1-detune yellow" label="detune" :value="state.osc1DetuneValue" @update="setOsc1DetuneValue">
@@ -90,7 +91,7 @@
         <knob class="osc2-gain red" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc2Type" @update="nextOsc2TypeValue"
-                   :width="120">
+                   :width="150">
         </ui-select>
 
         <knob class="osc2-detune red" label="detune" :value="state.osc2DetuneValue" @update="setOsc2DetuneValue">
@@ -175,11 +176,11 @@
         this.state.osc2Type = value
       },
       toggleOsc1() {
-        this.activeOsc1 ? this.setOsc1GainValue(0) : this.setOsc1GainValue(1)
+        this.activeOsc1 ? this.setOsc1GainValue(0) : this.setOsc1GainValue(0.5)
         this.activeOsc1 = !this.activeOsc1
       },
       toggleOsc2() {
-        this.activeOsc2 ? this.setOsc2GainValue(0) : this.setOsc2GainValue(1)
+        this.activeOsc2 ? this.setOsc2GainValue(0) : this.setOsc2GainValue(0.5)
         this.activeOsc2 = !this.activeOsc2
       },
       toggleFm() {

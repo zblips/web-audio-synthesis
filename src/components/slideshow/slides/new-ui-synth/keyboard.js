@@ -68,7 +68,7 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
         DOM.keyup(document)
         .filter(({ key }) => key === playKey)
         .filter(() => start && stop)
-        .do(() => isStarted ? stop() : start())
+        .do(() => isStarted ? dispatcher.dispatch('STOP') : dispatcher.dispatch('START'))
         .subscribe(() => {
           isStarted = !isStarted
         }),

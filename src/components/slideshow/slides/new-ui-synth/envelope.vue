@@ -23,7 +23,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 15px;
+        position: relative;
+        top: 24px;
 
         .slider {
           margin: 0 10px 0 10px;
@@ -31,9 +32,7 @@
       }
 
       .accent-knob {
-        position: relative;
-        height: 40%;
-        bottom: 14%;
+        height: 33%;
       }
     }
 
@@ -45,7 +44,7 @@
   <div class="card envelope">
     <div class="column">
       <span class="title">{{type}}</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleEnv()">
+      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleEnvelope()">
       </button>
 
       <div class="sliders">
@@ -83,7 +82,7 @@
     },
     data() {
       return {
-        active: false,
+        active: this.state.isActive,
       }
     },
     methods: {
@@ -102,9 +101,9 @@
       setReleaseTime(value) {
         this.state.release = value
       },
-      toggleEnv() {
+      toggleEnvelope() {
         this.active = !this.active
-        this.state.toggleActive()
+        this.state.toggleActive(!this.active)
       },
     },
   }

@@ -1,12 +1,12 @@
 <template>
   <span class="label">
-    <span @click="previousValue">🢔</span>
+    <!--<span @click="previousValue">◀</span>-->
 
     <span class="screen" :style="style" @click="nextValue">
       <span>{{ activeValue }}</span>
     </span>
 
-    <span @click="nextValue">🢖</span>
+    <!--<span @click="nextValue">▶</span>-->
   </span>
 </template>
 
@@ -43,9 +43,9 @@
         this.$emit('update', this.activeValue)
       },
       previousValue() {
-        const prevValueIndex = (this.values.indexOf(this.activeValue) - 1)
+        let prevValueIndex = (this.values.indexOf(this.activeValue) - 1)
         if (prevValueIndex < 0) {
-          return this.nextValue()
+           prevValueIndex = this.values.length - 1
         }
         this.activeValue = this.values[prevValueIndex]
         this.$emit('update', this.activeValue)
@@ -69,7 +69,7 @@
       border: 2px double gray;
       border-radius: 5px;
       padding: 2px;
-      color: #fdfdfd;
+      color: #8feb9c;
       width: 120px;
       display: inline-block;
     }

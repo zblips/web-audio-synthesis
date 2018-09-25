@@ -73,12 +73,12 @@
       },
     },
     mounted() {
-      const yMax = this.viewBoxDimensions.height - this.viewBoxDimensions.width / 2
-      const yMin = 0
-      const cursorRelativePos = this.viewBoxDimensions.width / 4
-      const max = yMin + cursorRelativePos
-      const min = yMax + cursorRelativePos
-      this.value && this.move(unscale({ min, max }, this.value))
+      this.moveFromValue(this.value)
+    },
+    watch: {
+      value(newValue) {
+        this.moveFromValue(newValue)
+      },
     },
     computed: {
       viewBox() {
@@ -146,6 +146,14 @@
         this.$refs.handle.setAttributeNS(null, 'y', newYPos)
         this.$refs.cursor.setAttributeNS(null, 'y', newCursorPos)
         this.$emit('update', scale({ max: cursorMin, min: cursorMax }, newCursorPos))
+      },
+      moveFromValue(value) {
+        const yMax = this.viewBoxDimensions.height - this.viewBoxDimensions.width / 2
+        const yMin = 0
+        const cursorRelativePos = this.viewBoxDimensions.width / 4
+        const max = yMin + cursorRelativePos
+        const min = yMax + cursorRelativePos
+        this.move(unscale({ min, max }, value))
       },
       getMousePosition(event) {
         const ctm = this.$refs.viewBox.getScreenCTM()
