@@ -6,6 +6,9 @@ $margin-ext: 12px;
 $internal-card-padding: 10px;
 $column-border-radius: 15px;
 
+$opacity-card-disabled: 0.15;
+$opacity-overlay-disabled: 0;
+
 .card {
   background-color: #fdfdfd;
   border-radius: 15px;
@@ -24,6 +27,23 @@ $column-border-radius: 15px;
     z-index: 100;
     cursor: pointer;
   }
+
+  &.card-disabled {
+
+    .column {
+      opacity: $opacity-card-disabled;
+
+      &::before {
+        content: ' ';
+        position: absolute;
+        opacity: $opacity-overlay-disabled;
+        height: 100%;
+        width: 100%;
+        z-index: 1000;
+      }
+    }
+  }
+
 }
 
 .toggle-button {

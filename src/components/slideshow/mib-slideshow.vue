@@ -78,7 +78,17 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
-      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
+      <synthesizer-demo :options="{
+                                    isOsc2Disabled: true,
+                                    isFmDisabled: true,
+                                    isADSRDisabled: true,
+                                    isFilterDisabled: true,
+                                    isAccentDisabled: true,
+                                    isLFODisabled: true,
+                                    isReverbDisabled: true
+                                  }">
+
+      </synthesizer-demo>
     </slide>
 
     <!--POLYPHONIC-->

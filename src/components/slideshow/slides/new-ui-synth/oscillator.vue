@@ -46,7 +46,6 @@
         height: 100%;
 
         .fm-amount {
-          /*width: 120px;*/
           height: 40%;
         }
 
@@ -56,13 +55,45 @@
         }
       }
     }
+
+    &.card-osc2-disabled {
+
+      .osc2-container {
+        opacity: 0.15;
+
+        &::before {
+          content: ' ';
+          position: absolute;
+          opacity: 0;
+          height: 100%;
+          width: 100%;
+          z-index: 1000;
+        }
+      }
+    }
+
+    &.card-fm-disabled {
+
+      .fm-container {
+        opacity: $opacity-card-disabled;
+
+        &::before {
+          content: ' ';
+          position: absolute;
+          opacity: $opacity-overlay-disabled;
+          height: 100%;
+          width: 100%;
+          z-index: 1000;
+        }
+      }
+    }
   }
 
 </style>
 
 <template>
   <div class="card">
-    <div class="column">
+    <div class="column osc1-container">
       <div class="osc">
         <span class="title">Osc1</span>
         <button class="toggle-button corner" :class="{ active: activeOsc1, inactive: !activeOsc1 }" @click="toggleOsc1()">
@@ -82,7 +113,7 @@
       </div>
     </div>
 
-    <div class="column">
+    <div class="column osc2-container">
       <div class="osc">
         <span class="title">Osc2</span>
         <button class="toggle-button" :class="{ active: activeOsc2, inactive: !activeOsc2 }" @click="toggleOsc2()">
@@ -102,7 +133,7 @@
       </div>
     </div>
 
-    <div class="column">
+    <div class="column fm-container">
       <div class="fm">
         <span class="title">Fm</span>
         <button class="toggle-button" :class="{ active: activeFm, inactive: !activeFm }" @click="toggleFm()"></button>
