@@ -19,6 +19,7 @@
       .osc, .fm {
         box-sizing: border-box;
         background-color: $column-block-background;
+        color: $column-block-text-color;
         border-radius: $column-border-radius;
       }
 

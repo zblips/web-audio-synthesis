@@ -8,7 +8,7 @@
     }
     .curse {
       stroke: none;
-      fill: #2c3e50;
+      fill: white;
     }
 
     .handle {

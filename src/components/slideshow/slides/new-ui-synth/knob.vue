@@ -29,7 +29,6 @@
         font-size: 62%;
         text-align: center;
         margin: 0 auto;
-        color: $text-input-label;
       }
     }
   }

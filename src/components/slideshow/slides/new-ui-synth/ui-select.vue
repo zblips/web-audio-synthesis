@@ -66,7 +66,7 @@
 
     .screen {
       background-color: #2c3e50;
-      border: 2px double gray;
+      border: 2px double #9b9fa7;
       border-radius: 5px;
       padding: 2px;
       color: #8feb9c;

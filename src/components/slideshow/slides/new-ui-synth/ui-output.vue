@@ -12,6 +12,7 @@
 
     .column {
       background-color: $column-block-background;
+      color: $column-block-text-color;
       border-radius: $column-border-radius;
       box-sizing: border-box;
       height: 100%;
