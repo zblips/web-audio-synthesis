@@ -1,14 +1,17 @@
 <template>
   <div class="app-bar">
+    <span class="polyphony-container">
+      <span class="switch-label">Polyphonic</span>
+      <ui-switch class="switch" @update="togglePolyphonyValue" :on="state.synth.voiceManager.isPolyphonic"></ui-switch>
+    </span>
+
     <span class="brand">Web Audio Synthesis</span>
 
-    <span class="track-label">Track :</span>
-    <ui-select class="track-selector" @update="changeTrack"
-               :values="state.midiTrack.tracks" :value="state.midiTrack.track" >
-    </ui-select>
-
-    <span class="switch-label" v-on:click="togglePolyphonyValue">Polyphonic</span>
-    <ui-switch class="switch" @update="togglePolyphonyValue" :on="state.synth.voiceManager.isPolyphonic"></ui-switch>
+    <span class="track-selector">
+      <ui-select @update="changeTrack"
+                 :values="state.midiTrack.tracks" :value="state.midiTrack.track">
+      </ui-select>
+    </span>
   </div>
 </template>
 
@@ -58,35 +61,43 @@
     width: 100vw;
     height: 6vh;
     background-color: #fdfdfd;
-    text-align: left;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 1em;
+
+    .polyphony-container, .brand, .track-selector {
+      width: 25vw;
+    }
 
     .brand {
-      display: inline-block;
       color: $knob-background-blue;
-      padding-left: 0.5em;
-      padding-right: 0.5em;
     }
 
-    .switch-label {
-      margin-left: 1em;
-      margin-right: 0.5em;
-    }
+    .polyphony-container {
+      display: flex;
+      align-items: center;
+      justify-items: center;
 
-    .switch {
-      width: 100px;
-      height: 50px;
-    }
+      .switch {
+        width: 100px;
+        height: 50px;
+      }
 
-    .track-label {
-      margin-left: 1em;
+      .switch-label {
+        padding-right: 8px;
+        font-size: 0.7em;
+      }
     }
 
     .track-selector {
-      margin: 0 0.5em;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
+
   }
 </style>

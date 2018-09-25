@@ -20,6 +20,7 @@
   <div class="slide">
     <div class="synth">
       <ui-synth-bar :state="{ midiTrack, synth }"></ui-synth-bar>
+
       <div class="upper-row">
         <osc :class="{'card-osc2-disabled': options.isOsc2Disabled, 'card-fm-disabled': options.isFmDisabled}"
              :state="synth.voiceManager">
