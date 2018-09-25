@@ -23,7 +23,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: 45px;
+        position: relative;
+        top: 24px;
 
         .slider {
           margin: 0 10px 0 10px;
@@ -31,9 +32,7 @@
       }
 
       .accent-knob {
-        position: relative;
-        height: 40%;
-        bottom: 5%;
+        height: 33%;
       }
     }
 

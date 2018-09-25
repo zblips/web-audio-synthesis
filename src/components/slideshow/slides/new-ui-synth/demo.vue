@@ -51,7 +51,7 @@
   import UiSynthBar from './ui-synth-bar.vue'
   import Lfo from './lfo.vue'
   import UiOutput from './ui-output.vue'
-  import { createReverb, IMPULSES } from './reverb'
+  import { createReverb } from './reverb'
 
   export default {
     components: {

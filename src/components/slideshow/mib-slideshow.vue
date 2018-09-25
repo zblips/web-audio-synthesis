@@ -177,31 +177,25 @@
   import MibMonophonicIntro from './slides/monophonic-synthesis/intro'
   import MibMonophonicSnippet from './slides/monophonic-synthesis/snippet.vue'
   import MibMonophonicGraph from './slides/monophonic-synthesis/graph.vue'
-  import MibMonophonicDemo from './slides/monophonic-synthesis/demo.vue'
   import SynthesizerDemo from './slides/new-ui-synth/demo.vue'
 
   import MibPolyphonicIntro from './slides/polyphonic-synthesis/intro'
   import MibPolyphonicSnippet from './slides/polyphonic-synthesis/snippet.vue'
   import MibPolyphonicGraph from './slides/polyphonic-synthesis/graph.vue'
-  import MibPolyphonicDemo from './slides/polyphonic-synthesis/demo.vue'
 
   import MibAdditiveIntro from './slides/additive-synthesis/intro'
   import MibAdditiveGraph from './slides/additive-synthesis/graph.vue'
   import MibAdditiveSnippet from './slides/additive-synthesis/snippet.vue'
-  import MibAdditiveDemo from './slides/additive-synthesis/demo.vue'
 
   import MibSubstractiveIntro from './slides/substractive-synthesis/intro'
   import MibSubstractiveGraph from './slides/substractive-synthesis/graph.vue'
-  import MibSubstractiveDemo from './slides/substractive-synthesis/demo.vue'
 
   import MibEnvelopesIntro from './slides/envelopes/intro.vue'
   import MibEnvelopesCurves from './slides/envelopes/curves.vue'
   import MibEnvelopesGraph from './slides/envelopes/graph.vue'
-  import MibEnvelopesDemo from './slides/envelopes/demo.vue'
 
   import MibLfoIntro from './slides/lfo/intro.vue'
   import MibLfoGraph from './slides/lfo/graph.vue'
-  import MibLfoDemo from './slides/lfo/demo.vue'
 
   import MibTheEnd from './slides/mib-the-end'
 
@@ -221,32 +215,26 @@
       MibMonophonicIntro,
       MibMonophonicGraph,
       MibMonophonicSnippet,
-      MibMonophonicDemo,
 
       SynthesizerDemo,
 
       MibPolyphonicIntro,
       MibPolyphonicGraph,
       MibPolyphonicSnippet,
-      MibPolyphonicDemo,
 
       MibAdditiveIntro,
       MibAdditiveGraph,
       MibAdditiveSnippet,
-      MibAdditiveDemo,
 
       MibSubstractiveIntro,
       MibSubstractiveGraph,
-      MibSubstractiveDemo,
 
       MibEnvelopesIntro,
-      MibEnvelopesDemo,
       MibEnvelopesCurves,
       MibEnvelopesGraph,
 
       MibLfoIntro,
       MibLfoGraph,
-      MibLfoDemo,
 
       MibTheEnd,
     },
