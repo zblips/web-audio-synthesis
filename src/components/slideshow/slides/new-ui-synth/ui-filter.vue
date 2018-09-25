@@ -41,9 +41,10 @@
 <template>
   <div class="card filters">
     <div class="column">
-      <span class="title">Filter</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleFilter()">
-      </button>
+      <div class="header">
+        <span class="title">Filter</span>
+        <toggle class="toggle" is-active="state.isActive" @update="toggleActive"></toggle>
+      </div>
 
       <knob class="frequency-knob grey" label="frequency" :value="state.frequencyValue" @update="setFrequencyValue">
       </knob>
@@ -94,7 +95,7 @@
       setFadeValue(value) {
         this.state.fadeValue = value
       },
-      toggleFilter() {
+      toggleActive() {
         if (this.active) {
           this.setFadeValue(-1)
         } else {

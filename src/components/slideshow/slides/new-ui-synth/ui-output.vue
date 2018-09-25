@@ -65,14 +65,12 @@
         default: () => Object.create(null),
       },
     },
-    computed: {
-      impulse() {
-        return this.state.reverb.impulse
-      },
+    mounted() {
+      this.nextReverbImpulse(Object.keys(this.state.reverb.impulses)[0])
     },
     data() {
       return {
-        destination: this.state.destination,
+        impulse: this.state.reverb.impulses[0],
         active: true,
       }
     },

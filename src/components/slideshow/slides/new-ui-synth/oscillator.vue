@@ -45,13 +45,12 @@
 
       .fm {
         height: 100%;
-
         .fm-amount {
-          height: 40%;
+          height: 35%;
         }
 
         .fm-ratio {
-          height: 35%;
+          height: 25%;
           margin-top: 16px;
         }
       }
@@ -96,9 +95,10 @@
   <div class="card">
     <div class="column osc1-container">
       <div class="osc">
-        <span class="title">Osc1</span>
-        <button class="toggle-button corner" :class="{ active: activeOsc1, inactive: !activeOsc1 }" @click="toggleOsc1()">
-        </button>
+        <div class="header">
+          <span class="title">Osc1</span>
+          <toggle class="toggle" is-active="state.isActive" @update="toggleOsc1"></toggle>
+        </div>
 
         <knob class="osc1-gain yellow" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
 
@@ -116,9 +116,10 @@
 
     <div class="column osc2-container">
       <div class="osc">
-        <span class="title">Osc2</span>
-        <button class="toggle-button" :class="{ active: activeOsc2, inactive: !activeOsc2 }" @click="toggleOsc2()">
-        </button>
+        <div class="header">
+          <span class="title">Osc2</span>
+          <toggle class="toggle" :is-active="state.isActive" @update="toggleOsc2"></toggle>
+        </div>
 
         <knob class="osc2-gain red" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
 
@@ -136,8 +137,10 @@
 
     <div class="column fm-container">
       <div class="fm">
-        <span class="title">Fm</span>
-        <button class="toggle-button" :class="{ active: activeFm, inactive: !activeFm }" @click="toggleFm()"></button>
+        <div class="header">
+          <span class="title">FM</span>
+          <toggle class="toggle" :is-active="state.isActive" @update="toggleFm"></toggle>
+        </div>
 
         <knob class="fm-amount violet" label="amount" :value="state.fmGainValue" @update="setFmGainValue"></knob>
 

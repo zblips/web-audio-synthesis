@@ -16,10 +16,6 @@
       height: 100%;
       padding-top: $internal-card-padding*2.5;
 
-      .toggle-button {
-        top: 10px;
-      }
-
       .sliders {
         display: flex;
         align-items: center;
@@ -43,10 +39,12 @@
 
 <template>
   <div class="card envelope">
-    <div class="column">
+    <div class="header">
       <span class="title">{{type}}</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleEnvelope()">
-      </button>
+      <toggle class="toggle" is-active="state.isActive" @update="toggleActive"></toggle>
+    </div>
+
+    <div class="column">
 
       <div class="sliders">
         <slider class="red" :height="200" label="A" :value="state.attack" @update="setAttackTime"></slider>
@@ -65,6 +63,7 @@
 <script>
   import Slider from './slider.vue'
   import Knob from './knob.vue'
+  import Toggle from './toggle.vue'
 
   export default {
     props: {
@@ -78,6 +77,7 @@
       },
     },
     components: {
+      Toggle,
       Slider,
       Knob,
     },
@@ -102,9 +102,8 @@
       setReleaseTime(value) {
         this.state.release = value
       },
-      toggleEnvelope() {
-        this.active = !this.active
-        this.state.toggleActive(!this.active)
+      toggleActive(value) {
+        this.state.toggleActive(value)
       },
     },
   }

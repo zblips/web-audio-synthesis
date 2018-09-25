@@ -19,6 +19,7 @@ export function createMidiTrack(audioContext) {
   const division = 96
 
   let events = []
+  let track
 
   const createEotDispatcher = () => {
     const eotDispatcher = audioContext.createConstantSource()
@@ -90,9 +91,10 @@ export function createMidiTrack(audioContext) {
       return Object.keys(MidiEvents)
     },
     get track() {
-      return 'tetris'
+      return track
     },
     changeTrack(trackName) {
+      track = trackName
       events = toTimedEvents(MidiEvents[trackName].tracks[0])
     },
   }

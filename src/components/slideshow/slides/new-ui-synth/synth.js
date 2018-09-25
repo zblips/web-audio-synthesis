@@ -22,7 +22,7 @@ export const Synth = (audioContext) => {
     [EnvelopeParameterKeys.FILTER_PEAK]: filter.peakParam,
   })
   .setActiveParameter(EnvelopeParameterKeys.FILTER_FREQUENCY)
-  .toggleActive()
+  .toggleActive(false)
 
   const adsrEnvelope = createAdsrEnvelope({
     [EnvelopeParameterKeys.OSC1_GAIN]: voiceManager.osc1Gain,
@@ -30,7 +30,7 @@ export const Synth = (audioContext) => {
     [EnvelopeParameterKeys.OSCS_GAIN]: voiceManager.outputGain,
   })
   .setActiveParameter(EnvelopeParameterKeys.OSCS_GAIN)
-  .toggleActive()
+  .toggleActive(false)
 
   const lfo = createLfo(audioContext, {
     [LFODestinations.FILTER_FREQUENCY]: filter.frequencyParam,
@@ -38,7 +38,7 @@ export const Synth = (audioContext) => {
     [LFODestinations.FILTER_PEAK]: filter.peakParam,
     [LFODestinations.FM_AMOUNT]: voiceManager.fmGainParam,
   })
-  .setActiveParameter(LFODestinations.FILTER_FREQUENCY)
+  .setActiveParameter(LFODestinations.OFF)
 
   voiceManager.connect(filter)
 

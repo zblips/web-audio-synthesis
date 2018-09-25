@@ -9,6 +9,7 @@ export const IMPULSES = {
 
 export const createReverb = (audioContext) => {
   const dryWetMixer = createDryWetMixer(audioContext)
+
   const impulses = {}
   let impulse
 
@@ -37,7 +38,7 @@ export const createReverb = (audioContext) => {
       impulse = name
       dryWetMixer.setWetNode(impulses[name])
     },
-    setImpulses() {
+    load() {
       return Observable.create(observer => {
         (async () => {
           for (const [name, url] of Object.entries(IMPULSES)) {

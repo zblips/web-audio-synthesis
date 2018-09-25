@@ -51,6 +51,9 @@ export const createLfo = (audioContext, parameters) => {
       gain.connect(parameter)
       return this
     },
+    isActive() {
+      return destination !== LFODestinations.OFF
+    },
     disconnect() {
       gain.disconnect()
     },

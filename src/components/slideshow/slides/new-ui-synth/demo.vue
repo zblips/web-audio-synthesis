@@ -93,15 +93,16 @@
       this.audioContext = new AudioContext()
       this.synth = Synth(this.audioContext)
       this.output = Output(this.audioContext)
-      this.midiTrack = createMidiTrack(this.audioContext, saria).setSlave(this.synth)
+      this.midiTrack = createMidiTrack(this.audioContext).setSlave(this.synth)
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
       this.reverb = createReverb(this.audioContext)
       this.reverb
       .setFadeValue(1)
-      .setImpulses()
+      .load()
       .subscribe(() => {
-        this.reverb.impulse = 'Deep space'
         this.synth.connect(this.reverb).connect(this.output)
+        this.reverb.impulse = 'Deep space'
+        this.midiTrack.changeTrack('saria')
         this.keyboard.init()
         setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
       })

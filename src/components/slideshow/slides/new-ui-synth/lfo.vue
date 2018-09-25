@@ -36,9 +36,10 @@
 <template>
   <div class="card lfo">
     <div class="column">
-      <span class="title">LFO</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">
-      </button>
+      <div class="header">
+        <span class="title">LFO</span>
+        <toggle class="toggle" :is-active="active" @update="toggleActive"></toggle>
+      </div>
 
       <knob class="amount-knob green" label="amount" :value="state.amplitude" @update="setAmount"></knob>
 
@@ -72,7 +73,7 @@
     data() {
       return {
         destination: this.state.destination,
-        active: true,
+        active: this.state.isActive,
       }
     },
     methods: {
@@ -86,7 +87,7 @@
         this.active = !(value === 'off')
         this.state.setActiveParameter(value)
       },
-      toggleLFO() {
+      toggleActive() {
         if (this.active) {
           this.value = 'off'
         } else {
