@@ -67,14 +67,15 @@
     justify-items: center;
     justify-content: space-between;
     box-sizing: border-box;
-    padding: 0 1em;
+    padding: 0 0.6em;
 
-    .polyphony-container, .brand, .track-selector {
+    .polyphony-container, .track-selector {
       width: 25vw;
     }
 
     .brand {
       color: #2c3e50;
+      width: 50vw;
     }
 
     .polyphony-container {

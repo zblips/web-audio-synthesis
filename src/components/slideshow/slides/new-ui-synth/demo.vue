@@ -6,6 +6,7 @@
     background: #dbdbdb;
     width: 100vw;
     height: 100vh;
+    font-family: "Lucida Console", Monaco, monospace;
 
     .upper-row, .lower-row {
       height: 47vh;
