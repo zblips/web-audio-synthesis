@@ -1,4 +1,4 @@
-import { createRandomWaveForm, midiToFrequency, scale, unscale, WaveForms } from 'wasa'
+import { Dispatcher, createRandomWaveForm, midiToFrequency, scale, unscale, WaveForms } from 'wasa'
 
 const getFrequency = midiToFrequency(440)
 
@@ -26,8 +26,7 @@ export const create4xVoiceManager = (audioContext) => {
   let osc2Shift = 0
   let voices = new Map() // polyphonic state
   let notes = [] // monophonic state
-
-  let cache = new Map()
+  let scheduledVoices = new Map()
 
   let monoVoice = create2xOscVoice(audioContext)
   .setOsc1DetuneValue(osc1DetuneValue)
@@ -57,6 +56,7 @@ export const create4xVoiceManager = (audioContext) => {
   const togglePolyphonyValue = (value = !isPolyphonic) => {
     isPolyphonic = value
     if (!isPolyphonic) { // to mono mode
+      output.gain.cancelScheduledValues(audioContext.currentTime)
       output.gain.setValueAtTime(0, audioContext.currentTime)
       for (const voice of voices.values()) {
         voice.stop()
@@ -75,6 +75,22 @@ export const create4xVoiceManager = (audioContext) => {
   }
 
   togglePolyphonyValue(isPolyphonic)
+
+  const dispatcher = Dispatcher.openSession()
+
+  dispatcher.as('STOP')
+  .subscribe((time = audioContext.currentTime) => {
+      for (const voice of scheduledVoices.keys()) {
+        voice.stop(time)
+      }
+      scheduledVoices.clear()
+      monoVoice.cancelScheduledValues(time)
+      output.gain.cancelScheduledValues(time)
+      output.gain.setValueAtTime(0, time)
+      notes = []
+      scheduledVoices.clear()
+      voices.clear()
+  })
 
   return {
     connect({ input, connect }) {
@@ -98,9 +114,9 @@ export const create4xVoiceManager = (audioContext) => {
         fmGain.connect(voice.osc1.frequency)
         fmGain.connect(voice.osc2.frequency)
         voices.set(value, voice)
-        cache.set(voice, null)
+        scheduledVoices.set(voice, null)
         voice.onEnded(() => {
-          cache.delete(voice)
+          scheduledVoices.delete(voice)
         })
         voice.noteOn(value, time)
         voice.start(time)
@@ -141,12 +157,6 @@ export const create4xVoiceManager = (audioContext) => {
           }
         }
       }
-    },
-    stop(time = audioContext.currentTime) {
-      for (const voice of cache.keys()) {
-        voice.stop(time)
-      }
-      cache.clear()
     },
     togglePolyphonyValue,
     set osc1GainValue(value) {

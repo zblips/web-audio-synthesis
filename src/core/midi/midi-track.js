@@ -32,11 +32,6 @@ export function createMidiTrack(audioContext) {
     return eotDispatcher
   }
 
-  dispatcher.as('MIDI_TRACK_CHANGED')
-  .subscribe((trackName) => {
-    events = toTimedEvents(MidiEvents[trackName].tracks[0])
-  })
-
   let slave, startTime
 
   const noteOn = (time, note) => {
@@ -50,6 +45,23 @@ export function createMidiTrack(audioContext) {
       slave.noteOff(note.value, time)
     }
   }
+
+  dispatcher.as('START')
+  .subscribe(() => {
+    startTime = audioContext.currentTime
+
+    events.forEach((event) => {
+      let time = startTime + event.time * (60 / (tempo * division))
+      switch (event.type) {
+        case Meta.END_OF_TRACK:
+          return createEotDispatcher().stop(time)
+        case Status.NOTE_ON:
+          return noteOn(time, event.data)
+        case Status.NOTE_OFF:
+          return noteOff(time, event.data)
+      }
+    })
+  })
 
   return {
     start() {
@@ -79,6 +91,9 @@ export function createMidiTrack(audioContext) {
     },
     get track() {
       return 'tetris'
+    },
+    changeTrack(trackName) {
+      events = toTimedEvents(MidiEvents[trackName].tracks[0])
     },
   }
 }

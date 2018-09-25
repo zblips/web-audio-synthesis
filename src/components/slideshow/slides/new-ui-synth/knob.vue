@@ -88,6 +88,11 @@
         type: Object,
       },
     },
+    watch: {
+      value(newValue) {
+        this.angle = unscale({ max: 160, min: -160 }, newValue)
+      },
+    },
     created: function () {
       this.angle = unscale({ max: 160, min: -160 }, this.value)
     },

@@ -16,9 +16,9 @@
       box-sizing: border-box;
       height: 100%;
 
-      .frequency-knob, .peak-knob, .dry-wet-knob {
+      .frequency-knob, .peak-knob, .type-selector {
         position: relative;
-        top: -6%;
+
       }
 
       .frequency-knob {
@@ -29,8 +29,8 @@
         height: 25%;
       }
 
-      .dry-wet-knob {
-        height: 25%;
+      .type-selector {
+        top: 40px;
       }
     }
 
@@ -50,10 +50,7 @@
       <knob class="peak-knob" label="peak" :value="state.peakValue" @update="setPeakValue">
       </knob>
 
-      <knob class="dry-wet-knob grey" label="dry-wet" :value="state.fadeValue" @update="setFadeValue">
-      </knob>
-
-      <ui-select class="type-selector" :value="state.type" :values="state.types" @update="setType" :width="120">
+      <ui-select class="type-selector" :value="state.type" :values="state.types" @update="setType" :width="150">
       </ui-select>
     </div>
   </div>

@@ -2,16 +2,15 @@
   <div class="app-bar">
     <span class="brand">Web Audio Synthesis</span>
     <ui-select :values="state.midiTrack.tracks" :value="state.midiTrack.track" @update="changeTrack"></ui-select>
-    <div class="switch"><ui-switch @update="togglePolyphonyValue" :on="state.synth.voiceManager.isPolyphonic"></ui-switch></div>
+    <div class="switch">
+      <ui-switch @update="togglePolyphonyValue" :on="state.synth.voiceManager.isPolyphonic"></ui-switch>
+    </div>
   </div>
 </template>
 
 <script>
-  import { Dispatcher } from 'wasa'
   import UiSelect from './ui-select.vue'
   import UiSwitch from './ui-switch.vue'
-
-  const dispatcher = Dispatcher.openSession()
 
   export default {
     components: {
@@ -27,9 +26,17 @@
     mounted() {
 
     },
+    computed: {
+      tracks() {
+        return Object.values(this.state.midiTrack.tracks).map(name => ({ name }))
+      },
+      selectedTrack() {
+        return this.state.midiTrack.track
+      },
+    },
     methods: {
       changeTrack(value) {
-        dispatcher.dispatch('MIDI_TRACK_CHANGED', value)
+        this.state.midiTrack.changeTrack(value)
       },
       togglePolyphonyValue() {
         this.state.synth.voiceManager.togglePolyphonyValue()
@@ -39,6 +46,9 @@
 </script>
 
 <style scoped lang="scss">
+  @import '../../../../assets/styles/synth-card';
+  @import '../../../../assets/styles/colors';
+
   .app-bar {
     position: fixed;
     bottom: 0;

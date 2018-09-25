@@ -80,11 +80,8 @@ export const createAdsrEnvelope = (parameters) => {
         parameter.linearRampToValueAtTime(initValue, time + attackTime + decayTime + sustainTime + releaseTime)
       }
     },
-    get active() {
+    get isActive() {
       return isActive
-    },
-    set active(value) {
-      isActive = value
     },
     set attack(value) {
       attackTime = unscale({ min: MIN_ATTACK_TIME, max: MAX_ATTACK_TIME }, value)

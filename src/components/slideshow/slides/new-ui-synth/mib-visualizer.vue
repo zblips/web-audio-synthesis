@@ -69,7 +69,7 @@
 
         this.canvasContext.beginPath()
         this.canvasContext.strokeStyle = '#fff'
-        this.canvasContext.lineWidth = 0.5
+        this.canvasContext.lineWidth = 1
         this.canvasContext.moveTo(0, this.height / 2)
         this.canvasContext.lineTo(this.width, this.height / 2)
         this.canvasContext.moveTo(this.width / 2, 0)
@@ -86,9 +86,9 @@
             this.canvasContext.moveTo(x, y)
             return
           }
-          this.canvasContext.lineTo(x, y + (v > 128 ? 20 : -20))
+          this.canvasContext.lineTo(x, y)
         })
-        this.canvasContext.lineWidth = 1
+        this.canvasContext.lineWidth = 5
         this.canvasContext.strokeStyle = '#ff5574'
         this.canvasContext.stroke()
         requestAnimationFrame(this.drawOscilloscope)

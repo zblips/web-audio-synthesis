@@ -25,6 +25,7 @@
         <ui-filter :state="synth.filter"></ui-filter>
         <envelope :state="synth.accentEnvelope"></envelope>
         <lfo :state="synth.lfo"></lfo>
+        <ui-output :state="{ reverb }"></ui-output>
       </div>
       <div class="lower-row">
         <mib-visualizer :analyzer="output.analyzer"></mib-visualizer>
@@ -49,7 +50,8 @@
   import UiFilter from './ui-filter'
   import UiSynthBar from './ui-synth-bar.vue'
   import Lfo from './lfo.vue'
-  import { createReverb } from './reverb'
+  import UiOutput from './ui-output.vue'
+  import { createReverb, IMPULSES } from './reverb'
 
   export default {
     components: {
@@ -59,6 +61,7 @@
       MibVisualizer,
       Osc,
       Lfo,
+      UiOutput,
     },
     data() {
       const audioContext = new AudioContext()
@@ -89,9 +92,10 @@
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
       this.reverb = createReverb(this.audioContext)
       this.reverb
-      .setFadeValue(-0)
-      .setImpulse(require('../../../../assets/media/Deep_Space.wav'))
+      .setFadeValue(1)
+      .setImpulses()
       .subscribe(() => {
+        this.reverb.impulse = 'Deep space'
         this.synth.connect(this.reverb).connect(this.output)
         this.keyboard.init()
         setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
