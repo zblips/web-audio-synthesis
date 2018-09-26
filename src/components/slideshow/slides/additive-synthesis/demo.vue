@@ -1,101 +1,130 @@
 <style lang="scss" scoped>
   @import '../../../../assets/styles/slide';
 
+  .synth {
+    position: fixed;
+    background: #dbdbdb;
+    width: 100vw;
+    height: 100vh;
+    font-family: "Lucida Console", Monaco, monospace;
+
+    .upper-row, .lower-row {
+      height: 47vh;
+      width: 100vw;
+      display: flex;
+      box-sizing: border-box;
+    }
+  }
 </style>
 
 <template>
   <div class="slide">
-    <h2>Synthèse additive</h2>
     <div class="synth">
-      <div class="controls">
-        <mib-spin-box class="control octave"
-                      label="Octave"
-                      width="50px"
-                      :init="keyboard.octave"
-                      :min="1"
-                      :max="8"
-                      @change="updateOctave"></mib-spin-box>
+      <ui-synth-bar :state="{ midiTrack, synth }"></ui-synth-bar>
 
-        <mib-spin-box class="control"
-                      label ="Waveform 2"
-                      :values="synth.waveForms"
-                      :init="synth.waveForm1"
-                      @change="updateWaveForm1"></mib-spin-box>
+      <div class="upper-row">
+        <osc :class="{'card-osc2-disabled': options.isOsc2Disabled, 'card-fm-disabled': options.isFmDisabled}"
+             :state="synth.voiceManager">
+        </osc>
 
-        <mib-slider class="control"
-                    label ="Detune 1"
-                    :init="synth.detune1"
-                    width="180px"
-                    @change="updateDetune1"></mib-slider>
-
-        <mib-spin-box class="control"
-                      label ="Waveform 2"
-                      :values="synth.waveForms"
-                      :init="synth.waveForm2"
-                      @change="updateWaveForm2"></mib-spin-box>
-
-        <mib-slider class="control"
-                    label ="Detune 2"
-                    :init="synth.detune2"
-                    width="180px"
-                    @change="updateDetune2"></mib-slider>
+        <envelope :class="{'card-disabled': options.isADSRDisabled}" type="ADSR" :state="synth.adsrEnvelope"></envelope>
+        <ui-filter :class="{'card-disabled': options.isFilterDisabled}" :state="synth.filter"></ui-filter>
+        <envelope :class="{'card-disabled': options.isAccentDisabled}" type="Accent"
+                  :state="synth.accentEnvelope"></envelope>
+        <lfo :class="{'card-disabled': options.isLFODisabled}" :state="synth.lfo"></lfo>
+        <ui-output :class="{'card-disabled': options.isReverbDisabled}" :state="{ reverb }"></ui-output>
       </div>
-
-      <mib-visualizer class="visualizer"
-                      :width="1000"
-                      :height="400"
-                      :analyzer="output.analyzer"></mib-visualizer>
+      <div class="lower-row">
+        <mib-visualizer :analyzer="output.analyzer"></mib-visualizer>
+        <mib-visualizer :analyzer="output.analyzer" type="spectrum"></mib-visualizer>
+      </div>
     </div>
+
   </div>
 </template>
 
 <script>
-  import { Keyboard } from '@/core/keyboard'
-  import { AdditiveSynth } from '@/core/synth/additive-synth'
-  import { Output } from '@/core/output'
-  import MibVisualizer from '@/components/synth/ui-visualizer.vue'
-  import MibSpinBox from '@/components/synth/mib-spinbox.vue'
-  import MibSlider from '@/components/synth/mib-slider.vue'
-  import { createMidiTrack } from '@/core/midi/midi-track'
-  import { arkanoid } from '../../../../core/midi/midi-events/arkanoid-events'
+  import { Keyboard } from '../../../../core/keyboard.js'
+  import { createSynth } from '../../../../core/synth'
+  import { Output } from '../../../../core/output'
+  import { resetSariasSongMapping, setSariasSongMapping } from '../../../../core/utils/gamepad-service'
+  import { createMidiTrack } from '../../../../core/midi/midi-track'
+  import { createReverb } from '../../../../core/reverb'
+
+  import Osc from '../../../ui/oscillator.vue'
+  import Envelope from '../../../ui/envelope.vue'
+  import UiFilter from '../../../ui/ui-filter.vue'
+  import UiSynthBar from '../../../ui/ui-synth-bar.vue'
+  import Lfo from '../../../ui/lfo.vue'
+  import UiOutput from '../../../ui/ui-output.vue'
+  import MibVisualizer from '../../../ui/ui-visualizer.vue'
+
+  import { WaveForms } from 'wasa'
+  import { LFODestinations } from '../../../../core/lfo-destinations'
+
+  const state = {
+    synth: {
+      isOsc1Active: true,
+      isOsc2Active: true,
+      isPolyphonic: true,
+      isFmActive: false,
+      fmGainValue: 0.2,
+      isAdsrEnvelopeActive: false,
+      isFilterActive: false,
+      isAccentActive: false,
+      lfoDestination: LFODestinations.OFF,
+      os1Type: WaveForms.TRIANGLE,
+    },
+    midiTrack: {
+      tempo: 100,
+    },
+    reverb: {
+      fadeValue: -1,
+    },
+  }
 
   export default {
     components: {
+      UiSynthBar,
+      UiFilter,
+      Envelope,
       MibVisualizer,
-      MibSpinBox,
-      MibSlider,
+      Osc,
+      Lfo,
+      UiOutput,
     },
-    methods: {
-      updateWaveForm1(value) {
-        this.synth.waveForm1 = value
-      },
-      updateDetune1(value) {
-        this.synth.detune1 = value
-      },
-      updateWaveForm2(value) {
-        this.synth.waveForm2 = value
-      },
-      updateDetune2(value) {
-        this.synth.detune2 = value
-      },
-      updateOctave(value) {
-        this.keyboard.octave = value
+    props: {
+      options: {
+        type: Object,
       },
     },
     created() {
       this.audioContext = new AudioContext()
-      this.synth = AdditiveSynth(this.audioContext)
+      this.synth = createSynth(this.audioContext)
+      .setState(state.synth)
       this.output = Output(this.audioContext)
-      this.synth.connect(this.output)
-      this.midiTrack = createMidiTrack(this.audioContext, arkanoid).setSlave(this.synth)
+      this.midiTrack = createMidiTrack(this.audioContext)
+      .setTrack('saria')
+      .setTempo(state.midiTrack.tempo)
+      .setSlave(this.synth)
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
-      this.keyboard.init()
+      this.reverb = createReverb(this.audioContext)
+      this.reverb
+      .setFadeValue(state.reverb.fadeValue)
+      .load()
+      .subscribe(() => {
+        this.synth.connect(this.reverb).connect(this.output)
+        this.reverb.impulse = 'Deep space'
+        this.keyboard.init()
+        setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
+      })
     },
     destroyed() {
       this.audioContext.close()
-        .then(() => {
-          this.keyboard.destroy()
-        })
+      .then(() => {
+        this.keyboard.destroy()
+      })
+      resetSariasSongMapping()
     },
   }
 </script>
