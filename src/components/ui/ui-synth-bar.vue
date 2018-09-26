@@ -63,9 +63,9 @@
 </script>
 
 <style scoped lang="scss">
-  @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/colors';
-  @import '../../../../assets/styles/buttons';
+  @import '../../assets/styles/synth-card';
+  @import '../../assets/styles/colors';
+  @import '../../assets/styles/buttons';
 
   .app-bar {
     position: relative;

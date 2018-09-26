@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-  @import '../../../../assets/styles/synth-card';
+  @import '../../assets/styles/synth-card';
 
   .card {
     width: 50vw;

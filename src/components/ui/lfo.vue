@@ -1,6 +1,6 @@
 <style scoped lang="scss">
-  @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/colors';
+  @import '../../assets/styles/synth-card';
+  @import '../../assets/styles/colors';
 
   .card.lfo {
     width: 15vw;
@@ -51,15 +51,13 @@
 <script>
   import Knob from './knob.vue'
   import Toggle from './toggle.vue'
-  import Selector from './selector.vue'
   import UiSelect from './ui-select'
-  import { LFODestinations } from '../../../../core/lfo-destinations'
+  import { LFODestinations } from '../../core/lfo-destinations'
 
   export default {
     components: {
       Knob,
       Toggle,
-      Selector,
       UiSelect,
     },
     props: {
