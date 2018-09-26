@@ -102,7 +102,7 @@
         <knob class="osc1-gain yellow" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc1Type" @update="nextOsc1TypeValue"
-                   :width="150">
+                   :width="125">
         </ui-select>
 
         <knob class="osc1-detune yellow" label="detune" :value="state.osc1DetuneValue" @update="setOsc1DetuneValue">
@@ -123,7 +123,7 @@
         <knob class="osc2-gain red" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc2Type" @update="nextOsc2TypeValue"
-                   :width="150">
+                   :width="125">
         </ui-select>
 
         <knob class="osc2-detune red" label="detune" :value="state.osc2DetuneValue" @update="setOsc2DetuneValue">

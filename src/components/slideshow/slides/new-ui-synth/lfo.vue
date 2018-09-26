@@ -18,10 +18,6 @@
       height: 100%;
       padding-top: 8%;
 
-      /*.amount-knob, .rate-knob {*/
-        /*position: relative;*/
-      /*}*/
-
       .amount-knob {
         height: 35%;
       }
@@ -46,7 +42,7 @@
 
       <knob class="rate-knob green" label="rate" :value="state.frequency" @update="setRate"></knob>
 
-      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="200">
+      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="180">
       </ui-select>
     </div>
   </div>

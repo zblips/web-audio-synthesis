@@ -38,7 +38,7 @@
 
       <knob class="amount-knob" label="amount" :value="state.reverb.fadeValue" @update="setReverbWetMix"></knob>
 
-      <ui-select class="selector" :value="impulse" :values="state.reverb.impulses" @update="nextReverbImpulse" :width="200">
+      <ui-select class="selector" :value="impulse" :values="state.reverb.impulses" @update="nextReverbImpulse" :width="180">
       </ui-select>
     </div>
   </div>
