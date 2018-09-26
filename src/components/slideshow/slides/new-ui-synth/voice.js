@@ -150,9 +150,8 @@ export const create4xVoiceManager = (audioContext) => {
       monoVoice.cancelScheduledValues(time)
       output.gain.cancelScheduledValues(time)
       output.gain.setValueAtTime(0, time)
-      notes = []
-      scheduledVoices.clear()
       voices.clear()
+      notes = []
     },
     togglePolyphonyValue,
     set osc1GainValue(value) {

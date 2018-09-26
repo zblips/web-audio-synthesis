@@ -3,7 +3,7 @@ import { scale, unscale } from 'wasa'
 const EPSILON = 2.220446049250313e-16
 
 const MIN_ATTACK_TIME = EPSILON
-const MAX_ATTACK_TIME = 0.25
+const MAX_ATTACK_TIME = 0.15
 const MIN_DECAY_TIME = 0.05
 const MAX_DECAY_TIME = 0.3
 const MIN_SUSTAIN_TIME = EPSILON
@@ -25,7 +25,6 @@ export const createAdsrEnvelope = (parameters) => {
   let parameter
 
   const update = (audioParam) => {
-    audioParam.xUnderEnvelopeControl = true
     audioParam.xEnvelopeDuration = attackTime + decayTime + sustainTime + releaseTime
   }
 
@@ -39,7 +38,7 @@ export const createAdsrEnvelope = (parameters) => {
         reset(parameter)
       }
       parameter = parameters[audioParamKey]
-      update(parameter)
+      parameter.xUnderEnvelopeControl = true
       sustainValue = parameter.value / 2
       peakValue = sustainValue * 2
       return this
@@ -64,6 +63,7 @@ export const createAdsrEnvelope = (parameters) => {
       if (!isActive && parameter) {
         reset(parameter)
       }
+      parameter.xUnderEnvelopeControl = isActive
       return this
     },
     start(time) {

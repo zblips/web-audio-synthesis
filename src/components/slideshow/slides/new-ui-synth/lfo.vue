@@ -38,7 +38,7 @@
     <div class="column">
       <div class="header">
         <span class="title">LFO</span>
-        <toggle class="toggle" :is-active="active" @update="toggleActive"></toggle>
+        <toggle class="toggle" :is-active="state.isActive" @update="toggleActive"></toggle>
       </div>
 
       <knob class="amount-knob green" label="amount" :value="state.amplitude" @update="setAmount"></knob>
@@ -56,6 +56,7 @@
   import Toggle from './toggle.vue'
   import Selector from './selector.vue'
   import UiSelect from './ui-select'
+  import { LFODestinations } from './lfo'
 
   export default {
     components: {
@@ -73,7 +74,7 @@
     data() {
       return {
         destination: this.state.destination,
-        active: this.state.isActive,
+        destinationState: this.state.destination,
       }
     },
     methods: {
@@ -87,13 +88,14 @@
         this.active = !(value === 'off')
         this.state.setActiveParameter(value)
       },
-      toggleActive() {
-        if (this.active) {
-          this.value = 'off'
+      toggleActive(value) {
+        this.state.isActive = value
+        if (this.state.isActive) {
+          this.state.destination = this.destinationState
+          this.destinationState = value
         } else {
-          this.value = 'all freq.'
+          this.state.destination = LFODestinations.OFF
         }
-
         this.nextDestination(this.value)
       },
     },

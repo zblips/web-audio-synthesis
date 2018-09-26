@@ -10,7 +10,7 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
     return acc
   }, {})
 
-  let octave = 4
+  let octave = 5
 
   const getShiftedNote = (key, octave) => keyMapping.indexOf(key) + 12 * octave
 

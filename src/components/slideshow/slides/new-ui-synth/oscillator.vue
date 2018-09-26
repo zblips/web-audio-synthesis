@@ -171,37 +171,26 @@
       return {
         osc1Type: this.state.osc1Type,
         osc2Type: this.state.osc2Type,
-        isOsc1Active: true,
-        isOsc2Active: false,
-        isFmActive: false,
+        isOsc1Active: this.state.osc1GainValue > 0,
+        isOsc2Active: this.state.osc2GainValue > 0,
+        isFmActive: this.state.fmGainValue > 0,
+        osc1GainState: this.state.osc1GainValue,
+        osc2GainState: this.state.osc2GainValue ,
+        fmGainState: this.state.fmGainValue,
       }
-    },
-    watch: {
-      isOsc1Active(value) {
-        if (!value) {
-          return this.setOsc1GainValue(0)
-        }
-        this.setOsc1GainValue(0.5)
-      },
-      isOsc2Active(value) {
-        if (!value) {
-          return this.setOsc2GainValue(0)
-        }
-        this.setOsc2GainValue(0.5)
-      },
-      isFmActive(value) {
-        if (!value) {
-          return this.setFmGainValue(0)
-        }
-        this.setFmGainValue(0.25)
-      },
     },
     methods: {
       setOsc1GainValue(value) {
-        this.state.osc1GainValue = value
+        this.osc1GainState = value
+        if (this.isOsc1Active) {
+          this.state.osc1GainValue = value
+        }
       },
       setOsc2GainValue(value) {
-        this.state.osc2GainValue = value
+        this.osc2GainState = value
+        if (this.isOsc2Active) {
+          this.state.osc2GainValue = value
+        }
       },
       setOsc1DetuneValue(value) {
         this.state.osc1DetuneValue = value
@@ -210,7 +199,10 @@
         this.state.osc2DetuneValue = value
       },
       setFmGainValue(value) {
-        this.state.fmGainValue = value
+        this.fmGainState = value
+        if (this.isFmActive) {
+          this.state.fmGainValue = value
+        }
       },
       setFmRatioValue(value) {
         this.state.fmRatioValue = value
@@ -232,12 +224,30 @@
       },
       toggleOsc1(value) {
         this.isOsc1Active = value
+        if (this.isOsc1Active) {
+          this.state.osc1GainValue = this.osc1GainState
+        } else {
+          this.osc1GainState = this.state.osc1GainValue
+          this.state.osc1GainValue = 0
+        }
       },
       toggleOsc2(value) {
         this.isOsc2Active = value
+        if (this.isOsc2Active) {
+          this.state.osc2GainValue = this.osc2GainState
+        } else {
+          this.osc2GainState = this.state.osc2GainValue
+          this.state.osc2GainValue = 0
+        }
       },
       toggleFm(value) {
         this.isFmActive = value
+        if (this.isFmActive) {
+          this.state.fmGainValue = this.fmGainState
+        } else {
+          this.fmGainState = this.state.fmGainValue
+          this.state.fmGainValue = 0
+        }
       },
     },
   }

@@ -92,14 +92,11 @@
       setPeakValue(value) {
         this.state.peakValue = value
       },
-      setFadeValue(value) {
-        this.state.fadeValue = value
-      },
       toggleActive() {
         if (this.active) {
-          this.setFadeValue(-1)
+          this.state.fadeValue = -1
         } else {
-          this.setFadeValue(1)
+          this.state.fadeValue = 1
         }
         this.active = !this.active
       },
