@@ -1,4 +1,5 @@
 import { createRandomWaveForm, scale, unscale, WaveForms } from 'wasa'
+import { LFODestinations } from './lfo-destinations'
 
 const EPSILON = 2.220446049250313e-16
 
@@ -7,13 +8,6 @@ const MAX_FREQUENCY = 15
 const MIN_AMPLITUDE = EPSILON
 const MAX_AMPLITUDE = 700
 
-export const LFODestinations = Object.freeze({
-  OFF: 'off',
-  FILTER_FREQUENCY: 'filter freq.',
-  FILTER_PEAK: 'filter peak',
-  ALL_FREQUENCY: 'all freq.',
-  FM_AMOUNT: 'fm amount',
-})
 
 export const createLfo = (audioContext, parameters) => {
   const osc = audioContext.createOscillator()

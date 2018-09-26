@@ -2,7 +2,8 @@ import { create4xVoiceManager } from './voice'
 import { createFilter } from './filter'
 import { createAccentEnvelope } from './accent-envelope'
 import { createAdsrEnvelope } from './adsr-enveloppe'
-import { createLfo, LFODestinations } from './lfo'
+import { createLfo } from './lfo'
+import { LFODestinations } from './lfo-destinations'
 
 const EnvelopeParameterKeys = {
   FILTER_FREQUENCY: 'filter freq.',

@@ -60,7 +60,7 @@
   import MibVisualizer from '../../../ui/ui-visualizer.vue'
 
   import { WaveForms } from 'wasa'
-  import { LFODestinations } from '../../../../core/lfo'
+  import { LFODestinations } from '../../../../core/lfo-destinations'
 
   const state = {
     synth: {
