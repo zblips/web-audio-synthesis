@@ -21,7 +21,7 @@
         align-items: center;
         justify-content: center;
         position: relative;
-        top: 24px;
+        padding-top: 16%;
 
         .slider {
           margin: 0 10px 0 10px;
@@ -29,7 +29,7 @@
       }
 
       .accent-knob {
-        height: 33%;
+        height: 25%;
       }
     }
 
@@ -47,10 +47,10 @@
     <div class="column">
 
       <div class="sliders">
-        <slider class="red" :height="200" label="A" :value="state.attack" @update="setAttackTime"></slider>
-        <slider class="blue" :height="200" label="D" :value="state.decay" @update="setDecayTime"></slider>
-        <slider class="green" :height="200" label="S" :value="state.sustain" @update="setSustainValue"></slider>
-        <slider class="cyan" v-if="type === 'ADSR'" :height="200" label="R" :value="state.release" @update="setReleaseTime"></slider>
+        <slider class="red" :height="160" label="A" :value="state.attack" @update="setAttackTime"></slider>
+        <slider class="blue" :height="160" label="D" :value="state.decay" @update="setDecayTime"></slider>
+        <slider class="green" :height="160" label="S" :value="state.sustain" @update="setSustainValue"></slider>
+        <slider class="cyan" v-if="type === 'ADSR'" :height="160" label="R" :value="state.release" @update="setReleaseTime"></slider>
       </div>
 
       <knob class="accent-knob black" v-if="type === 'Accent'" label="accent" :value="state.accent"

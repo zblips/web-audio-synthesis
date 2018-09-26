@@ -23,16 +23,20 @@
         border-radius: $column-border-radius;
       }
 
-      .osc {
+      .osc1-gain, .osc2-gain, .fm-amount {
+        height: 35%;
+      }
+
+      .osc1-detune, .osc2-detune, .fm-ratio {
+        height: 25%;
+      }
+
+      .fm, .osc {
         height: 100%;
+        padding-top: 10%;
+      }
 
-        .osc1-gain, .osc2-gain {
-          height: 40%;
-        }
-
-        .osc1-detune, .osc2-detune {
-          height: 25%;
-        }
+      .osc {
 
         .wave-selector {
           top: -16px;
@@ -44,13 +48,8 @@
       }
 
       .fm {
-        height: 100%;
-        .fm-amount {
-          height: 35%;
-        }
 
         .fm-ratio {
-          height: 25%;
           margin-top: 16px;
         }
       }

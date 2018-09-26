@@ -16,19 +16,14 @@
       border-radius: $column-border-radius;
       box-sizing: border-box;
       height: 100%;
-
-      .amount-knob, .rate-knob {
-        position: relative;
-        top: -6%;
-      }
+      padding-top: 8%;
 
       .amount-knob {
-        height: 45%;
+        position: relative;
+        height: 35%;
+        margin-bottom: 8%;
       }
 
-      .rate-knob {
-        height: 30%;
-      }
     }
   }
 </style>
@@ -43,7 +38,7 @@
 
       <knob class="amount-knob" label="amount" :value="state.reverb.fadeValue" @update="setReverbWetMix"></knob>
 
-      <ui-select :value="impulse" :values="state.reverb.impulses" @update="nextReverbImpulse" :width="200">
+      <ui-select class="selector" :value="impulse" :values="state.reverb.impulses" @update="nextReverbImpulse" :width="200">
       </ui-select>
     </div>
   </div>

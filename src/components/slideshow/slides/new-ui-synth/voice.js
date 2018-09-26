@@ -183,7 +183,7 @@ export const create4xVoiceManager = (audioContext) => {
       return osc2GainValue
     },
     set fmRatioValue(value) {
-      fmRatioValue = unscale({ min: 1, max: 10 }, Number(value.toFixed(1))) * 2
+      fmRatioValue = unscale({ min: 1, max: 10 }, value) * 2
       voices.forEach(voice => {
         fmOscillator.frequency.value = voice.osc1.frequency.value * fmRatioValue
       })

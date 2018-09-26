@@ -16,18 +16,19 @@
       border-radius: $column-border-radius;
       box-sizing: border-box;
       height: 100%;
+      padding-top: 8%;
 
-      .amount-knob, .rate-knob {
-        position: relative;
-        top: -6%;
-      }
+      /*.amount-knob, .rate-knob {*/
+        /*position: relative;*/
+      /*}*/
 
       .amount-knob {
-        height: 45%;
+        height: 35%;
       }
 
       .rate-knob {
-        height: 30%;
+        height: 25%;
+        margin-bottom: 6%;
       }
     }
   }

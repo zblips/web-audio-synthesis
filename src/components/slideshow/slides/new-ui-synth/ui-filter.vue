@@ -16,6 +16,7 @@
       border-radius: $column-border-radius;
       box-sizing: border-box;
       height: 100%;
+      padding-top: 8%;
 
       .frequency-knob, .peak-knob, .type-selector {
         position: relative;
