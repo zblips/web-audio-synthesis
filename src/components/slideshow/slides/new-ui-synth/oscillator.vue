@@ -97,7 +97,7 @@
       <div class="osc">
         <div class="header">
           <span class="title">Osc1</span>
-          <toggle class="toggle" is-active="state.isActive" @update="toggleOsc1"></toggle>
+          <toggle class="toggle" :is-active="isOsc1Active" @update="toggleOsc1"></toggle>
         </div>
 
         <knob class="osc1-gain yellow" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
@@ -118,7 +118,7 @@
       <div class="osc">
         <div class="header">
           <span class="title">Osc2</span>
-          <toggle class="toggle" :is-active="state.isActive" @update="toggleOsc2"></toggle>
+          <toggle class="toggle" :is-active="isOsc2Active" @update="toggleOsc2"></toggle>
         </div>
 
         <knob class="osc2-gain red" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
@@ -139,7 +139,7 @@
       <div class="fm">
         <div class="header">
           <span class="title">FM</span>
-          <toggle class="toggle" :is-active="state.isActive" @update="toggleFm"></toggle>
+          <toggle class="toggle" :is-active="isFmActive" @update="toggleFm"></toggle>
         </div>
 
         <knob class="fm-amount violet" label="amount" :value="state.fmGainValue" @update="setFmGainValue"></knob>
@@ -171,10 +171,30 @@
       return {
         osc1Type: this.state.osc1Type,
         osc2Type: this.state.osc2Type,
-        activeOsc1: true,
-        activeOsc2: true,
-        activeFm: false,
+        isOsc1Active: true,
+        isOsc2Active: false,
+        isFmActive: false,
       }
+    },
+    watch: {
+      isOsc1Active(value) {
+        if (!value) {
+          return this.setOsc1GainValue(0)
+        }
+        this.setOsc1GainValue(0.5)
+      },
+      isOsc2Active(value) {
+        if (!value) {
+          return this.setOsc2GainValue(0)
+        }
+        this.setOsc2GainValue(0.5)
+      },
+      isFmActive(value) {
+        if (!value) {
+          return this.setFmGainValue(0)
+        }
+        this.setFmGainValue(0.25)
+      },
     },
     methods: {
       setOsc1GainValue(value) {
@@ -210,17 +230,14 @@
       nextOsc2TypeValue(value) {
         this.state.osc2Type = value
       },
-      toggleOsc1() {
-        this.activeOsc1 ? this.setOsc1GainValue(0) : this.setOsc1GainValue(0.5)
-        this.activeOsc1 = !this.activeOsc1
+      toggleOsc1(value) {
+        this.isOsc1Active = value
       },
-      toggleOsc2() {
-        this.activeOsc2 ? this.setOsc2GainValue(0) : this.setOsc2GainValue(0.5)
-        this.activeOsc2 = !this.activeOsc2
+      toggleOsc2(value) {
+        this.isOsc2Active = value
       },
-      toggleFm() {
-        this.activeFm ? this.setFmGainValue(0) : this.setFmGainValue(1)
-        this.activeFm = !this.activeFm
+      toggleFm(value) {
+        this.isFmActive = value
       },
     },
   }

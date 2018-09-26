@@ -65,9 +65,6 @@
         default: () => Object.create(null),
       },
     },
-    mounted() {
-      this.nextReverbImpulse(Object.keys(this.state.reverb.impulses)[0])
-    },
     data() {
       return {
         impulse: this.state.reverb.impulses[0],

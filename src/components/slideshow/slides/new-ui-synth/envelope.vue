@@ -41,7 +41,7 @@
   <div class="card envelope">
     <div class="header">
       <span class="title">{{type}}</span>
-      <toggle class="toggle" is-active="state.isActive" @update="toggleActive"></toggle>
+      <toggle class="toggle" :is-active="state.isActive" @update="toggleActive"></toggle>
     </div>
 
     <div class="column">

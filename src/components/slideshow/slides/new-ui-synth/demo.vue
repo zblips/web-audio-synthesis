@@ -89,7 +89,7 @@
         type: Object,
       },
     },
-    mounted() {
+    created() {
       this.audioContext = new AudioContext()
       this.synth = Synth(this.audioContext)
       this.output = Output(this.audioContext)
@@ -97,7 +97,7 @@
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
       this.reverb = createReverb(this.audioContext)
       this.reverb
-      .setFadeValue(1)
+      .setFadeValue(0)
       .load()
       .subscribe(() => {
         this.synth.connect(this.reverb).connect(this.output)

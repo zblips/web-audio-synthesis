@@ -71,11 +71,8 @@ export const createAccentEnvelope = (parameters) => {
     get parameterKeys() {
       return Object.keys(parameters)
     },
-    get active() {
+    get isActive() {
       return isActive
-    },
-    set active(value) {
-      isActive = value
     },
     set accent(value) {
       accentValue = unscale({ min: 0.001, max: 8000 }, value)

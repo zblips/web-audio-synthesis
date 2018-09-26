@@ -43,7 +43,7 @@
     <div class="column">
       <div class="header">
         <span class="title">Filter</span>
-        <toggle class="toggle" is-active="state.isActive" @update="toggleActive"></toggle>
+        <toggle class="toggle" :style="state.isActive" @update="toggleActive"></toggle>
       </div>
 
       <knob class="frequency-knob grey" label="frequency" :value="state.frequencyValue" @update="setFrequencyValue">
