@@ -87,7 +87,6 @@
         this.state.type = value
       },
       setFrequencyValue(value) {
-        console.log(Number(value))
         this.state.frequencyValue = Number(value)
       },
       setPeakValue(value) {

@@ -164,14 +164,14 @@ export const create4xVoiceManager = (audioContext) => {
     },
     set osc1DetuneValue(value) {
       osc1DetuneValue = unscale({ min: 0, max: 100 }, Number(value.toFixed(2)))
-      Object.values(voices).forEach(voice => voice.setOsc1DetuneValue(osc1DetuneValue))
+      voices.forEach(voice => voice.setOsc1DetuneValue(osc1DetuneValue))
     },
     get osc1DetuneValue() {
       return scale({ min: 0, max: 100 }, osc1DetuneValue)
     },
     set osc2DetuneValue(value) {
       osc2DetuneValue = unscale({ min: 0, max: 100 }, Number(value.toFixed(2)))
-      Object.values(voices).forEach(voice => voice.setOsc1DetuneValue(osc2DetuneValue))
+      voices.forEach(voice => voice.setOsc1DetuneValue(osc2DetuneValue))
     },
     get osc2DetuneValue() {
       return scale({ min: 0, max: 100 }, osc2DetuneValue)
@@ -185,10 +185,9 @@ export const create4xVoiceManager = (audioContext) => {
     },
     set fmRatioValue(value) {
       fmRatioValue = unscale({ min: 1, max: 10 }, Number(value.toFixed(1))) * 2
-      for (const voice of Object.values(voices)) {
+      voices.forEach(voice => {
         fmOscillator.frequency.value = voice.osc1.frequency.value * fmRatioValue
-        break
-      }
+      })
     },
     get fmRatioValue() {
       return scale({ min: 1, max: 10 }, fmRatioValue / 2)
@@ -211,13 +210,15 @@ export const create4xVoiceManager = (audioContext) => {
     },
     set osc1Type(value) {
       osc1Type = value
+      voices.forEach(voice => voice.setOsc1Type(value))
+      monoVoice.setOsc1Type(value)
     },
     get osc2Type() {
       return osc2Type
     },
     set osc2Type(value) {
       osc2Type = value
-      Object.values(voices).forEach(voice => voice.setOsc2Type(value))
+      voices.forEach(voice => voice.setOsc2Type(value))
       monoVoice.setOsc2Type(value)
     },
     get types() {

@@ -58,7 +58,6 @@
       text-align: center;
       display: block;
       margin: 0 auto;
-      color: #2c3e50;
       font-family: "Lucida Console", Monaco, monospace;
     }
   }

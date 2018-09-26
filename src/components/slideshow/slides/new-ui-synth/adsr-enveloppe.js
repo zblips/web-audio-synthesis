@@ -16,7 +16,7 @@ export const createAdsrEnvelope = (parameters) => {
   let attackTime = 0.01
   let decayTime = 0.15
   let releaseTime = 0.01
-  let sustainValue = 0.5
+  let sustainValue = 0.2
   let sustainTime = 0.1
   let peakValue = 1
 
