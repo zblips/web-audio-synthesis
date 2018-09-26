@@ -76,6 +76,7 @@ export const createSynth = (audioContext) => {
       return adsrEnvelope
     },
     setState({
+               isPolyphonic = false,
                isOsc1Active = voiceManager.osc1GainValue > 0,
                isOsc2Active = voiceManager.osc2GainValue > 0,
                isAdsrEnvelopeActive = adsrEnvelope.isActive,
@@ -92,6 +93,7 @@ export const createSynth = (audioContext) => {
                filterFrequency = filter.frequencyValue,
                filterPeak = filter.peakValue,
              }) {
+      voiceManager.togglePolyphonyValue(isPolyphonic)
       voiceManager.osc1GainValue = isOsc1Active ? 0.5 : 0
       voiceManager.osc2GainValue = isOsc2Active ? 0.5 : 0
       voiceManager.fmGainValue = isFmActive ? fmGainValue : 0

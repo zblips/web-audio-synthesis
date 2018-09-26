@@ -66,6 +66,7 @@
     synth: {
       isOsc1Active: true,
       isOsc2Active: true,
+      isPolyphonic: true,
       isFmActive: true,
       fmGainValue: 0.2,
       isAdsrEnvelopeActive: true,
