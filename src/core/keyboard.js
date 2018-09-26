@@ -10,11 +10,7 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
     return acc
   }, {})
 
-  const playKey = ' '
-
-  let octave = 4
-
-  let isStarted = false
+  let octave = 5
 
   const getShiftedNote = (key, octave) => keyMapping.indexOf(key) + 12 * octave
 
@@ -56,22 +52,9 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
           keyPressed[key] = false
         }),
       )
-      /* Map space bar to play/stop */
-      subscriptions.push(
-        DOM.keyup(document)
-        .filter(({ key }) => key === playKey)
-        .filter(() => start && stop)
-        .do(() => isStarted ? stop() : start())
-        .subscribe(() => {
-          isStarted = !isStarted
-        }),
-      )
     },
     destroy() {
       subscriptions.forEach(sub => sub.dispose())
-    },
-    stop() {
-      isStarted = false
     },
   }
 }

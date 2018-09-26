@@ -1,6 +1,6 @@
 <style scoped lang="scss">
-  @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/colors';
+  @import '../../assets/styles/synth-card';
+  @import '../../assets/styles/colors';
 
   .card.lfo {
     width: 15vw;
@@ -35,7 +35,7 @@
     <div class="column">
       <div class="header">
         <span class="title">LFO</span>
-        <toggle class="toggle" :is-active="state.isActive" @update="toggleActive"></toggle>
+        <toggle class="toggle" :is-active="isActive" @update="toggleActive"></toggle>
       </div>
 
       <knob class="amount-knob green" label="amount" :value="state.amplitude" @update="setAmount"></knob>
@@ -51,15 +51,13 @@
 <script>
   import Knob from './knob.vue'
   import Toggle from './toggle.vue'
-  import Selector from './selector.vue'
   import UiSelect from './ui-select'
-  import { LFODestinations } from './lfo'
+  import { LFODestinations } from '../../core/lfo-destinations'
 
   export default {
     components: {
       Knob,
       Toggle,
-      Selector,
       UiSelect,
     },
     props: {
@@ -72,6 +70,7 @@
       return {
         destination: this.state.destination,
         destinationState: this.state.destination,
+        isActive: this.state.destination !== LFODestinations.OFF,
       }
     },
     methods: {
@@ -82,15 +81,14 @@
         this.state.frequency = value
       },
       nextDestination(value) {
-        this.active = !(value === 'off')
         this.state.setActiveParameter(value)
       },
       toggleActive(value) {
-        this.state.isActive = value
+        this.isActive = value
         if (this.state.isActive) {
           this.state.destination = this.destinationState
-          this.destinationState = value
         } else {
+          this.destinationState = this.state.destination
           this.state.destination = LFODestinations.OFF
         }
         this.nextDestination(this.value)

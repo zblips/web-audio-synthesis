@@ -2,7 +2,8 @@ import { create4xVoiceManager } from './voice'
 import { createFilter } from './filter'
 import { createAccentEnvelope } from './accent-envelope'
 import { createAdsrEnvelope } from './adsr-enveloppe'
-import { createLfo, LFODestinations } from './lfo'
+import { createLfo } from './lfo'
+import { LFODestinations } from './lfo-destinations'
 
 const EnvelopeParameterKeys = {
   FILTER_FREQUENCY: 'filter freq.',
@@ -12,7 +13,7 @@ const EnvelopeParameterKeys = {
   OSCS_GAIN: 'vca 1/2',
 }
 
-export const Synth = (audioContext) => {
+export const createSynth = (audioContext) => {
   const voiceManager = create4xVoiceManager(audioContext)
 
   const filter = createFilter(audioContext).setFadeValue(-1)

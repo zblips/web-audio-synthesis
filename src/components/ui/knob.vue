@@ -1,5 +1,5 @@
 <style lang="scss" type="text/scss" scoped>
-  @import '../../../../assets/styles/colors';
+  @import '../../assets/styles/colors';
 
   .knob-container {
     height: 100%;

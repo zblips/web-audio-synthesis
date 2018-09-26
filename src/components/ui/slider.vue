@@ -1,6 +1,6 @@
 <style lang="scss" type="text/scss" scoped>
-  @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/colors';
+  @import '../../assets/styles/synth-card';
+  @import '../../assets/styles/colors';
 
   .slider {
     &.active {

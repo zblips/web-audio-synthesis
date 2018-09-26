@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
-  @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/colors';
+  @import '../../assets/styles/synth-card';
+  @import '../../assets/styles/colors';
 
   .card.filters {
     width: 15vw;
@@ -62,14 +62,12 @@
 <script>
   import Knob from './knob.vue'
   import Toggle from './toggle.vue'
-  import Selector from './selector.vue'
   import UiSelect from './ui-select.vue'
 
   export default {
     components: {
       Knob,
       Toggle,
-      Selector,
       UiSelect,
     },
     props: {

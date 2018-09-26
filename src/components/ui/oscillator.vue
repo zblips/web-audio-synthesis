@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
-  @import '../../../../assets/styles/synth-card';
-  @import '../../../../assets/styles/colors';
+  @import '../../assets/styles/synth-card';
+  @import '/../../assets/styles/colors';
 
   .card {
     width: 34vw;
@@ -174,7 +174,7 @@
         isOsc2Active: this.state.osc2GainValue > 0,
         isFmActive: this.state.fmGainValue > 0,
         osc1GainState: this.state.osc1GainValue,
-        osc2GainState: this.state.osc2GainValue ,
+        osc2GainState: this.state.osc2GainValue,
         fmGainState: this.state.fmGainValue,
       }
     },
