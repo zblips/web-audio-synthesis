@@ -65,6 +65,7 @@ export function createMidiTrack(audioContext) {
     },
     setTrack(value) {
       track = value
+      events = toTimedEvents(MidiEvents[track].tracks[0])
       return this
     },
     setSlave(instrument) {
