@@ -25,10 +25,10 @@ export const createFilter = (audioContext) => {
       return dryWetMixer.getInput()
     },
     set frequencyValue(value) {
-      filter.frequency.linearRampToValueAtTime(unscale({ min: 33, max: 22050 }, value), audioContext.currentTime + 0.1)
+      filter.frequency.setValueAtTime(unscale({ min: 33, max: 8000 }, value), audioContext.currentTime)
     },
     get frequencyValue() {
-      return scale({ min: 33, max: 22050 }, filter.frequency.value)
+      return scale({ min: 33, max: 8000 }, filter.frequency.value)
     },
     set peakValue(value) {
       filter.Q.value = unscale({ min: 0, max: 20 }, value)

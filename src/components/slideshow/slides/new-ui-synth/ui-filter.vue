@@ -87,7 +87,8 @@
         this.state.type = value
       },
       setFrequencyValue(value) {
-        this.state.frequencyValue = value
+        console.log(Number(value))
+        this.state.frequencyValue = Number(value)
       },
       setPeakValue(value) {
         this.state.peakValue = value
@@ -101,7 +102,6 @@
         } else {
           this.setFadeValue(1)
         }
-
         this.active = !this.active
       },
     },

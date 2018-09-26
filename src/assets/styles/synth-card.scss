@@ -1,3 +1,5 @@
+@import 'colors';
+
 $input-label-size: 65%;
 
 $margin-int: 6px;
@@ -19,6 +21,7 @@ $opacity-overlay-disabled: 0;
     align-items: center;
     .title {
       font-size: $input-label-size;
+      color: $text-input-label;
       position: absolute;
       left: 18px;
       top: 15px;

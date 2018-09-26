@@ -36,7 +36,10 @@
 <template>
   <div class="card lfo">
     <div class="column">
-      <span class="title">Reverb</span>
+      <div class="header">
+        <span class="title">Reverb</span>
+        <toggle class="toggle" :style="isActive" @update="toggleActive"></toggle>
+      </div>
 
       <knob class="amount-knob" label="amount" :value="state.reverb.fadeValue" @update="setReverbWetMix"></knob>
 
@@ -68,8 +71,12 @@
     data() {
       return {
         impulse: this.state.reverb.impulses[0],
-        active: true,
       }
+    },
+    computed: {
+      isActive() {
+        return this.state.fadeValue > 0
+      },
     },
     methods: {
       setReverbWetMix(value) {
@@ -77,6 +84,9 @@
       },
       nextReverbImpulse(value) {
         this.state.reverb.impulse = value
+      },
+      toggleActive(value) {
+
       },
     },
   }

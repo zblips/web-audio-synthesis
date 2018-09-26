@@ -1,4 +1,4 @@
-import { Dispatcher, createRandomWaveForm, midiToFrequency, scale, unscale, WaveForms } from 'wasa'
+import { createRandomWaveForm, midiToFrequency, scale, unscale, WaveForms } from 'wasa'
 
 const getFrequency = midiToFrequency(440)
 
@@ -76,22 +76,6 @@ export const create4xVoiceManager = (audioContext) => {
 
   togglePolyphonyValue(isPolyphonic)
 
-  const dispatcher = Dispatcher.openSession()
-
-  dispatcher.as('STOP')
-  .subscribe((time = audioContext.currentTime) => {
-      for (const voice of scheduledVoices.keys()) {
-        voice.stop(time)
-      }
-      scheduledVoices.clear()
-      monoVoice.cancelScheduledValues(time)
-      output.gain.cancelScheduledValues(time)
-      output.gain.setValueAtTime(0, time)
-      notes = []
-      scheduledVoices.clear()
-      voices.clear()
-  })
-
   return {
     connect({ input, connect }) {
       output.connect(input)
@@ -157,6 +141,18 @@ export const create4xVoiceManager = (audioContext) => {
           }
         }
       }
+    },
+    stop(time = audioContext.currentTime) {
+      for (const voice of scheduledVoices.keys()) {
+        voice.stop(time)
+      }
+      scheduledVoices.clear()
+      monoVoice.cancelScheduledValues(time)
+      output.gain.cancelScheduledValues(time)
+      output.gain.setValueAtTime(0, time)
+      notes = []
+      scheduledVoices.clear()
+      voices.clear()
     },
     togglePolyphonyValue,
     set osc1GainValue(value) {

@@ -47,23 +47,6 @@ export function createMidiTrack(audioContext) {
     }
   }
 
-  dispatcher.as('START')
-  .subscribe(() => {
-    startTime = audioContext.currentTime
-
-    events.forEach((event) => {
-      let time = startTime + event.time * (60 / (tempo * division))
-      switch (event.type) {
-        case Meta.END_OF_TRACK:
-          return createEotDispatcher().stop(time)
-        case Status.NOTE_ON:
-          return noteOn(time, event.data)
-        case Status.NOTE_OFF:
-          return noteOff(time, event.data)
-      }
-    })
-  })
-
   return {
     start() {
       startTime = audioContext.currentTime
@@ -79,6 +62,10 @@ export function createMidiTrack(audioContext) {
             return noteOff(time, event.data)
         }
       })
+    },
+    setTrack(value) {
+      track = value
+      return this
     },
     setSlave(instrument) {
       slave = instrument

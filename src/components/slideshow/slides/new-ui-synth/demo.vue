@@ -29,7 +29,7 @@
 
         <envelope :class="{'card-disabled': options.isADSRDisabled}" type="ADSR" :state="synth.adsrEnvelope"></envelope>
         <ui-filter :class="{'card-disabled': options.isFilterDisabled}" :state="synth.filter"></ui-filter>
-        <envelope :class="{'card-disabled': options.isAccentDisabled}" :state="synth.accentEnvelope"></envelope>
+        <envelope :class="{'card-disabled': options.isAccentDisabled}" type="Accent" :state="synth.accentEnvelope"></envelope>
         <lfo :class="{'card-disabled': options.isLFODisabled}" :state="synth.lfo"></lfo>
         <ui-output :class="{'card-disabled': options.isReverbDisabled}" :state="{ reverb }"></ui-output>
       </div>
@@ -49,7 +49,6 @@
   import MibVisualizer from './ui-visualizer.vue'
   import { resetSariasSongMapping, setSariasSongMapping } from '../../../../core/utils/gamepad-service'
   import { createMidiTrack } from '@/core/midi/midi-track'
-  import { saria } from '../../../../core/midi/midi-events/saria-events'
   import Osc from './oscillator.vue'
   import Envelope from './envelope'
   import UiFilter from './ui-filter'
@@ -68,22 +67,6 @@
       Lfo,
       UiOutput,
     },
-    data() {
-      const audioContext = new AudioContext()
-      const synth = Synth(audioContext)
-      const output = Output(audioContext)
-      const midiTrack = createMidiTrack(audioContext, saria).setSlave(synth)
-      const keyboard = Keyboard(Object.assign(synth, midiTrack))
-      const reverb = createReverb(audioContext)
-      return {
-        audioContext,
-        synth,
-        output,
-        midiTrack,
-        reverb,
-        keyboard,
-      }
-    },
     props: {
       options: {
         type: Object,
@@ -93,7 +76,7 @@
       this.audioContext = new AudioContext()
       this.synth = Synth(this.audioContext)
       this.output = Output(this.audioContext)
-      this.midiTrack = createMidiTrack(this.audioContext).setSlave(this.synth)
+      this.midiTrack = createMidiTrack(this.audioContext).setTrack('saria').setSlave(this.synth)
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
       this.reverb = createReverb(this.audioContext)
       this.reverb
@@ -102,7 +85,6 @@
       .subscribe(() => {
         this.synth.connect(this.reverb).connect(this.output)
         this.reverb.impulse = 'Deep space'
-        this.midiTrack.changeTrack('saria')
         this.keyboard.init()
         setSariasSongMapping(this.synth.noteOn, this.synth.noteOff)
       })
