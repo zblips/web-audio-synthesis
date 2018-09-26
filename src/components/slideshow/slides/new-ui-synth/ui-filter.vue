@@ -16,6 +16,7 @@
       border-radius: $column-border-radius;
       box-sizing: border-box;
       height: 100%;
+      padding-top: 8%;
 
       .frequency-knob, .peak-knob, .type-selector {
         position: relative;
@@ -41,9 +42,10 @@
 <template>
   <div class="card filters">
     <div class="column">
-      <span class="title">Filter</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleFilter()">
-      </button>
+      <div class="header">
+        <span class="title">Filter</span>
+        <toggle class="toggle" :is-active="isActive" @update="toggleActive"></toggle>
+      </div>
 
       <knob class="frequency-knob grey" label="frequency" :value="state.frequencyValue" @update="setFrequencyValue">
       </knob>
@@ -78,7 +80,7 @@
     },
     data() {
       return {
-        active: false,
+        isActive: this.state.fadeValue > -1,
       }
     },
     methods: {
@@ -86,22 +88,18 @@
         this.state.type = value
       },
       setFrequencyValue(value) {
-        this.state.frequencyValue = value
+        this.state.frequencyValue = Number(value)
       },
       setPeakValue(value) {
         this.state.peakValue = value
       },
-      setFadeValue(value) {
-        this.state.fadeValue = value
-      },
-      toggleFilter() {
-        if (this.active) {
-          this.setFadeValue(-1)
+      toggleActive(value) {
+        this.isActive = value
+        if (this.isActive) {
+          this.state.fadeValue = 1
         } else {
-          this.setFadeValue(1)
+          this.state.fadeValue = -1
         }
-
-        this.active = !this.active
       },
     },
   }

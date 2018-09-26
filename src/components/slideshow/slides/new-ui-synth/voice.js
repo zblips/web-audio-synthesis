@@ -1,4 +1,4 @@
-import { Dispatcher, createRandomWaveForm, midiToFrequency, scale, unscale, WaveForms } from 'wasa'
+import { createRandomWaveForm, midiToFrequency, scale, unscale, WaveForms } from 'wasa'
 
 const getFrequency = midiToFrequency(440)
 
@@ -76,22 +76,6 @@ export const create4xVoiceManager = (audioContext) => {
 
   togglePolyphonyValue(isPolyphonic)
 
-  const dispatcher = Dispatcher.openSession()
-
-  dispatcher.as('STOP')
-  .subscribe((time = audioContext.currentTime) => {
-      for (const voice of scheduledVoices.keys()) {
-        voice.stop(time)
-      }
-      scheduledVoices.clear()
-      monoVoice.cancelScheduledValues(time)
-      output.gain.cancelScheduledValues(time)
-      output.gain.setValueAtTime(0, time)
-      notes = []
-      scheduledVoices.clear()
-      voices.clear()
-  })
-
   return {
     connect({ input, connect }) {
       output.connect(input)
@@ -158,6 +142,17 @@ export const create4xVoiceManager = (audioContext) => {
         }
       }
     },
+    stop(time = audioContext.currentTime) {
+      for (const voice of scheduledVoices.keys()) {
+        voice.stop(time)
+      }
+      scheduledVoices.clear()
+      monoVoice.cancelScheduledValues(time)
+      output.gain.cancelScheduledValues(time)
+      output.gain.setValueAtTime(0, time)
+      voices.clear()
+      notes = []
+    },
     togglePolyphonyValue,
     set osc1GainValue(value) {
       osc1GainValue = value
@@ -168,14 +163,14 @@ export const create4xVoiceManager = (audioContext) => {
     },
     set osc1DetuneValue(value) {
       osc1DetuneValue = unscale({ min: 0, max: 100 }, Number(value.toFixed(2)))
-      Object.values(voices).forEach(voice => voice.setOsc1DetuneValue(osc1DetuneValue))
+      voices.forEach(voice => voice.setOsc1DetuneValue(osc1DetuneValue))
     },
     get osc1DetuneValue() {
       return scale({ min: 0, max: 100 }, osc1DetuneValue)
     },
     set osc2DetuneValue(value) {
       osc2DetuneValue = unscale({ min: 0, max: 100 }, Number(value.toFixed(2)))
-      Object.values(voices).forEach(voice => voice.setOsc1DetuneValue(osc2DetuneValue))
+      voices.forEach(voice => voice.setOsc1DetuneValue(osc2DetuneValue))
     },
     get osc2DetuneValue() {
       return scale({ min: 0, max: 100 }, osc2DetuneValue)
@@ -188,11 +183,10 @@ export const create4xVoiceManager = (audioContext) => {
       return osc2GainValue
     },
     set fmRatioValue(value) {
-      fmRatioValue = unscale({ min: 1, max: 10 }, Number(value.toFixed(1))) * 2
-      for (const voice of Object.values(voices)) {
+      fmRatioValue = unscale({ min: 1, max: 10 }, value) * 2
+      voices.forEach(voice => {
         fmOscillator.frequency.value = voice.osc1.frequency.value * fmRatioValue
-        break
-      }
+      })
     },
     get fmRatioValue() {
       return scale({ min: 1, max: 10 }, fmRatioValue / 2)
@@ -207,21 +201,29 @@ export const create4xVoiceManager = (audioContext) => {
     set osc1Shift(value) {
       osc1Shift = value * 12
     },
+    get osc1Shift() {
+      return osc1Shift / 12
+    },
     set osc2Shift(value) {
       osc2Shift = value * 12
+    },
+    get osc2Shift() {
+      return osc2Shift / 12
     },
     get osc1Type() {
       return osc1Type
     },
     set osc1Type(value) {
       osc1Type = value
+      voices.forEach(voice => voice.setOsc1Type(value))
+      monoVoice.setOsc1Type(value)
     },
     get osc2Type() {
       return osc2Type
     },
     set osc2Type(value) {
       osc2Type = value
-      Object.values(voices).forEach(voice => voice.setOsc2Type(value))
+      voices.forEach(voice => voice.setOsc2Type(value))
       monoVoice.setOsc2Type(value)
     },
     get types() {
@@ -247,36 +249,6 @@ export const create4xVoiceManager = (audioContext) => {
     },
     get fmGainParam() {
       return fmGain.gain
-    },
-    getState() {
-      return {
-        isPolyphonic,
-        fmRatioValue,
-        fmGainValue,
-        osc1GainValue,
-        osc2GainValue,
-        osc1DetuneValue,
-        osc2DetuneValue,
-        osc1Type,
-        osc2Type,
-        osc1Shift,
-        osc2Shift,
-      }
-    },
-    setState(state) {
-      isPolyphonic = state.isPolyphonic
-      togglePolyphonyValue(isPolyphonic)
-      fmRatioValue = state.fmRatioValue
-      fmGainValue = state.fmGainValue
-      osc1GainValue = state.osc1GainValue
-      osc2GainValue = state.osc2GainValue
-      osc1DetuneValue = state.osc1DetuneValue
-      osc2DetuneValue = state.osc2DetuneValue
-      osc1Type = state.osc1Type
-      osc2Type = state.osc2Type
-      osc1Shift = state.osc1Shift
-      osc2Shift = state.osc2Shift
-      return this
     },
   }
 }

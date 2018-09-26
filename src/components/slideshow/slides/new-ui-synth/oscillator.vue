@@ -23,16 +23,20 @@
         border-radius: $column-border-radius;
       }
 
-      .osc {
+      .osc1-gain, .osc2-gain, .fm-amount {
+        height: 35%;
+      }
+
+      .osc1-detune, .osc2-detune, .fm-ratio {
+        height: 25%;
+      }
+
+      .fm, .osc {
         height: 100%;
+        padding-top: 10%;
+      }
 
-        .osc1-gain, .osc2-gain {
-          height: 40%;
-        }
-
-        .osc1-detune, .osc2-detune {
-          height: 25%;
-        }
+      .osc {
 
         .wave-selector {
           top: -16px;
@@ -44,14 +48,8 @@
       }
 
       .fm {
-        height: 100%;
-
-        .fm-amount {
-          height: 40%;
-        }
 
         .fm-ratio {
-          height: 35%;
           margin-top: 16px;
         }
       }
@@ -60,7 +58,7 @@
     &.card-osc2-disabled {
 
       .osc2-container {
-        opacity: 0.15;
+        opacity: $opacity-card-disabled;
 
         &::before {
           content: ' ';
@@ -96,14 +94,15 @@
   <div class="card">
     <div class="column osc1-container">
       <div class="osc">
-        <span class="title">Osc1</span>
-        <button class="toggle-button corner" :class="{ active: activeOsc1, inactive: !activeOsc1 }" @click="toggleOsc1()">
-        </button>
+        <div class="header">
+          <span class="title">Osc1</span>
+          <toggle class="toggle" :is-active="isOsc1Active" @update="toggleOsc1"></toggle>
+        </div>
 
         <knob class="osc1-gain yellow" :value="state.osc1GainValue" @update="setOsc1GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc1Type" @update="nextOsc1TypeValue"
-                   :width="150">
+                   :width="125">
         </ui-select>
 
         <knob class="osc1-detune yellow" label="detune" :value="state.osc1DetuneValue" @update="setOsc1DetuneValue">
@@ -116,14 +115,15 @@
 
     <div class="column osc2-container">
       <div class="osc">
-        <span class="title">Osc2</span>
-        <button class="toggle-button" :class="{ active: activeOsc2, inactive: !activeOsc2 }" @click="toggleOsc2()">
-        </button>
+        <div class="header">
+          <span class="title">Osc2</span>
+          <toggle class="toggle" :is-active="isOsc2Active" @update="toggleOsc2"></toggle>
+        </div>
 
         <knob class="osc2-gain red" :value="state.osc2GainValue" @update="setOsc2GainValue"></knob>
 
         <ui-select class="wave-selector" :values="state.types" :value="state.osc2Type" @update="nextOsc2TypeValue"
-                   :width="150">
+                   :width="125">
         </ui-select>
 
         <knob class="osc2-detune red" label="detune" :value="state.osc2DetuneValue" @update="setOsc2DetuneValue">
@@ -136,8 +136,10 @@
 
     <div class="column fm-container">
       <div class="fm">
-        <span class="title">Fm</span>
-        <button class="toggle-button" :class="{ active: activeFm, inactive: !activeFm }" @click="toggleFm()"></button>
+        <div class="header">
+          <span class="title">FM</span>
+          <toggle class="toggle" :is-active="isFmActive" @update="toggleFm"></toggle>
+        </div>
 
         <knob class="fm-amount violet" label="amount" :value="state.fmGainValue" @update="setFmGainValue"></knob>
 
@@ -168,17 +170,26 @@
       return {
         osc1Type: this.state.osc1Type,
         osc2Type: this.state.osc2Type,
-        activeOsc1: true,
-        activeOsc2: true,
-        activeFm: false,
+        isOsc1Active: this.state.osc1GainValue > 0,
+        isOsc2Active: this.state.osc2GainValue > 0,
+        isFmActive: this.state.fmGainValue > 0,
+        osc1GainState: this.state.osc1GainValue,
+        osc2GainState: this.state.osc2GainValue ,
+        fmGainState: this.state.fmGainValue,
       }
     },
     methods: {
       setOsc1GainValue(value) {
-        this.state.osc1GainValue = value
+        this.osc1GainState = value
+        if (this.isOsc1Active) {
+          this.state.osc1GainValue = value
+        }
       },
       setOsc2GainValue(value) {
-        this.state.osc2GainValue = value
+        this.osc2GainState = value
+        if (this.isOsc2Active) {
+          this.state.osc2GainValue = value
+        }
       },
       setOsc1DetuneValue(value) {
         this.state.osc1DetuneValue = value
@@ -187,7 +198,10 @@
         this.state.osc2DetuneValue = value
       },
       setFmGainValue(value) {
-        this.state.fmGainValue = value
+        this.fmGainState = value
+        if (this.isFmActive) {
+          this.state.fmGainValue = value
+        }
       },
       setFmRatioValue(value) {
         this.state.fmRatioValue = value
@@ -207,17 +221,32 @@
       nextOsc2TypeValue(value) {
         this.state.osc2Type = value
       },
-      toggleOsc1() {
-        this.activeOsc1 ? this.setOsc1GainValue(0) : this.setOsc1GainValue(0.5)
-        this.activeOsc1 = !this.activeOsc1
+      toggleOsc1(value) {
+        this.isOsc1Active = value
+        if (this.isOsc1Active) {
+          this.state.osc1GainValue = this.osc1GainState
+        } else {
+          this.osc1GainState = this.state.osc1GainValue
+          this.state.osc1GainValue = 0
+        }
       },
-      toggleOsc2() {
-        this.activeOsc2 ? this.setOsc2GainValue(0) : this.setOsc2GainValue(0.5)
-        this.activeOsc2 = !this.activeOsc2
+      toggleOsc2(value) {
+        this.isOsc2Active = value
+        if (this.isOsc2Active) {
+          this.state.osc2GainValue = this.osc2GainState
+        } else {
+          this.osc2GainState = this.state.osc2GainValue
+          this.state.osc2GainValue = 0
+        }
       },
-      toggleFm() {
-        this.activeFm ? this.setFmGainValue(0) : this.setFmGainValue(1)
-        this.activeFm = !this.activeFm
+      toggleFm(value) {
+        this.isFmActive = value
+        if (this.isFmActive) {
+          this.state.fmGainValue = this.fmGainState
+        } else {
+          this.fmGainState = this.state.fmGainValue
+          this.state.fmGainValue = 0
+        }
       },
     },
   }

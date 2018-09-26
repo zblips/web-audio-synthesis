@@ -10,11 +10,6 @@ export const createAccentEnvelope = (parameters) => {
 
   let parameter
 
-  const update = (audioParam) => {
-    audioParam.xUnderEnvelopeControl = true
-    audioParam.xEnvelopeDuration = attackTime + decayTime
-  }
-
   const reset = (audioParam) => {
     audioParam.xUnderEnvelopeControl = false
   }
@@ -25,7 +20,7 @@ export const createAccentEnvelope = (parameters) => {
         reset(parameter)
       }
       parameter = parameters[audioParamKey]
-      update(parameter)
+      parameter.xUnderEnvelopeControl = true
       peakValue = parameter.value
       sustainValue = parameter.value
       return this
@@ -39,7 +34,7 @@ export const createAccentEnvelope = (parameters) => {
       return this
     },
     setSustainValue(value) {
-      sustainValue = unscale({ min: 0.001, max: 0.5 }, parameter.value)
+      sustainValue = unscale({ min: 0.001, max: 0.5 }, value)
       return this
     },
     setAccentValue(value) {
@@ -66,16 +61,14 @@ export const createAccentEnvelope = (parameters) => {
       if (!isActive && parameter) {
         reset(parameter)
       }
+      parameter.xUnderEnvelopeControl = isActive
       return this
     },
     get parameterKeys() {
       return Object.keys(parameters)
     },
-    get active() {
+    get isActive() {
       return isActive
-    },
-    set active(value) {
-      isActive = value
     },
     set accent(value) {
       accentValue = unscale({ min: 0.001, max: 8000 }, value)

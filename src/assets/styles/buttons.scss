@@ -12,15 +12,19 @@
 }
 
 button {
-  color: $ui-primary;
-  background-color: $ui-bg;
+  color: #8feb9c;
+  background-color: $column-block-background;
   text-decoration:none;
   font-family: 'regular', sans-serif;
-  font-size:1em;
-  border: none;
-  border-radius: 0;
+  font-size:0.5em;
+  border: 2px double #9b9fa7;
+  border-radius: 5px;
   cursor: pointer;
   outline: none;
+  padding: 2px;
+  color: #8feb9c;
+  width: 80px;
+  display: inline-block;
 }
 
 .btn:hover {

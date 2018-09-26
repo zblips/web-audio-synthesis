@@ -1,15 +1,16 @@
 <template>
   <div class="app-bar">
     <span class="polyphony-container">
-      <span class="switch-label">Polyphonic</span>
+      <span class="switch-label">Mono/Poly</span>
       <ui-switch class="switch" @update="togglePolyphonyValue" :on="state.synth.voiceManager.isPolyphonic"></ui-switch>
     </span>
 
     <span class="brand">Web Audio Synthesis</span>
 
     <span class="track-selector">
+      <button @click="togglePlay()" :class="{stop:isPlaying, start: !isPlaying}">️️</button>
       <ui-select @update="changeTrack"
-                 :values="state.midiTrack.tracks" :value="state.midiTrack.track">
+                 :values="state.midiTrack.tracks" :value="state.midiTrack.track" :width="200">
       </ui-select>
     </span>
   </div>
@@ -30,23 +31,32 @@
         default: () => Object.create(null),
       },
     },
-    mounted() {
-
-    },
     computed: {
       tracks() {
         return Object.values(this.state.midiTrack.tracks).map(name => ({ name }))
       },
-      selectedTrack() {
-        return this.state.midiTrack.track
-      },
+    },
+    data() {
+      return {
+        isPlaying: false,
+      }
     },
     methods: {
       changeTrack(value) {
         this.state.midiTrack.changeTrack(value)
       },
+      track() {
+        return this.state.midiTrack.track
+      },
       togglePolyphonyValue() {
         this.state.synth.voiceManager.togglePolyphonyValue()
+      },
+      togglePlay(value = !this.isPlaying) {
+        this.isPlaying = value
+        if (this.isPlaying) {
+          return this.state.midiTrack.start()
+        }
+        this.state.synth.stop()
       },
     },
   }
@@ -55,6 +65,7 @@
 <style scoped lang="scss">
   @import '../../../../assets/styles/synth-card';
   @import '../../../../assets/styles/colors';
+  @import '../../../../assets/styles/buttons';
 
   .app-bar {
     position: relative;
@@ -98,6 +109,17 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
+    }
+
+    .stop:after {
+      content: "■";
+      font-size: 30px;
+    }
+
+    .start:after {
+      content: "▶";
+      font-size: 25px;
+
     }
 
   }

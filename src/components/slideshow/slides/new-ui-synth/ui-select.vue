@@ -1,12 +1,8 @@
 <template>
   <span class="label">
-    <!--<span @click="previousValue">◀</span>-->
-
     <span class="screen" :style="style" @click="nextValue">
       <span>{{ activeValue }}</span>
     </span>
-
-    <!--<span @click="nextValue">▶</span>-->
   </span>
 </template>
 

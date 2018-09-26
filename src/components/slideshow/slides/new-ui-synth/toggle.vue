@@ -1,8 +1,15 @@
 <style lang="scss" type="text/scss" scoped>
+  @import '../../../../assets/styles/synth-card';
+  @import '../../../../assets/styles/colors';
+
   .toggle {
+    /*&.corner {*/
+      /*top: 10px;*/
+      /*right: 10px;*/
+    /*}*/
     button {
-      width: 15px;
-      height: 15px;
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
       border: 2px solid #9C8AA5;
       outline: none;
@@ -30,7 +37,7 @@
 
 <template>
   <div class="toggle">
-    <button :class="{ active, inactive: !active }" @click="toggle()"></button>
+    <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggle()"></button>
     <span class="label" v-if="label">{{label}}</span>
   </div>
 </template>

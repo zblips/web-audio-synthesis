@@ -13,8 +13,6 @@ export const LFODestinations = Object.freeze({
   FILTER_PEAK: 'filter peak',
   ALL_FREQUENCY: 'all freq.',
   FM_AMOUNT: 'fm amount',
-  // OSC1_FREQUENCY: 'osc1 freq.',
-  // OSC2_FREQUENCY: 'osc2 freq',
 })
 
 export const createLfo = (audioContext, parameters) => {
@@ -50,6 +48,9 @@ export const createLfo = (audioContext, parameters) => {
       parameter = parameters[audioParamKey]
       gain.connect(parameter)
       return this
+    },
+    get isActive() {
+      return destination !== LFODestinations.OFF
     },
     disconnect() {
       gain.disconnect()

@@ -22,7 +22,7 @@ export const Synth = (audioContext) => {
     [EnvelopeParameterKeys.FILTER_PEAK]: filter.peakParam,
   })
   .setActiveParameter(EnvelopeParameterKeys.FILTER_FREQUENCY)
-  .toggleActive()
+  .toggleActive(true)
 
   const adsrEnvelope = createAdsrEnvelope({
     [EnvelopeParameterKeys.OSC1_GAIN]: voiceManager.osc1Gain,
@@ -30,7 +30,7 @@ export const Synth = (audioContext) => {
     [EnvelopeParameterKeys.OSCS_GAIN]: voiceManager.outputGain,
   })
   .setActiveParameter(EnvelopeParameterKeys.OSCS_GAIN)
-  .toggleActive()
+  .toggleActive(false)
 
   const lfo = createLfo(audioContext, {
     [LFODestinations.FILTER_FREQUENCY]: filter.frequencyParam,
@@ -38,9 +38,11 @@ export const Synth = (audioContext) => {
     [LFODestinations.FILTER_PEAK]: filter.peakParam,
     [LFODestinations.FM_AMOUNT]: voiceManager.fmGainParam,
   })
-  .setActiveParameter(LFODestinations.FILTER_FREQUENCY)
+  .setActiveParameter(LFODestinations.OFF)
 
   voiceManager.connect(filter)
+
+  voiceManager.osc2GainValue = 0
 
   return {
     noteOn(value, time = audioContext.currentTime) {
@@ -71,6 +73,39 @@ export const Synth = (audioContext) => {
     },
     get adsrEnvelope() {
       return adsrEnvelope
+    },
+    setState({
+               isOsc1Active = voiceManager.osc1GainValue > 0,
+               isOsc2Active = voiceManager.osc2GainValue > 0,
+               isAdsrEnvelopeActive = adsrEnvelope.isActive,
+               isFilterActive = filter.fadeValue > -1,
+               isAccentActive = accentEnvelope.isActive,
+               isFmActive = voiceManager.fmGainValue > 0,
+               fmGainValue = voiceManager.fmGainValue,
+               lfoDestination = lfo.destination,
+               osc1Type = voiceManager.osc1Type,
+               osc2Type = voiceManager.osc2Type,
+               osc1Shift = voiceManager.osc1Shift,
+               osc2Shift = voiceManager.osc2Shift,
+               filterType = filter.type,
+               filterFrequency = filter.frequencyValue,
+               filterPeak = filter.peakValue,
+             }) {
+      voiceManager.osc1GainValue = isOsc1Active ? 0.5 : 0
+      voiceManager.osc2GainValue = isOsc2Active ? 0.5 : 0
+      voiceManager.fmGainValue = isFmActive ? fmGainValue : 0
+      lfo.destination = lfoDestination
+      filter.fadeValue = isFilterActive ? 1 : -1
+      adsrEnvelope.toggleActive(isAdsrEnvelopeActive)
+      accentEnvelope.toggleActive(isAccentActive)
+      voiceManager.osc1Type = osc1Type
+      voiceManager.osc2Type = osc2Type
+      voiceManager.osc1Shift = osc1Shift
+      voiceManager.osc2Shift = osc2Shift
+      filter.type = filterType
+      filter.frequencyValue = filterFrequency
+      filter.peakValue = filterPeak
+      return this
     },
     get lfo() {
       return lfo

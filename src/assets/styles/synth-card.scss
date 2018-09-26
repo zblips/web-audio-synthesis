@@ -1,3 +1,5 @@
+@import 'colors';
+
 $input-label-size: 65%;
 
 $margin-int: 6px;
@@ -6,26 +8,32 @@ $margin-ext: 12px;
 $internal-card-padding: 10px;
 $column-border-radius: 15px;
 
-$opacity-card-disabled: 0.15;
+$opacity-card-disabled: 0.6;
 $opacity-overlay-disabled: 0;
 
 .card {
   background-color: #fdfdfd;
   border-radius: 15px;
   box-sizing: border-box;
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .title {
+      font-size: $input-label-size;
+      color: $text-input-label;
+      position: absolute;
+      left: 18px;
+      top: 15px;
+    }
 
-  .title {
-    font-size: $input-label-size;
-    position: absolute;
-    left: 18px;
-    top: 15px;
-  }
-
-  .toggle-button {
-    position: absolute;
-    right: 20px;
-    z-index: 100;
-    cursor: pointer;
+    .toggle {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      z-index: 100;
+      cursor: pointer;
+    }
   }
 
   &.card-disabled {
@@ -47,6 +55,10 @@ $opacity-overlay-disabled: 0;
 }
 
 .toggle-button {
+  &corner {
+    top: 10px;
+    right: 15px;
+  }
   width: 25px;
   height: 25px;
   border-radius: 50%;

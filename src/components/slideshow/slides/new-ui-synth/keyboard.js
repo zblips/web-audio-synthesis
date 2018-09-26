@@ -1,8 +1,5 @@
 import * as R from 'ramda'
 import { DOM } from 'rx-dom'
-import { Dispatcher } from 'wasa'
-
-const dispatcher = Dispatcher.openSession()
 
 export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
   const subscriptions = []
@@ -13,17 +10,9 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
     return acc
   }, {})
 
-  const playKey = ' '
-
-  let octave = 4
-
-  let isStarted = false
+  let octave = 5
 
   const getShiftedNote = (key, octave) => keyMapping.indexOf(key) + 12 * octave
-
-  dispatcher.as('END_OF_TRACK').subscribe(() => {
-    isStarted = false
-  })
 
   return {
     get octave() {
@@ -63,22 +52,9 @@ export function Keyboard({ start, stop, noteOn, noteOff, pitch }) {
           keyPressed[key] = false
         }),
       )
-      /* Map space bar to play/stop */
-      subscriptions.push(
-        DOM.keyup(document)
-        .filter(({ key }) => key === playKey)
-        .filter(() => start && stop)
-        .do(() => isStarted ? dispatcher.dispatch('STOP') : dispatcher.dispatch('START'))
-        .subscribe(() => {
-          isStarted = !isStarted
-        }),
-      )
     },
     destroy() {
       subscriptions.forEach(sub => sub.dispose())
-    },
-    stop() {
-      isStarted = false
     },
   }
 }

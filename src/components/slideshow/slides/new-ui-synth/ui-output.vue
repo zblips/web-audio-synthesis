@@ -16,19 +16,14 @@
       border-radius: $column-border-radius;
       box-sizing: border-box;
       height: 100%;
-
-      .amount-knob, .rate-knob {
-        position: relative;
-        top: -6%;
-      }
+      padding-top: 8%;
 
       .amount-knob {
-        height: 45%;
+        position: relative;
+        height: 35%;
+        margin-bottom: 8%;
       }
 
-      .rate-knob {
-        height: 30%;
-      }
     }
   }
 </style>
@@ -36,11 +31,14 @@
 <template>
   <div class="card lfo">
     <div class="column">
-      <span class="title">Reverb</span>
+      <div class="header">
+        <span class="title">Reverb</span>
+        <toggle class="toggle" :style="isActive" @update="toggleActive"></toggle>
+      </div>
 
       <knob class="amount-knob" label="amount" :value="state.reverb.fadeValue" @update="setReverbWetMix"></knob>
 
-      <ui-select :value="impulse" :values="state.reverb.impulses" @update="nextReverbImpulse" :width="200">
+      <ui-select class="selector" :value="impulse" :values="state.reverb.impulses" @update="nextReverbImpulse" :width="180">
       </ui-select>
     </div>
   </div>
@@ -65,16 +63,15 @@
         default: () => Object.create(null),
       },
     },
-    computed: {
-      impulse() {
-        return this.state.reverb.impulse
-      },
-    },
     data() {
       return {
-        destination: this.state.destination,
-        active: true,
+        impulse: this.state.reverb.impulses[0],
       }
+    },
+    computed: {
+      isActive() {
+        return this.state.fadeValue > 0
+      },
     },
     methods: {
       setReverbWetMix(value) {
@@ -82,6 +79,9 @@
       },
       nextReverbImpulse(value) {
         this.state.reverb.impulse = value
+      },
+      toggleActive(value) {
+
       },
     },
   }

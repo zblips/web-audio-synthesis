@@ -16,18 +16,15 @@
       border-radius: $column-border-radius;
       box-sizing: border-box;
       height: 100%;
-
-      .amount-knob, .rate-knob {
-        position: relative;
-        top: -6%;
-      }
+      padding-top: 8%;
 
       .amount-knob {
-        height: 45%;
+        height: 35%;
       }
 
       .rate-knob {
-        height: 30%;
+        height: 25%;
+        margin-bottom: 6%;
       }
     }
   }
@@ -36,15 +33,16 @@
 <template>
   <div class="card lfo">
     <div class="column">
-      <span class="title">LFO</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleLFO()">
-      </button>
+      <div class="header">
+        <span class="title">LFO</span>
+        <toggle class="toggle" :is-active="state.isActive" @update="toggleActive"></toggle>
+      </div>
 
       <knob class="amount-knob green" label="amount" :value="state.amplitude" @update="setAmount"></knob>
 
       <knob class="rate-knob green" label="rate" :value="state.frequency" @update="setRate"></knob>
 
-      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="200">
+      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="180">
       </ui-select>
     </div>
   </div>
@@ -55,6 +53,7 @@
   import Toggle from './toggle.vue'
   import Selector from './selector.vue'
   import UiSelect from './ui-select'
+  import { LFODestinations } from './lfo'
 
   export default {
     components: {
@@ -72,7 +71,7 @@
     data() {
       return {
         destination: this.state.destination,
-        active: true,
+        destinationState: this.state.destination,
       }
     },
     methods: {
@@ -86,13 +85,14 @@
         this.active = !(value === 'off')
         this.state.setActiveParameter(value)
       },
-      toggleLFO() {
-        if (this.active) {
-          this.value = 'off'
+      toggleActive(value) {
+        this.state.isActive = value
+        if (this.state.isActive) {
+          this.state.destination = this.destinationState
+          this.destinationState = value
         } else {
-          this.value = 'all freq.'
+          this.state.destination = LFODestinations.OFF
         }
-
         this.nextDestination(this.value)
       },
     },

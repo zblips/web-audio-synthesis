@@ -16,16 +16,12 @@
       height: 100%;
       padding-top: $internal-card-padding*2.5;
 
-      .toggle-button {
-        top: 10px;
-      }
-
       .sliders {
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        top: 24px;
+        padding-top: 16%;
 
         .slider {
           margin: 0 10px 0 10px;
@@ -33,7 +29,7 @@
       }
 
       .accent-knob {
-        height: 33%;
+        height: 25%;
       }
     }
 
@@ -43,16 +39,18 @@
 
 <template>
   <div class="card envelope">
-    <div class="column">
+    <div class="header">
       <span class="title">{{type}}</span>
-      <button class="toggle-button" :class="{ active, inactive: !active }" @click="toggleEnvelope()">
-      </button>
+      <toggle class="toggle" :is-active="state.isActive" @update="toggleActive"></toggle>
+    </div>
+
+    <div class="column">
 
       <div class="sliders">
-        <slider class="red" :height="200" label="A" :value="state.attack" @update="setAttackTime"></slider>
-        <slider class="blue" :height="200" label="D" :value="state.decay" @update="setDecayTime"></slider>
-        <slider class="green" :height="200" label="S" :value="state.sustain" @update="setSustainValue"></slider>
-        <slider class="cyan" v-if="type === 'ADSR'" :height="200" label="R" :value="state.release" @update="setReleaseTime"></slider>
+        <slider class="red" :height="160" label="A" :value="state.attack" @update="setAttackTime"></slider>
+        <slider class="blue" :height="160" label="D" :value="state.decay" @update="setDecayTime"></slider>
+        <slider class="green" :height="160" label="S" :value="state.sustain" @update="setSustainValue"></slider>
+        <slider class="cyan" v-if="type === 'ADSR'" :height="160" label="R" :value="state.release" @update="setReleaseTime"></slider>
       </div>
 
       <knob class="accent-knob black" v-if="type === 'Accent'" label="accent" :value="state.accent"
@@ -65,6 +63,7 @@
 <script>
   import Slider from './slider.vue'
   import Knob from './knob.vue'
+  import Toggle from './toggle.vue'
 
   export default {
     props: {
@@ -78,6 +77,7 @@
       },
     },
     components: {
+      Toggle,
       Slider,
       Knob,
     },
@@ -102,9 +102,8 @@
       setReleaseTime(value) {
         this.state.release = value
       },
-      toggleEnvelope() {
-        this.active = !this.active
-        this.state.toggleActive(!this.active)
+      toggleActive(value) {
+        this.state.toggleActive(value)
       },
     },
   }

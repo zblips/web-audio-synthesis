@@ -2,7 +2,7 @@
   @import '../../assets/styles/colors.scss';
 
   .eg-slideshow {
-    font-family: "Roboto Condensed";
+    font-family: "Lucida Console", Monaco, monospace;
     background-color: $bg-primary;
     overflow: hidden;
     height: 100%;
@@ -85,7 +85,7 @@
                                     isFilterDisabled: true,
                                     isAccentDisabled: true,
                                     isLFODisabled: true,
-                                    isReverbDisabled: true
+                                    isReverbDisabled: false
                                   }">
 
       </synthesizer-demo>
