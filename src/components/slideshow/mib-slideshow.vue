@@ -44,8 +44,16 @@
 <template>
   <div class="eg-slideshow">
     <slide enter='fadeIn' leave='fadeOut'>
-      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
-    </slide>
+      <IntroDemo :options="{
+                            isOsc2Disabled: false,
+                            isFmDisabled: false,
+                            isADSRDisabled: false,
+                            isFilterDisabled: false,
+                            isAccentDisabled: false,
+                            isLFODisabled: false,
+                            isReverbDisabled: false
+                          }">
+      </IntroDemo>    </slide>
 
     <slide enter='fadeIn' leave='fadeOut'>
       <mib-title></mib-title>
@@ -78,17 +86,16 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
-      <synthesizer-demo :options="{
+      <mib-monophonic-demo :options="{
                                     isOsc2Disabled: true,
                                     isFmDisabled: true,
                                     isADSRDisabled: true,
                                     isFilterDisabled: true,
                                     isAccentDisabled: true,
                                     isLFODisabled: true,
-                                    isReverbDisabled: false
+                                    isReverbDisabled: true
                                   }">
-
-      </synthesizer-demo>
+      </mib-monophonic-demo>
     </slide>
 
     <!--POLYPHONIC-->
@@ -105,7 +112,16 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut'>
-      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
+      <mib-polyphonic-demo :options="{
+                                    isOsc2Disabled: true,
+                                    isFmDisabled: true,
+                                    isADSRDisabled: true,
+                                    isFilterDisabled: true,
+                                    isAccentDisabled: true,
+                                    isLFODisabled: true,
+                                    isReverbDisabled: true
+                                  }">
+      </mib-polyphonic-demo>
     </slide>
 
     <!--ADDITIVE-->
@@ -122,7 +138,16 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
-      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
+      <mib-additive-demo :options="{
+                                    isOsc2Disabled: false,
+                                    isFmDisabled: true,
+                                    isADSRDisabled: true,
+                                    isFilterDisabled: true,
+                                    isAccentDisabled: true,
+                                    isLFODisabled: true,
+                                    isReverbDisabled: true
+                                  }">
+      </mib-additive-demo>
     </slide>
 
     <!--SUBSTRACTIVE-->
@@ -135,7 +160,16 @@
     </slide>
 
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
-      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
+      <mib-substractive-demo :options="{
+                                    isOsc2Disabled: false,
+                                    isFmDisabled: true,
+                                    isADSRDisabled: true,
+                                    isFilterDisabled: false,
+                                    isAccentDisabled: true,
+                                    isLFODisabled: true,
+                                    isReverbDisabled: true
+                                  }">
+      </mib-substractive-demo>
     </slide>
 
     <!--ENVELOPES-->
@@ -152,7 +186,16 @@
     </slide>
 
     <slide enter='bounceInRight' :mouseNavigation="false" :steps="2">
-      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
+      <mib-envelopes-demo :options="{
+                                    isOsc2Disabled: false,
+                                    isFmDisabled: true,
+                                    isADSRDisabled: false,
+                                    isFilterDisabled: false,
+                                    isAccentDisabled: false,
+                                    isLFODisabled: true,
+                                    isReverbDisabled: true
+                                  }">
+      </mib-envelopes-demo>
     </slide>
 
     <!--LFO-->
@@ -165,7 +208,16 @@
     </slide>
 
     <slide enter='bounceInRight' :mouseNavigation="false" :steps="2">
-      <synthesizer-demo :options="{test: true}"></synthesizer-demo>
+      <mib-envelopes-demo :options="{
+                                    isOsc2Disabled: false,
+                                    isFmDisabled: false,
+                                    isADSRDisabled: false,
+                                    isFilterDisabled: false,
+                                    isAccentDisabled: false,
+                                    isLFODisabled: false,
+                                    isReverbDisabled: false
+                                  }">
+      </mib-envelopes-demo>
     </slide>
 
     <!--END-->
@@ -180,6 +232,8 @@
   import MibTitle from './slides/mib-title.vue'
   import { gamepadHandler } from '../../core/utils/gamepad-service'
 
+  import IntroDemo from './slides/web-audio-api/demo.vue'
+
   import MibWebAudioApi00 from './slides/web-audio-api/mib-web-audio-api-00'
   import MibWebAudioApi01 from './slides/web-audio-api/mib-web-audio-api-01'
   import MibWebAudioSnippet from './slides/web-audio-api/snippet'
@@ -187,25 +241,30 @@
   import MibMonophonicIntro from './slides/monophonic-synthesis/intro'
   import MibMonophonicSnippet from './slides/monophonic-synthesis/snippet.vue'
   import MibMonophonicGraph from './slides/monophonic-synthesis/graph.vue'
-  import SynthesizerDemo from './slides/new-ui-synth/demo.vue'
+  import MibMonophonicDemo from './slides/monophonic-synthesis/demo.vue'
 
   import MibPolyphonicIntro from './slides/polyphonic-synthesis/intro'
   import MibPolyphonicSnippet from './slides/polyphonic-synthesis/snippet.vue'
   import MibPolyphonicGraph from './slides/polyphonic-synthesis/graph.vue'
+  import MibPolyphonicDemo from './slides/polyphonic-synthesis/demo.vue'
 
   import MibAdditiveIntro from './slides/additive-synthesis/intro'
   import MibAdditiveGraph from './slides/additive-synthesis/graph.vue'
   import MibAdditiveSnippet from './slides/additive-synthesis/snippet.vue'
+  import MibAdditiveDemo from './slides/additive-synthesis/demo.vue'
 
   import MibSubstractiveIntro from './slides/substractive-synthesis/intro'
   import MibSubstractiveGraph from './slides/substractive-synthesis/graph.vue'
+  import MibSubstractiveDemo from './slides/substractive-synthesis/demo.vue'
 
   import MibEnvelopesIntro from './slides/envelopes/intro.vue'
   import MibEnvelopesCurves from './slides/envelopes/curves.vue'
   import MibEnvelopesGraph from './slides/envelopes/graph.vue'
+  import MibEnvelopesDemo from './slides/envelopes/demo.vue'
 
   import MibLfoIntro from './slides/lfo/intro.vue'
   import MibLfoGraph from './slides/lfo/graph.vue'
+  import MibLfoDemo from './slides/lfo/demo.vue'
 
   import MibTheEnd from './slides/mib-the-end'
 
@@ -218,6 +277,8 @@
     components: {
       MibTitle,
 
+      IntroDemo,
+
       MibWebAudioApi00,
       MibWebAudioApi01,
       MibWebAudioSnippet,
@@ -225,26 +286,30 @@
       MibMonophonicIntro,
       MibMonophonicGraph,
       MibMonophonicSnippet,
-
-      SynthesizerDemo,
+      MibMonophonicDemo,
 
       MibPolyphonicIntro,
       MibPolyphonicGraph,
       MibPolyphonicSnippet,
+      MibPolyphonicDemo,
 
       MibAdditiveIntro,
       MibAdditiveGraph,
       MibAdditiveSnippet,
+      MibAdditiveDemo,
 
       MibSubstractiveIntro,
       MibSubstractiveGraph,
+      MibSubstractiveDemo,
 
       MibEnvelopesIntro,
       MibEnvelopesCurves,
       MibEnvelopesGraph,
+      MibEnvelopesDemo,
 
       MibLfoIntro,
       MibLfoGraph,
+      MibLfoDemo,
 
       MibTheEnd,
     },
