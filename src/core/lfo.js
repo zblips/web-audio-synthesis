@@ -1,14 +1,27 @@
-import { WaveForms } from '@/core/waveforms'
-import { LFODestinations } from '@/core/lfo-destinations'
-import { randomWaveForm } from '@/core/utils'
+import { createRandomWaveForm, scale, unscale, WaveForms } from 'wasa'
 
-export const LFO = (audioContext) => {
+const EPSILON = 2.220446049250313e-16
+
+const MIN_FREQUENCY = EPSILON
+const MAX_FREQUENCY = 15
+const MIN_AMPLITUDE = EPSILON
+const MAX_AMPLITUDE = 700
+
+export const LFODestinations = Object.freeze({
+  OFF: 'off',
+  FILTER_FREQUENCY: 'filter freq.',
+  FILTER_PEAK: 'filter peak',
+  ALL_FREQUENCY: 'all freq.',
+  FM_AMOUNT: 'fm amount',
+})
+
+export const createLfo = (audioContext, parameters) => {
   const osc = audioContext.createOscillator()
   const gain = audioContext.createGain()
 
   const setWaveForm = (waveForm, osc) => {
     if (waveForm === WaveForms.RANDOM) {
-      osc.setPeriodicWave(randomWaveForm(audioContext))
+      osc.setPeriodicWave(createRandomWaveForm(audioContext))
     } else {
       osc.type = waveForm
     }
@@ -18,33 +31,41 @@ export const LFO = (audioContext) => {
   let destination = LFODestinations.OFF
   let waveForm = WaveForms.SINE
 
-  gain.gain.value = 700
+  gain.gain.value = MIN_AMPLITUDE + EPSILON
 
   osc.connect(gain)
-  osc.frequency.value = 5
+  osc.frequency.value = (100 * 2) / 60
   setWaveForm(waveForm, osc)
   osc.start(audioContext.currentTime)
 
   return {
-    connect(audioParam) {
-      parameter = audioParam
+    setActiveParameter(audioParamKey) {
+      destination = audioParamKey
       gain.disconnect()
+      if (audioParamKey === LFODestinations.OFF) {
+        return this
+      }
+      parameter = parameters[audioParamKey]
       gain.connect(parameter)
+      return this
+    },
+    get isActive() {
+      return destination !== LFODestinations.OFF
     },
     disconnect() {
       gain.disconnect()
     },
     set frequency(value) {
-      osc.frequency.value = value
+      osc.frequency.value = unscale({ min: MIN_FREQUENCY, max: MAX_FREQUENCY }, value)
     },
     get frequency() {
-      return osc.frequency.value
+      return scale({ min: MIN_FREQUENCY, max: MAX_FREQUENCY }, osc.frequency.value)
     },
     set amplitude(value) {
-      gain.gain.value = value
+      gain.gain.value = unscale({ min: MIN_AMPLITUDE, max: MAX_AMPLITUDE }, value)
     },
     get amplitude() {
-      return gain.gain.value
+      return scale({ min: MIN_AMPLITUDE, max: MAX_AMPLITUDE }, gain.gain.value)
     },
     set destination(value) {
       destination = value
@@ -58,6 +79,9 @@ export const LFO = (audioContext) => {
     },
     get waveForm() {
       return waveForm
+    },
+    get destinations() {
+      return Object.values(LFODestinations)
     },
   }
 }

@@ -44,21 +44,23 @@
 </template>
 
 <script>
-  import { Keyboard } from './keyboard'
-  import { Synth } from './synth'
-  import { Output } from './output'
-  import MibVisualizer from './ui-visualizer.vue'
+  import { Keyboard } from '../../../../core/keyboard.js'
+  import { createSynth } from '../../../../core/synth'
+  import { Output } from '../../../../core/output'
   import { resetSariasSongMapping, setSariasSongMapping } from '../../../../core/utils/gamepad-service'
-  import { createMidiTrack } from '@/core/midi/midi-track'
+  import { createMidiTrack } from '../../../../core/midi/midi-track'
+  import { createReverb } from '../../../../core/reverb'
+
   import Osc from './oscillator.vue'
-  import Envelope from './envelope'
-  import UiFilter from './ui-filter'
+  import Envelope from './envelope.vue'
+  import UiFilter from './ui-filter.vue'
   import UiSynthBar from './ui-synth-bar.vue'
   import Lfo from './lfo.vue'
-  import { LFODestinations } from './lfo'
   import UiOutput from './ui-output.vue'
-  import { createReverb } from './reverb'
+  import MibVisualizer from './ui-visualizer.vue'
+
   import { WaveForms } from 'wasa'
+  import { LFODestinations } from '../../../../core/lfo'
 
   const state = {
     synth: {
@@ -97,7 +99,7 @@
     },
     created() {
       this.audioContext = new AudioContext()
-      this.synth = Synth(this.audioContext)
+      this.synth = createSynth(this.audioContext)
       .setState(state.synth)
       this.output = Output(this.audioContext)
       this.midiTrack = createMidiTrack(this.audioContext)

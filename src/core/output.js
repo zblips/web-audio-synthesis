@@ -1,11 +1,9 @@
 export const Output = (audioContext) => {
-  const analyzer = audioContext.createAnalyser()
-  const compressor = audioContext.createDynamicsCompressor()
-  const gain = audioContext.createGain()
+  let analyzer = audioContext.createAnalyser()
+  let compressor = audioContext.createDynamicsCompressor()
   analyzer.fftSize = 2048
 
-  gain
-  .connect(compressor)
+  compressor
   .connect(analyzer)
   .connect(audioContext.destination)
 
@@ -19,11 +17,8 @@ export const Output = (audioContext) => {
     get analyzer() {
       return analyzer
     },
-    get gain() {
-      return gain.gain
-    },
     get input() {
-      return gain
+      return compressor
     },
   }
 }

@@ -12,7 +12,7 @@ const EnvelopeParameterKeys = {
   OSCS_GAIN: 'vca 1/2',
 }
 
-export const Synth = (audioContext) => {
+export const createSynth = (audioContext) => {
   const voiceManager = create4xVoiceManager(audioContext)
 
   const filter = createFilter(audioContext).setFadeValue(-1)
