@@ -42,7 +42,7 @@
 
       <knob class="rate-knob green" label="rate" :value="state.frequency" @update="setRate"></knob>
 
-      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="200">
+      <ui-select :value="state.destination" :values="state.destinations" @update="nextDestination" :width="180">
       </ui-select>
     </div>
   </div>
