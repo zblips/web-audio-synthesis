@@ -6,6 +6,7 @@
     background: #dbdbdb;
     width: 100vw;
     height: 100vh;
+    font-family: "Lucida Console", Monaco, monospace;
 
     .upper-row, .lower-row {
       height: 47vh;
@@ -20,13 +21,17 @@
   <div class="slide">
     <div class="synth">
       <ui-synth-bar :state="{ midiTrack, synth }"></ui-synth-bar>
+
       <div class="upper-row">
-        <osc :state="synth.voiceManager"></osc>
-        <envelope type="ADSR" :state="synth.adsrEnvelope"></envelope>
-        <ui-filter :state="synth.filter"></ui-filter>
-        <envelope :state="synth.accentEnvelope"></envelope>
-        <lfo :state="synth.lfo"></lfo>
-        <ui-output :state="{ reverb }"></ui-output>
+        <osc :class="{'card-osc2-disabled': options.isOsc2Disabled, 'card-fm-disabled': options.isFmDisabled}"
+             :state="synth.voiceManager">
+        </osc>
+
+        <envelope :class="{'card-disabled': options.isADSRDisabled}" type="ADSR" :state="synth.adsrEnvelope"></envelope>
+        <ui-filter :class="{'card-disabled': options.isFilterDisabled}" :state="synth.filter"></ui-filter>
+        <envelope :class="{'card-disabled': options.isAccentDisabled}" :state="synth.accentEnvelope"></envelope>
+        <lfo :class="{'card-disabled': options.isLFODisabled}" :state="synth.lfo"></lfo>
+        <ui-output :class="{'card-disabled': options.isReverbDisabled}" :state="{ reverb }"></ui-output>
       </div>
       <div class="lower-row">
         <mib-visualizer :analyzer="output.analyzer"></mib-visualizer>
