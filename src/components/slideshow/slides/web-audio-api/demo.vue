@@ -66,7 +66,7 @@
     synth: {
       isOsc1Active: true,
       isOsc2Active: false,
-      isPolyphonic: true,
+      isPolyphonic: false,
       isFmActive: false,
       fmGainValue: 0.2,
       isAdsrEnvelopeActive: false,
@@ -79,7 +79,7 @@
       tempo: 100,
     },
     reverb: {
-      fadeValue: -1,
+      fadeValue: 0,
     },
   }
 
