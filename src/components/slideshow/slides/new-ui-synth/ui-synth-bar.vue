@@ -1,7 +1,7 @@
 <template>
   <div class="app-bar">
     <span class="polyphony-container">
-      <span class="switch-label">Polyphonic</span>
+      <span class="switch-label">Mono/Poly</span>
       <ui-switch class="switch" @update="togglePolyphonyValue" :on="state.synth.voiceManager.isPolyphonic"></ui-switch>
     </span>
 
