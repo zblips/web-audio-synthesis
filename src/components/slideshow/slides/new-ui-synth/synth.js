@@ -74,6 +74,39 @@ export const Synth = (audioContext) => {
     get adsrEnvelope() {
       return adsrEnvelope
     },
+    setState({
+               isOsc1Active = voiceManager.osc1GainValue > 0,
+               isOsc2Active = voiceManager.osc2GainValue > 0,
+               isAdsrEnvelopeActive = adsrEnvelope.isActive,
+               isFilterActive = filter.fadeValue > -1,
+               isAccentActive = accentEnvelope.isActive,
+               isFmActive = voiceManager.fmGainValue > 0,
+               fmGainValue = voiceManager.fmGainValue,
+               lfoDestination = lfo.destination,
+               osc1Type = voiceManager.osc1Type,
+               osc2Type = voiceManager.osc2Type,
+               osc1Shift = voiceManager.osc1Shift,
+               osc2Shift = voiceManager.osc2Shift,
+               filterType = filter.type,
+               filterFrequency = filter.frequencyValue,
+               filterPeak = filter.peakValue,
+             }) {
+      voiceManager.osc1GainValue = isOsc1Active ? 0.5 : 0
+      voiceManager.osc2GainValue = isOsc2Active ? 0.5 : 0
+      voiceManager.fmGainValue = isFmActive ? fmGainValue : 0
+      lfo.destination = lfoDestination
+      filter.fadeValue = isFilterActive ? 1 : -1
+      adsrEnvelope.toggleActive(isAdsrEnvelopeActive)
+      accentEnvelope.toggleActive(isAccentActive)
+      voiceManager.osc1Type = osc1Type
+      voiceManager.osc2Type = osc2Type
+      voiceManager.osc1Shift = osc1Shift
+      voiceManager.osc2Shift = osc2Shift
+      filter.type = filterType
+      filter.frequencyValue = filterFrequency
+      filter.peakValue = filterPeak
+      return this
+    },
     get lfo() {
       return lfo
     },

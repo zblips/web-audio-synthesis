@@ -85,7 +85,7 @@
                                     isFilterDisabled: true,
                                     isAccentDisabled: true,
                                     isLFODisabled: true,
-                                    isReverbDisabled: true
+                                    isReverbDisabled: false
                                   }">
 
       </synthesizer-demo>

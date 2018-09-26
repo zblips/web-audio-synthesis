@@ -15,7 +15,7 @@ function toTimedEvents({ events }) {
 }
 
 export function createMidiTrack(audioContext) {
-  const tempo = 100
+  let tempo = 100
   const division = 96
 
   let events = []
@@ -68,6 +68,10 @@ export function createMidiTrack(audioContext) {
       events = toTimedEvents(MidiEvents[track].tracks[0])
       return this
     },
+    setTempo(value) {
+      tempo = value
+      return this
+    },
     setSlave(instrument) {
       slave = instrument
       return this
@@ -84,6 +88,12 @@ export function createMidiTrack(audioContext) {
     changeTrack(trackName) {
       track = trackName
       events = toTimedEvents(MidiEvents[trackName].tracks[0])
+    },
+    get tempo() {
+      return tempo
+    },
+    set tempo(value) {
+      tempo = value
     },
   }
 }

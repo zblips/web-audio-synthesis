@@ -29,7 +29,8 @@
 
         <envelope :class="{'card-disabled': options.isADSRDisabled}" type="ADSR" :state="synth.adsrEnvelope"></envelope>
         <ui-filter :class="{'card-disabled': options.isFilterDisabled}" :state="synth.filter"></ui-filter>
-        <envelope :class="{'card-disabled': options.isAccentDisabled}" type="Accent" :state="synth.accentEnvelope"></envelope>
+        <envelope :class="{'card-disabled': options.isAccentDisabled}" type="Accent"
+                  :state="synth.accentEnvelope"></envelope>
         <lfo :class="{'card-disabled': options.isLFODisabled}" :state="synth.lfo"></lfo>
         <ui-output :class="{'card-disabled': options.isReverbDisabled}" :state="{ reverb }"></ui-output>
       </div>
@@ -54,8 +55,30 @@
   import UiFilter from './ui-filter'
   import UiSynthBar from './ui-synth-bar.vue'
   import Lfo from './lfo.vue'
+  import { LFODestinations } from './lfo'
   import UiOutput from './ui-output.vue'
   import { createReverb } from './reverb'
+  import { WaveForms } from 'wasa'
+
+  const state = {
+    synth: {
+      isOsc1Active: true,
+      isOsc2Active: true,
+      isFmActive: true,
+      fmGainValue: 0.2,
+      isAdsrEnvelopeActive: true,
+      isFilterActive: true,
+      isAccentActive: true,
+      lfoDestination: LFODestinations.OFF,
+      os1Type: WaveForms.TRIANGLE,
+    },
+    midiTrack: {
+      tempo: 100,
+    },
+    reverb: {
+      fadeValue: -1,
+    },
+  }
 
   export default {
     components: {
@@ -75,12 +98,16 @@
     created() {
       this.audioContext = new AudioContext()
       this.synth = Synth(this.audioContext)
+      .setState(state.synth)
       this.output = Output(this.audioContext)
-      this.midiTrack = createMidiTrack(this.audioContext).setTrack('saria').setSlave(this.synth)
+      this.midiTrack = createMidiTrack(this.audioContext)
+      .setTrack('saria')
+      .setTempo(state.midiTrack.tempo)
+      .setSlave(this.synth)
       this.keyboard = Keyboard(Object.assign(this.synth, this.midiTrack))
       this.reverb = createReverb(this.audioContext)
       this.reverb
-      .setFadeValue(0)
+      .setFadeValue(state.reverb.fadeValue)
       .load()
       .subscribe(() => {
         this.synth.connect(this.reverb).connect(this.output)

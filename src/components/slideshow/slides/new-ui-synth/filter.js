@@ -46,10 +46,10 @@ export const createFilter = (audioContext) => {
       return Object.values(FilterTypes)
     },
     set fadeValue(value) {
-      dryWetMixer.setFadeValue(unscale({ min: -1, max: 1 }, value))
+      dryWetMixer.setFadeValue(value)
     },
     get fadeValue() {
-      return scale({ min: -1, max: 1 }, dryWetMixer.getFadeValue())
+      return dryWetMixer.getFadeValue()
     },
     get frequencyParam() {
       return filter.frequency

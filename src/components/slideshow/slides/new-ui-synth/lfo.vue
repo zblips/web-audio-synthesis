@@ -18,10 +18,6 @@
       height: 100%;
       padding-top: 8%;
 
-      /*.amount-knob, .rate-knob {*/
-        /*position: relative;*/
-      /*}*/
-
       .amount-knob {
         height: 35%;
       }

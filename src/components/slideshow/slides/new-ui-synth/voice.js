@@ -201,8 +201,14 @@ export const create4xVoiceManager = (audioContext) => {
     set osc1Shift(value) {
       osc1Shift = value * 12
     },
+    get osc1Shift() {
+      return osc1Shift / 12
+    },
     set osc2Shift(value) {
       osc2Shift = value * 12
+    },
+    get osc2Shift() {
+      return osc2Shift / 12
     },
     get osc1Type() {
       return osc1Type
@@ -243,36 +249,6 @@ export const create4xVoiceManager = (audioContext) => {
     },
     get fmGainParam() {
       return fmGain.gain
-    },
-    getState() {
-      return {
-        isPolyphonic,
-        fmRatioValue,
-        fmGainValue,
-        osc1GainValue,
-        osc2GainValue,
-        osc1DetuneValue,
-        osc2DetuneValue,
-        osc1Type,
-        osc2Type,
-        osc1Shift,
-        osc2Shift,
-      }
-    },
-    setState(state) {
-      isPolyphonic = state.isPolyphonic
-      togglePolyphonyValue(isPolyphonic)
-      fmRatioValue = state.fmRatioValue
-      fmGainValue = state.fmGainValue
-      osc1GainValue = state.osc1GainValue
-      osc2GainValue = state.osc2GainValue
-      osc1DetuneValue = state.osc1DetuneValue
-      osc2DetuneValue = state.osc2DetuneValue
-      osc1Type = state.osc1Type
-      osc2Type = state.osc2Type
-      osc1Shift = state.osc1Shift
-      osc2Shift = state.osc2Shift
-      return this
     },
   }
 }

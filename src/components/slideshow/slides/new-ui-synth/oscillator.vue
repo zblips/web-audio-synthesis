@@ -58,7 +58,7 @@
     &.card-osc2-disabled {
 
       .osc2-container {
-        opacity: 0.15;
+        opacity: $opacity-card-disabled;
 
         &::before {
           content: ' ';

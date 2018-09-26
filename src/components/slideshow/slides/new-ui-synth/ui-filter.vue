@@ -44,7 +44,7 @@
     <div class="column">
       <div class="header">
         <span class="title">Filter</span>
-        <toggle class="toggle" :style="state.isActive" @update="toggleActive"></toggle>
+        <toggle class="toggle" :is-active="isActive" @update="toggleActive"></toggle>
       </div>
 
       <knob class="frequency-knob grey" label="frequency" :value="state.frequencyValue" @update="setFrequencyValue">
@@ -80,7 +80,7 @@
     },
     data() {
       return {
-        active: false,
+        isActive: this.state.fadeValue > -1,
       }
     },
     methods: {
@@ -93,13 +93,13 @@
       setPeakValue(value) {
         this.state.peakValue = value
       },
-      toggleActive() {
-        if (this.active) {
-          this.state.fadeValue = -1
-        } else {
+      toggleActive(value) {
+        this.isActive = value
+        if (this.isActive) {
           this.state.fadeValue = 1
+        } else {
+          this.state.fadeValue = -1
         }
-        this.active = !this.active
       },
     },
   }
