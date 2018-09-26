@@ -8,7 +8,6 @@ const MAX_FREQUENCY = 15
 const MIN_AMPLITUDE = EPSILON
 const MAX_AMPLITUDE = 700
 
-
 export const createLfo = (audioContext, parameters) => {
   const osc = audioContext.createOscillator()
   const gain = audioContext.createGain()
