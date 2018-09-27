@@ -53,7 +53,8 @@
                             isLFODisabled: false,
                             isReverbDisabled: false
                           }">
-      </IntroDemo>    </slide>
+      </IntroDemo>
+    </slide>
 
     <slide enter='fadeIn' leave='fadeOut'>
       <mib-title></mib-title>
