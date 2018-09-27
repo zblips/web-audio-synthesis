@@ -1,18 +1,6 @@
-# music-in-the-browser
+# web-audio-synthesis
 
-> technozaure@lille, 2018-03-21
-
-# Plan
-
-- [ ] Abstract
-- [ ] History of synthesis
-- [ ] Web Audio API
-- [ ] Demo
-- [ ] What's Next ?
-- [ ] Conclusion
-
-to put somewhere:
-- [ ] Is it debuggable ?
+> gdg@lille, 09/27/2018
 
 ## Build Setup
 
