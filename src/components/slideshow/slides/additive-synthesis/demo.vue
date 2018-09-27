@@ -70,7 +70,7 @@
       osc2Shift: -1,
       isPolyphonic: false,
       isFmActive: false,
-      fmGainValue: 0.2,
+      fmGainValue: 0,
       isAdsrEnvelopeActive: false,
       isFilterActive: false,
       isAccentActive: false,
@@ -83,7 +83,7 @@
       tempo: 100,
     },
     reverb: {
-      fadeValue: -1,
+      fadeValue: 0,
     },
   }
 

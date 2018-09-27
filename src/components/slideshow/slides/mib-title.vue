@@ -9,7 +9,7 @@
     color: white;
 
     .content {
-      background-color: rgba(37, 37, 37, 0.6);
+      background-color: rgba(37, 37, 37, 0.75);
       width: fit-content;
       margin: auto;
 
@@ -21,7 +21,7 @@
     .footer {
       display: flex;
       justify-content: space-around;
-      background-color: rgba(37, 37, 37, 0.6);
+      background-color: rgba(37, 37, 37, 0.75);
       bottom: 70px;
       position: absolute;
       width: 100%;

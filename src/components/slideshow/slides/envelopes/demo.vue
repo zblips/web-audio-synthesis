@@ -80,7 +80,7 @@
       tempo: 100,
     },
     reverb: {
-      fadeValue: -1,
+      fadeValue: 0,
     },
   }
 
