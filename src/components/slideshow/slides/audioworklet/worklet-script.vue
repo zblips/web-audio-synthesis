@@ -7,29 +7,23 @@
   <div class="slide">
     <h2>Audioworklet</h2>
     <div class="snippets">
-      <div class="snippet">
-        <eg-code-block lang="javascript">
-        </eg-code-block>
-      </div>
       <div class="snippets">
         <div class="snippet">
-          <eg-code-block lang="javascript">
-            // my-processor.js
-            class MyWorkletProcessor extends AudioWorkletProcessor {
+          <eg-code-block lang="javascript">// my-processor.js
+class MyWorkletProcessor extends AudioWorkletProcessor {
 
-            static get parameterDescriptors() {
-              return [{
-                name: 'myParam',
-                defaultValue: 0.707
-              }];
-            }
+static get parameterDescriptors() {
+  return [{
+    name: 'myParam',
+    defaultValue: 0.707
+  }];
+}
 
-            constructor() { super(); }
+constructor() { super(); }
 
-            process(inputs, outputs, parameters) {
-                // Something cool goes here ...
-            }
-          </eg-code-block>
+process(inputs, outputs, parameters) {
+    // Something cool goes here ...
+}</eg-code-block>
         </div>
       </div>
     </div>
