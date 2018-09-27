@@ -68,7 +68,7 @@
       isOsc2Active: true,
       isPolyphonic: true,
       isFmActive: true,
-      fmGainValue: 0.2,
+      fmGainValue: 0,
       isAdsrEnvelopeActive: true,
       isFilterActive: true,
       isAccentActive: true,

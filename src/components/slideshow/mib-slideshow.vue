@@ -141,7 +141,7 @@
     <slide enter='bounceInRight' leave='fadeOut' :mouseNavigation="false">
       <mib-additive-demo :options="{
                                     isOsc2Disabled: false,
-                                    isFmDisabled: true,
+                                    isFmDisabled: false,
                                     isADSRDisabled: true,
                                     isFilterDisabled: true,
                                     isAccentDisabled: true,
