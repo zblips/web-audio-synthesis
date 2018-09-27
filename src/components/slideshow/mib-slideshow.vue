@@ -209,7 +209,7 @@
     </slide>
 
     <slide enter='bounceInRight' :mouseNavigation="false" :steps="2">
-      <mib-envelopes-demo :options="{
+      <mib-lfo-demo :options="{
                                     isOsc2Disabled: false,
                                     isFmDisabled: false,
                                     isADSRDisabled: false,
@@ -218,7 +218,7 @@
                                     isLFODisabled: false,
                                     isReverbDisabled: false
                                   }">
-      </mib-envelopes-demo>
+      </mib-lfo-demo>
     </slide>
 
     <slide enter='bounceInRight' :mouseNavigation="false">
