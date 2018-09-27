@@ -65,15 +65,16 @@
   const state = {
     synth: {
       isOsc1Active: true,
-      isOsc2Active: true,
-      isPolyphonic: true,
-      isFmActive: true,
-      fmGainValue: 0.2,
+      isOsc2Active: false,
+      isPolyphonic: false,
+      isFmActive: false,
+      fmGainValue: 0,
       isAdsrEnvelopeActive: false,
       isFilterActive: true,
       isAccentActive: true,
       lfoDestination: LFODestinations.OFF,
       os1Type: WaveForms.TRIANGLE,
+      reverbFadedValue: -1,
     },
     midiTrack: {
       tempo: 100,

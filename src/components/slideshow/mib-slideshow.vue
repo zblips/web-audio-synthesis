@@ -220,6 +220,22 @@
       </mib-envelopes-demo>
     </slide>
 
+    <slide enter='bounceInRight' :mouseNavigation="false">
+      <custom></custom>
+    </slide>
+
+    <slide enter='bounceInRight' :mouseNavigation="false">
+      <but></but>
+    </slide>
+
+    <slide enter='bounceInRight' :mouseNavigation="false">
+      <mib-audio-worklet-script></mib-audio-worklet-script>
+    </slide>
+
+    <slide enter='bounceInRight' :mouseNavigation="false">
+      <mib-audio-worklet-usage></mib-audio-worklet-usage>
+    </slide>
+
     <!--END-->
     <slide enter='bounceInRight' :mouseNavigation="false" :steps="2">
       <mib-the-end></mib-the-end>
@@ -266,6 +282,10 @@
   import MibLfoGraph from './slides/lfo/graph.vue'
   import MibLfoDemo from './slides/lfo/demo.vue'
 
+  import But from './slides/audioworklet/but'
+  import Custom from './slides/audioworklet/custom'
+  import MibAudioWorkletScript from './slides/audioworklet/worklet-script'
+  import MibAudioWorkletUsage from './slides/audioworklet/worklet-usage'
   import MibTheEnd from './slides/mib-the-end'
 
   const btnMapping = gamepadHandler.gamepadsMapping[0].buttonsMapping
@@ -310,6 +330,11 @@
       MibLfoIntro,
       MibLfoGraph,
       MibLfoDemo,
+
+      But,
+      Custom,
+      MibAudioWorkletScript,
+      MibAudioWorkletUsage,
 
       MibTheEnd,
     },
